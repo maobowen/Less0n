@@ -428,3 +428,6 @@ __pycache__/
 
 
 # End of https://www.gitignore.io/api/linux,macos,windows,pycharm+all,visualstudio,visualstudiocode
+
+# Less0n
+less0n.db

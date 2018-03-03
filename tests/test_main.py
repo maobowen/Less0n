@@ -1,8 +1,8 @@
 import sys
 import os.path
-import main
 import unittest
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
+import main
 
 
 class MainTest(unittest.TestCase):
