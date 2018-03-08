@@ -1,0 +1,256 @@
+/*color for all*/
+/*#124259  深蓝*/
+/*#E3A723  姜黄*/
+/*#8CB1D7  浅蓝*/
+/*#BD3228  红色*/
+/*#e4e4e4  浅灰*/
+/* --------------------------------- */
+/*  BASIC SETUP*/
+/* --------------------------------- */
+
+*{
+    margin:0;
+    padding:0;
+/*    box-sizing:border-box;*/
+}
+
+html,
+body{
+    background-color: #fff;
+    color:#555;
+    font-family: 'Lato','Arial', sans-serif;
+    font-size:20px;
+    font-weight:300;
+    text-rendering: optimizeLegibility;
+    width: 100%;
+}
+
+
+/* --------------------------------- */
+/*  REUSABLE COMPONENTS */
+/* --------------------------------- */
+
+
+.row{
+    margin: 0 auto;
+}
+
+
+
+/* --------------------------------- */
+/*  HEADER */
+/* --------------------------------- */
+
+header{
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    background-attachment: fixed;
+}
+
+
+/* Main nav*/
+
+.main-nav{
+    float:right;
+    list-style: none;
+/*    margin-top:55px;*/
+}
+
+.main-nav li{
+    display: inline-block;
+    margin-left: 40px;
+}
+
+.main-nav li a:link,
+.main-nav li a:visited{
+    padding: 8px 0;
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 90%;
+    border-bottom: 2px solid transparent;
+    -webkit-transition: border-bottom 0.2s;
+    transition: border-bottom 0.2s;
+}
+
+
+
+/*Sticky nav*/
+.sticky{
+/*    position: fixed;*/
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color:#124259;
+    height: 50px;
+}
+
+.sticky .main-nav{
+    margin: 10px 30px;
+}
+.sticky .ion-heart{
+    float: left;
+    margin: 10px 30px;
+    color: #e4e4e4;
+    font-size: 150%;
+    
+}
+
+.sticky .main-nav li a:link,
+.sticky .main-nav li a:visited{
+    padding: 16px 0;
+    color: #e4e4e4;
+}
+
+.sticky .logo{display: none;}
+.sticky .logo-black{
+    display: block;
+}
+
+/*search area*/
+.search-area{
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-color: #e4e4e4;
+    height: 450px;
+    position: relative;
+}
+.search-back{
+    position: absolute;
+    width: 1140px;
+    top:50%;
+    left:50%;
+    -webkit-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    
+}
+.search-text{
+    display: inline-block;
+    position: absolute;
+    background-color: #E3A723;
+    border-radius: 10px;
+    height: 30px;
+    width: 250px;
+    text-align: center;
+    margin-top: -50px;
+    margin-bottom: 20px;
+}
+
+.search{
+    display: inline-block;
+    height: 50px;
+    width: 1020px;
+    font-size: 130%;
+    border: none;
+    padding-left: 10px;
+}
+::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #dedede;
+    font-weight: 100;
+}
+
+.search-icon{
+    display: inline-block;
+    height: 50px;
+    width: 50px;
+    background-color: #BD3228;
+    color: #e4e4e4;
+    font-size: 200%;
+    text-align: center;
+    margin-left: -4px;
+    margin-top: -10px;
+    vertical-align: middle;
+}
+
+
+/*source-icon*/
+
+
+/**/
+.source-icon{
+    position: relative;
+    height: 220px;
+    margin: 0 auto;
+/*    text-align: center;*/
+}
+
+.leaderboard{
+    position: absolute;
+/*    margin: 70px 0px 70px 0px;*/
+    top: 30%;
+    left: 10%;
+    display: inline-block;
+    
+}
+
+.lb-icon{
+    background-color: #8CB1D7;
+    height: 150px;
+    width: 150px;
+    position: relative;
+    
+}
+.ion-trophy{
+    position: absolute;
+    font-size: 500%;
+    color: #fff;
+    margin:15px 32px;
+}
+.leaderboard-text{
+    text-align: center;
+    padding-top: 20px;
+    font-size: 120%;
+}
+
+.addcourse{
+    position: absolute;
+/*    margin: 70px 0px 70px 0px;*/
+    top:30%;
+    left: 40%;
+    display: inline-block;
+}
+
+.add-icon{
+    position: relative;
+    background-color: #E3A723;
+    height: 150px;
+    width: 150px;
+}
+.ion-plus{
+    position: absolute;
+    font-size: 500%;
+    color: #fff;
+    margin:15px 38px;
+}
+.addcourse-text{
+    text-align: center;
+    padding-top: 20px;
+    font-size: 120%;
+}
+
+.department{
+    position: absolute;
+    top:30%;
+    left: 70%;
+    display: inline-block;
+}
+
+.d-icon{
+    position: relative;
+    background-color: #BD3228;
+    height: 150px;
+    width: 150px;
+}
+.ion-university{
+    position: absolute;
+    font-size: 500%;
+    color: #fff;
+    margin:15px 38px;
+}
+.department-text{
+    text-align: center;
+    padding-top: 20px;
+    font-size: 120%;
+}
