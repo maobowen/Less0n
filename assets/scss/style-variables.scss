@@ -1,0 +1,26 @@
+/*font*/
+$lato: 'Lato', sans-serif;
+
+/*colors*/
+$yellow: #FFEC8B;
+$star: #FFB90F;
+$workload: #B0171F;
+$dark: #3D3D3D;
+$green: #4FA584;
+$good: #4FA584;
+$neutral: #FFD700;
+$bad: #EE3B3B;
+
+/*mixins*/
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+     -moz-border-radius: $radius;
+      -ms-border-radius: $radius;
+          border-radius: $radius;
+}
+
+@mixin content-columns($columnCount) {
+  -webkit-column-count: $columnCount;
+     -moz-column-count: $columnCount;
+          column-count: $columnCount;
+}
