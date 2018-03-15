@@ -2,7 +2,7 @@ import sys
 import os.path
 import unittest
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
-import main
+import less0n
 
 
 class MainTest(unittest.TestCase):
@@ -10,7 +10,7 @@ class MainTest(unittest.TestCase):
     local instance of the server."""
 
     def setUp(self):
-        self.app = main.app.test_client()
+        self.app = less0n.app.test_client()
 
     def test_hello_world(self):
         rv = self.app.get('/')
