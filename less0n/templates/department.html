@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,300italic' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <link rel="stylesheet" type="text/css" href="../static/css/base-res.css">
+        <link rel="stylesheet" type="text/css" href="../static/css/base.css">
+        <link rel="stylesheet" type="text/css" href="../static/css/department.css">
+    
+    </head>
+    <body>
+        <header>
+            <nav class="sticky">
+                <div class="row">
+                    <img src="../static/img/c-logo.jpeg" alt="logo" class="logo">
+                    <ul class="main-nav mr-auto">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#leaderboard">LeaderBoard</a></li>
+                        <li><a class="active" href="#department">Department</a></li>
+                    </ul>
+                    <ul class="main-nav">
+                        <li><a href="#sign-up">Sign up</a></li>
+                        <li><a href="#sign-in">Sign in</a></li>
+                    </ul>
+                    <a class="mobile-nav-icon js--nav-icon"><i class="ion-navicon-round"></i></a>
+                </div>
+            </nav>
+        </header>
+<!--
+        <section>
+            <h1>List of Department</h1>
+            <a id="department-sort">All</a>
+            <a id="department-school">School</a>
+            
+        </section>
+-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light nav-child">
+          <a class="navbar-brand" href="#">List of Department</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link selected" href="#" id="sort">Sort</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" id="school">School</a>
+              </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+              <input class="form-control mr-sm-2" type="search" placeholder="Keywords of Department" aria-label="Search">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+          </div>
+        </nav>
+        <section id="sort-alphabetical">
+            <a class="selected" id="All">ALL</a>
+            <a id="A-F">A-F</a>
+            <a id="G-L">G-L</a>
+            <a id="M-R">M-R</a>
+            <a id="S-Z">S-Z</a>
+        </section>
+        <section id="sort-school">
+            <a id="Arts">Arts</a>
+            <a id="Barnard">Barnard College</a>
+            <a id="Business">Business</a>
+            <a id="Fu">Fu Foundation School of Engineering and Applied Science</a>
+            <a id="Health">Public Health</a>
+            <a id="Vagelos">Vagelos College of Physicians and Surgeons</a>
+        </section>
+        <div class="row" id="alphabetical-card">
+          <div class="col-sm-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Accounting Division</h5>
+                <p class="card-text"></p>
+                <a href="#" class="btn btn-primary">See all <i>25</i> courses</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Africana Studies (Barnard College)</h5>
+                <p class="card-text"></p>
+                <a href="#" class="btn btn-primary">See all <i>20</i> courses</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Anesthesiology Department</h5>
+                <p class="card-text"></p>
+                <a href="#" class="btn btn-primary">See all <i>5</i> courses</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Anthropology (Barnard College)</h5>
+                <p class="card-text"></p>
+                <a href="#" class="btn btn-primary">See all <i>17</i> courses</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Anthropology Department</h5>
+                <p class="card-text"></p>
+                <a href="#" class="btn btn-primary">See all <i>19</i> courses</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" id="school-card">
+          <div class="col-sm-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Accounting Division</h5>
+                <p class="card-text"></p>
+                <a href="#" class="btn btn-primary">See all <i>25</i> courses</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Africana Studies (Barnard College)</h5>
+                <p class="card-text"></p>
+                <a href="#" class="btn btn-primary">See all <i>20</i> courses</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Anesthesiology Department</h5>
+                <p class="card-text"></p>
+                <a href="#" class="btn btn-primary">See all <i>5</i> courses</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Anthropology (Barnard College)</h5>
+                <p class="card-text"></p>
+                <a href="#" class="btn btn-primary">See all <i>17</i> courses</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Anthropology Department</h5>
+                <p class="card-text"></p>
+                <a href="#" class="btn btn-primary">See all <i>19</i> courses</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script src="../static/js/jquery-3.3.1.min.js"></script> 
+        <script src="../static/js/jquery-ui.min.js"></script>
+        <script src="../static/js/department.js"></script>
+    </body>  
+    
+</html>
