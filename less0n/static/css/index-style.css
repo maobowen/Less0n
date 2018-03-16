@@ -9,8 +9,7 @@
     box-sizing: border-box;
 }
 
-.index-html,
-.index-body {
+header{
     background-color: #fff;
     color: #555;
     font-family: 'Lato', 'Arial', sans-serif;
@@ -153,22 +152,6 @@ header {
     top: -4px;
 }
 
-
-/* ----------------------------------------------- */
-/* FOOTER */
-/* ----------------------------------------------- */
-
-footer {
-    background-color: #333;
-    padding: 50px;
-    font-size: 80%;
-}
-
-footer p {
-    color: #888;
-    text-align: center;
-    margin-top: 20px;
-}
 
 
 /* ----------------------------------------------- */
