@@ -3,6 +3,19 @@ env: flex
 entrypoint: gunicorn -b :$PORT less0n:app
 api_version: 1
 threadsafe: true
+env_variables:
+  FLASK_CONFIG: prod
+  CLOUDSQL_CONNECTION_NAME: swift-hope-195519:us-central1:less0n
+  CLOUDSQL_USER: postgres
+  CLOUDSQL_PASSWORD: "!Qazxsw2#Edcvfr4"
+  OAUTHLIB_INSECURE_TRANSPORT: 1
+
+#[START cloudsql_settings]
+# Replace project and instance with the values obtained  when configuring your
+# Cloud SQL instance.
+beta_settings:
+    cloud_sql_instances: swift-hope-195519:us-central1:less0n
+#[END cloudsql_settings]
 
 runtime_config:
   python_version: 3
