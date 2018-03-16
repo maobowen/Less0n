@@ -75,3 +75,8 @@ input[type=checkbox] {
     margin-bottom: 20px;
     font-weight: 300;
 }
+
+input,select,textarea{
+    font-weight: 300;
+    padding-left: 10px;
+}

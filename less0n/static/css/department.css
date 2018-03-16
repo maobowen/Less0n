@@ -55,3 +55,8 @@
 .btn{
    font-weight: 300; 
 }
+
+.btn-card{
+    background-color: #e4e4e4;
+    border: none;
+}
