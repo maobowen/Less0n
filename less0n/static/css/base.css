@@ -1,3 +1,7 @@
+/* ----------------------------------------------- */
+/* BASIC SETUP */
+/* ----------------------------------------------- */
+
 * {
     margin: 0;
     padding: 0;
@@ -39,13 +43,6 @@ header {
     z-index: 99999;
 }
 
-.logo1 {
-    height: 50px;
-    width: auto;
-    float: left;
-    margin-top: 45px;
-    z-index: 99999;
-}
 
 /* Main navi */
 .main-nav {

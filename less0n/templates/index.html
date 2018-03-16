@@ -1,89 +1,54 @@
-<!DOCTYPE html>
-<html class="index-html" lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="Omnifood is a premium food delivery service with the mission to bring affordable and healty meals to as many people as possible.">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="vendors/css/ionicons.min.css">
-        <link rel="stylesheet" type="text/css" href="../static/css/index-style.css">
-        <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,300italic' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-        <link rel="stylesheet" type="text/css" href="../static/css/base.css">
-        <link rel="stylesheet" type="text/css" href="../static/css/base-res.css">
-        
-        <title>Less0n</title>
-        
-    </head>
-    <body class="index-body">
-        <header id="welcome">
-            <div class="hero-text-box">
-                <h1>Welcome to Less0n</h1>
-                <h2>A Course Evaluation Website</h2>
-                <a class="btn btn-full js--scroll-to-plans" href="#" id="start-btn">Start</a>
-            </div>
-        </header>
-        <header id="main-page">
-            <nav>
-                <div class="row">
-                    <img src="../static/img/c-logo.jpeg" alt="logo" class="logo1">
-                    <ul class="main-nav nav-left  mr-auto">
-                        <li><a class="active" href="#home">Home</a></li>
-                        <li><a href="#leadBoard">LeaderBord</a></li>
-                        <li><a href="#Department">Department</a></li>
-                    </ul>
-                    <ul class="main-nav">
-                        <li><a href="#sign-up">Sign up</a></li>
-                        <li><a href="#sign-in">Sign in</a></li>
-                    </ul>
-                    <a class="mobile-nav-icon js--nav-icon"><i class="ion-navicon-round"></i></a>
-                </div>
-<!--
-                <div class="row">
-                    <img src="../static/img/c-logo.jpeg" alt="logo" class="logo">
-                    <ul class="main-nav js--main-nav">
-                        <li><a href="#features">Sign up</a></li>
-                        <li><a href="#works">Sign in</a></li>
-                    </ul>
-                    <a class="mobile-nav-icon js--nav-icon"><i class="ion-navicon-round"></i></a>
-                </div>
--->
-            </nav>
-            <section class="search-area">
-                <div class="search-back">
-                    <div class="search-text">
-                        Search courses/professors
-                    </div>
-                    <input type="text" name="search" class="search" placeholder="Course Name/Professor" required>
-                    <div class="search-icon">
-                        <i class="ion-ios-search-strong"></i>
-                    </div>
-                </div>
+{% extends "base.html" %}
 
-            </section>
-<!--
-            <div class="hero-text-box">
-                <h1>Goodbye junk food.<br>Hello super healthy meals.</h1>
-                <a class="btn btn-full js--scroll-to-plans" href="#">I'm hungry</a>
-                <a class="btn btn-ghost js--scroll-to-start" href="#">Show me more</a>
-            </div>
--->
-            
-        </header>
-        
-        
-        <footer>
+{% block head_meta %}
+    <title>Less0n</title>
+{% endblock %}
+
+{% block head_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block body_header %}
+    <header id="welcome">
+        <div class="hero-text-box">
+            <h1>Welcome to Less0n</h1>
+            <h2>A Course Evaluation Website</h2>
+            <a class="btn btn-full js--scroll-to-plans" href="#" id="start-btn">Start</a>
+        </div>
+    </header>
+    <header id="main-page">
+        <nav>
             <div class="row">
-                <p>
-                    Copyright &copy; 2018 by Less0n. All rights reserved.
-                </p>
+                <img src="{{ url_for('static', filename='img/c-logo.jpg') }}" alt="logo" class="logo1">
+                <ul class="main-nav nav-left  mr-auto">
+                    <li><a class="active" href="#home">Home</a></li>
+                    <li><a href="#leadBoard">LeaderBord</a></li>
+                    <li><a href="#Department">Department</a></li>
+                </ul>
+                <ul class="main-nav">
+                    <li><a href="#sign-up">Sign up</a></li>
+                    <li><a href="#sign-in">Sign in</a></li>
+                </ul>
+                <a class="mobile-nav-icon js--nav-icon"><i class="ion-navicon-round"></i></a>
             </div>
-        </footer>
-        <script src="../static/js/jquery-3.3.1.min.js"></script> 
-        <script src="../static/js/jquery-ui.min.js"></script>
-        <script src="../static/js/main.js"></script>
-        
-    </body>
-    
-    
-</html>
+        </nav>
+
+        <section class="search-area">
+            <div class="search-back">
+                <div class="search-text">
+                    Search courses/professors
+                </div>
+                <input type="text" name="search" class="search" placeholder="Course Name/Professor" required>
+                <div class="search-icon">
+                    <i class="ion-ios-search-strong"></i>
+                </div>
+            </div>
+
+        </section>
+
+    </header>
+{% endblock %}
+
+{% block body_js %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}
