@@ -531,3 +531,4 @@ paket-files/
 # Less0n
 .cache/
 less0n.db
+cloud_sql_proxy

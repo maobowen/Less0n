@@ -4,13 +4,13 @@ jobs:
     docker:
       - image: circleci/python:3.6.4-stretch-browsers
         environment:
-          SQLALCHEMY_DATABASE_URL: postgresql://less0n@localhost/less0n?sslmode=disable
+          FLASK_CONFIG: test
           PYTHONPATH: ${PYTHONPATH}:${HOME}/google_appengine
-      - image: circleci/postgres:10.2-alpine-ram
+      - image: circleci/postgres:9.6-alpine-ram
         environment:
-          POSTGRES_USER: less0n
-          POSTGRES_DB: less0n
-          POSTGRES_PASSWORD: ""
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: "!Qazxsw2#Edcvfr4"
     steps:
       - checkout
       - restore_cache:
@@ -36,7 +36,7 @@ jobs:
             . less0n/bin/activate
             pip3 install pytest
             mkdir test-reports
-            pytest --junitxml=test-reports/junit.xml
+            python3 -m pytest --junitxml=test-reports/junit.xml
       - store_artifacts:
           path: test-reports/
       - store_test_results:

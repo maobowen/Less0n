@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block head_meta %}
+    <title>Less0n</title>
+{% endblock %}
+
+{% block head_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block body_header %}
+    <header id="welcome">
+        <div class="hero-text-box">
+            <h1>Welcome to Less0n</h1>
+            <h2>The Next Generation of Course Ratings System</h2>
+            <a class="btn btn-full js--scroll-to-plans" href="#" id="start-btn">Start</a>
+        </div>
+    </header>
+    <header id="main-page">
+        <nav>
+            <div class="row">
+                <img src="{{ url_for('static', filename='img/c-logo.jpg') }}" alt="logo" class="logo1">
+                <ul class="main-nav nav-left mr-auto">
+                    <li><a class="active" href="#home">Home</a></li>
+                    <li><a href="#leadBoard">Leader board</a></li>
+                    <li><a href="#Department">Department</a></li>
+                </ul>
+                <ul class="main-nav">
+                    {%- if current_user.is_authenticated -%}
+                    <li><img src="{{current_user.avatar}}?sz=50" width="50" height="50" alt="{{current_user.name}}"> {{current_user.name}}</li>
+                    <li><a href="{{ url_for('logout') }}">Sign out</a></li>
+                    {%- else -%}
+                    <li><a href="{{ url_for('login') }}?redirect={{ request.path }}">Sign in with Lionmail</a></li>
+                    {%- endif -%}
+                </ul>
+                <a class="mobile-nav-icon js--nav-icon"><i class="ion-navicon-round"></i></a>
+            </div>
+        </nav>
+
+        <section class="search-area">
+            <div class="search-back">
+                <div class="search-text">
+                    Search courses/professors
+                </div>
+                <input type="text" name="search" class="search" placeholder="Course Name/Professor" required>
+                <div class="search-icon">
+                    <i class="ion-ios-search-strong"></i>
+                </div>
+            </div>
+
+        </section>
+
+    </header>
+{% endblock %}
+
+{% block body_js %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}
