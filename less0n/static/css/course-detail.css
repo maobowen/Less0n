@@ -69,12 +69,14 @@ body {
     margin: 0 !important; }
   body .jumbotron {
     background-color: #FFEC8B;
-    height: 380px; }
-    body .jumbotron .container .course-title {
-      float: left; }
-    body .jumbotron .container .course-info {
-      float: right;
-      margin-top: 20px; }
+    height: 450px; }
+    body .jumbotron .container {
+      margin-top: 50px; }
+      body .jumbotron .container .course-title {
+        float: left; }
+      body .jumbotron .container .course-info {
+        float: right;
+        margin-top: 20px; }
   body .statistics {
     position: relative;
     top: -150px;

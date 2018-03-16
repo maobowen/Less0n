@@ -74,9 +74,10 @@ body {
 
   .jumbotron {
   	background-color: $yellow;
-  	height: 380px;
+  	height: 450px;
 
     .container {
+    margin-top: 50px;
       .course-title {
         float: left;
       }
