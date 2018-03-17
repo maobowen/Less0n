@@ -1,8 +1,8 @@
 @import "style-variables";
 
-$rating_width: 50%;
-$grade_width: 70%;
-$workload_width: 80%;
+$rating_width: 90%;
+$grade_width: 90%;
+$workload_width: 30%;
 
 /*progrss bar animation*/
 @mixin progress-bar($bar_name, $time) {
@@ -51,68 +51,56 @@ body {
   font-family: $lato !important;
 
   .jumbotron {
-  	background-color: $yellow;
+  	background-color: $blue;
   	height: $jumbotron;
 
     .container {
       margin-top: 50px;
+
       .course-title {
         float: left;
       }
 
-      .course-info {
-        float: right;
-        margin-top: 20px;
+      .faculty-pic img {
+      	@include border-radius(20px);
+        width: 240px;
+        height: 240px;
+        border: 5px solid white;
+        display: block;
+        float: left;
+        position: relative;
+        top: 20px;
+      }
+
+      .faculty-info {
+        float: left;
+        margin: 10px 0 0 60px;
       }
     }
   }
 
   .statistics {
   	position: relative;
-  	top: -170px;
+  	top: -180px;
     color: white;
     background: $dark;
     box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+    width: 49%;
+    margin-left: 34%;
 
     .stats_box {
-      box-shadow: -3px 0px rgba(255, 255, 255, 0.1);
       display: flex;
       flex-direction: column;
       justify-content: center;
+      padding: 0;
 
       .stats_box_content {
         padding: 30px;
       }
 
-      #faculty_choice {
-        img {
-          @include border-radius(60px);
-          width: 120px;
-          height: 120px;
-          border: 5px solid white;
-          display: block;
-          margin-left: auto;
-          margin-right: auto;
-        }
-
-        i {
-          font-size: 40px;
-          color: $green;
-          line-height: 120px;
-          text-align: center;
-          vertical-align: middle;
-          display: block;
-          margin-left: auto;
-          margin-right: auto;
-        }
-
-        h4 {
-          text-align: center;
-          padding-top: 30px;
-        }
-      }
-
       #tag_list {
+      	padding-left: 45px;
+
         .tags a {
           @include border-radius(2px);
           color: white;
@@ -143,6 +131,9 @@ body {
       }
 
       #bar_stats {
+      	box-shadow: -3px 0px rgba(255, 255, 255, 0.1);
+      	padding-right: 45px;
+
         .progress {
           height: 6px;
           background: rgba(0, 0, 0, 0.3);
@@ -177,50 +168,65 @@ body {
   }
 
   #sortby {
-    form {
-      width: 230px;
-      position: relative;
-      top: -130px;
-      left: 0;
-      float: right;
-    }
+  	form {
+  		width: 230px;
+  		position: relative;
+  		top: -215px;  	
+  	}
   }
 
   .card-columns {
-    @include content-columns(3);
+    @include content-columns(2);
     position: relative;
-    top: -100px;
+    top: -170px;
     max-height: 100vh;
     overflow: auto;
-    clear: both;
 
-    .good {
-      border-left: 7px solid $good;
+    .border-good {
+      border-top: 10px solid $border-good;
     }
 
-    .neutral {
-      border-left: 7px solid $neutral;
+    .border-neutral {
+      border-top: 10px solid $border-neutral;
     }
 
-    .bad {
-      border-left: 7px solid $bad;
+    .border-bad {
+      border-top: 10px solid $border-bad;
     }
 
     .card {
       margin: 10px 0;
       box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 5px 0 rgba(0, 0, 0, 0.1);
 
+      .card-text {
+      	color: #808080;
+      }
+
+      .btn {
+      	color: white;
+      	cursor: auto;
+      	margin-top: 8px;
+      }
+
+      .good {
+	      background-color: $good;
+	    }
+
+	    .neutral {
+	      background-color: $neutral;
+	    }
+
+	    .bad {
+	      background-color: $bad;
+	    }
+
+	    .comment {
+	      background-color: $comment;
+	    }
+
       .list-group {
         border: none;
         font-size: 15px;
-      }
-
-      .fa-star {
-        color: $star;
-      }
-
-      .fa-pencil {
-        color: $workload;
       }
     }
   }

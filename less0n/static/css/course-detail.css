@@ -1,5 +1,26 @@
 /*font*/
+/*size*/
 /*colors*/
+body .statistics .stats_box #tag_list .tags a.primary {
+  background-color: #428BCA;
+  border-color: #357EBD; }
+
+body .statistics .stats_box #tag_list .tags a.success {
+  background-color: #5CB85C;
+  border-color: #4CAE4C; }
+
+body .statistics .stats_box #tag_list .tags a.info {
+  background-color: #5BC0DE;
+  border-color: #46B8DA; }
+
+body .statistics .stats_box #tag_list .tags a.warning {
+  background-color: #F0AD4E;
+  border-color: #EEA236; }
+
+body .statistics .stats_box #tag_list .tags a.danger {
+  background-color: #D9534F;
+  border-color: #D43F3A; }
+
 /*mixins*/
 /*progrss bar animation*/
 @-webkit-keyframes rating_progress_bar {
@@ -65,8 +86,6 @@
 body {
   background-color: white;
   font-family: "Lato", "Arial", sans-serif !important; }
-  body nav {
-    margin: 0 !important; }
   body .jumbotron {
     background-color: #FFEC8B;
     height: 450px; }
@@ -79,7 +98,7 @@ body {
         margin-top: 20px; }
   body .statistics {
     position: relative;
-    top: -150px;
+    top: -170px;
     color: white;
     background: #3D3D3D;
     box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.2); }
@@ -122,21 +141,6 @@ body {
         margin: 0 3px 6px 0;
         padding: 5px 10px;
         display: inline-block; }
-      body .statistics .stats_box #tag_list .tags a.primary {
-        background-color: #428BCA;
-        border-color: #357EBD; }
-      body .statistics .stats_box #tag_list .tags a.success {
-        background-color: #5CB85C;
-        border-color: #4CAE4C; }
-      body .statistics .stats_box #tag_list .tags a.info {
-        background-color: #5BC0DE;
-        border-color: #46B8DA; }
-      body .statistics .stats_box #tag_list .tags a.warning {
-        background-color: #F0AD4E;
-        border-color: #EEA236; }
-      body .statistics .stats_box #tag_list .tags a.danger {
-        background-color: #D9534F;
-        border-color: #D43F3A; }
       body .statistics .stats_box #bar_stats .progress {
         height: 6px;
         background: rgba(0, 0, 0, 0.3);
@@ -181,6 +185,12 @@ body {
           animation-duration: 2s;
           width: 80%;
           background: #EE3B3B; }
+  body #sortby form {
+    width: 230px;
+    position: relative;
+    top: -130px;
+    left: 0;
+    float: right; }
   body .card-columns {
     -webkit-column-count: 3;
     -moz-column-count: 3;
@@ -188,7 +198,8 @@ body {
     position: relative;
     top: -100px;
     max-height: 100vh;
-    overflow: auto; }
+    overflow: auto;
+    clear: both; }
     body .card-columns .good {
       border-left: 7px solid #4FA584; }
     body .card-columns .neutral {

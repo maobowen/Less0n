@@ -1,15 +1,52 @@
 /*font*/
 $lato: 'Lato', 'Arial', sans-serif;
 
+/*size*/
+$jumbotron: 450px;
+
 /*colors*/
 $yellow: #FFEC8B;
+$blue: #8EE5EE;
+
 $star: #FFB90F;
 $workload: #B0171F;
+
 $dark: #3D3D3D;
+
 $green: #4FA584;
 $good: #4FA584;
 $neutral: #FFD700;
 $bad: #EE3B3B;
+$comment: #5CACEE;
+
+$border-good: #e67300;
+$border-neutral: #ffa64d;
+$border-bad: #ffbf80;
+
+%color-primary {
+  background-color: #428BCA;
+  border-color: #357EBD
+}
+
+%color-success {
+  background-color: #5CB85C;
+  border-color: #4CAE4C
+}
+
+%color-info {
+  background-color: #5BC0DE;
+  border-color: #46B8DA;
+}
+
+%color-warning {
+  background-color: #F0AD4E;
+  border-color: #EEA236;
+}
+
+%color-danger{
+  background-color: #D9534F;
+  border-color: #D43F3A;
+}
 
 /*mixins*/
 @mixin border-radius($radius) {
@@ -23,4 +60,22 @@ $bad: #EE3B3B;
   -webkit-column-count: $columnCount;
      -moz-column-count: $columnCount;
           column-count: $columnCount;
+}
+
+@mixin keyframe($animation_name) {
+  @-webkit-keyframes #{$animation_name} {
+    @content;
+  }
+
+  @-moz-keyframes #{$animation_name} {
+    @content;
+  }
+
+  @-o-keyframes #{$animation_name} {
+    @content;
+  }
+
+  @keyframes #{$animation_name} {
+    @content;
+  }
 }
