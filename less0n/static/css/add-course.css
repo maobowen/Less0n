@@ -1,0 +1,53 @@
+header {
+    background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.9)), to(rgba(255, 255, 255, 0.9))), url(../img/backimg-1.jpg);
+    background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url(../img/backimg-1.jpg);
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    background-attachment: fixed;
+}
+
+.card{
+/*    text-align: center;*/
+    
+    margin: 100px auto;
+}
+
+#top-addcourse{
+    height: 30px;
+    background-color: #e67e22;
+}
+.section-form{
+    margin-top: 0px;
+}
+input,select,textarea{
+    font-weight: 300;
+    padding-left: 10px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+label{
+/*    margin: 0 auto;*/
+    width: 100%;
+    text-align: right;
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+.card-title{
+    text-align: center;
+    font-size: 40px;
+    font-weight: 300;
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+
+.button-addcourse{
+    padding-top: 0;
+    text-align: center;
+}
+
+.btn-addcourse{
+    margin: 0 100px;
+}
