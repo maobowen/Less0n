@@ -2,7 +2,7 @@ import sys
 import os.path
 import unittest
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
-from less0n import app
+from less0n import app, database
 from less0n.models import *
 from config import Auth
 
@@ -13,20 +13,10 @@ class MainTest(unittest.TestCase):
 
     def setUp(self):
         self.app = app.test_client()
-        db.create_all()
-
-        role_student = Role()
-        role_student.name = 'student'
-        db.session.add(role_student)
-        role_teacher = Role()
-        role_teacher.name = 'teacher'
-        db.session.add(role_teacher)
-
-        db.session.commit()
+        database.init_db()
 
     def tearDown(self):
-        db.session.remove()
-        db.drop_all()
+        database.drop_db()
 
     def test_index(self):
         rv = self.app.get('/')
