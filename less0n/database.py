@@ -1,6 +1,7 @@
 from less0n.models import *
 
-if __name__ == '__main__':
+
+def init_db():
     # Create tables
     print('Creating all database tables...')
     db.create_all()
@@ -20,3 +21,6 @@ if __name__ == '__main__':
 
     db.session.commit()
     print('Done!')
+
+if __name__ == '__main__':
+    init_db()

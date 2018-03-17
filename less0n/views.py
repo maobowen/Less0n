@@ -100,6 +100,12 @@ def logout():
     return redirect(redirect_url)
 
 
+@app.route('/department')
+def department():
+    """Return a friendly HTTP greeting."""
+    return render_template('department.html')
+
+
 @app.errorhandler(500)
 def server_error(e):
     logging.exception('An error occurred during a request.')

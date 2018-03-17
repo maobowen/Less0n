@@ -1,6 +1,6 @@
 from less0n import db, login_manager
+from datetime import datetime
 from flask_login import UserMixin
-import datetime
 
 
 class User(db.Model, UserMixin):
@@ -96,16 +96,18 @@ class Professor(db.Model):
         return '<Professor %r>' % self.name
 
 
-class Teaching(db.Base):
+class Teaching(db.Model):
     __tablename__ = 'teachings'
-    course = db.Column(db.String(12), db.ForeignKey('courses.id'), primary_key=True)  # CSEE3827
-    professor = db.Column(db.String(8), db.ForeignKey('professors.uni'), primary_key=True)  # Ewan Lowe
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # 1
+    course = db.Column(db.String(12), db.ForeignKey('courses.id'))  # CSEE3827
+    professor = db.Column(db.String(8), db.ForeignKey('professors.uni'))  # Ewan Lowe
     comments = db.relationship('Comment', backref='teaching_comment', lazy=True)
 
 
 class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # 1
+    teaching = db.Column(db.Integer, db.ForeignKey('teachings.id'))
     title = db.Column(db.String(100))  # Great course
     content = db.Column(db.Text)  # A very good teacher
     term = db.Column(db.String(12), db.ForeignKey('terms.id'))
@@ -125,4 +127,4 @@ class Term(db.Model):
 class Tag(db.Model):
     __tablename__ = 'tags'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # 1
-    text = db.Column(db.String(40), primary_key=True, nullable=False)
+    text = db.Column(db.String(40), nullable=False)
