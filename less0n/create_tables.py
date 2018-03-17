@@ -7,12 +7,16 @@ if __name__ == '__main__':
 
     # Create data
     print('Dumping all data...')
-    role_student = Role()
-    role_student.name = 'student'
+    role_student = Role(name='student')
     db.session.add(role_student)
-    role_teacher = Role()
-    role_teacher.name = 'teacher'
-    db.session.add(role_teacher)
+    role_instructor = Role(name='instructor')
+    db.session.add(role_instructor)
+
+    dept_coms = Department(id='COMS', name='Computer Science')
+    db.session.add(dept_coms)
+
+    subj_csee = Subject(id='CSEE', name='Computer Science and Electrical Engineering')
+    db.session.add(subj_csee)
 
     db.session.commit()
     print('Done!')
