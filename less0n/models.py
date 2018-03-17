@@ -45,7 +45,7 @@ class Membership(db.Model):
 class Department(db.Model):
     __tablename__ = 'departments'
     id = db.Column(db.String(6), primary_key=True, nullable=False)  # COMS
-    name = db.Column(db.String(40), nullable=False)  # Computer Science
+    name = db.Column(db.String(100), nullable=False)  # Computer Science
     url = db.Column(db.String(200))  # Department website
     courses = db.relationship('Course', backref='course_department', lazy=True)
 
@@ -59,7 +59,7 @@ class Department(db.Model):
 class Subject(db.Model):
     __tablename__ = 'subjects'
     id = db.Column(db.String(6), primary_key=True, nullable=False)  # CSEE
-    name = db.Column(db.String(40), nullable=False)  # Computer Science and Electrical Engineering
+    name = db.Column(db.String(100), nullable=False)  # Computer Science and Electrical Engineering
     courses = db.relationship('Course', backref='course_subject', lazy=True)
 
     def __init__(self, id=None, name=None):
@@ -74,7 +74,7 @@ class Course(db.Model):
     id = db.Column(db.String(12), primary_key=True, nullable=False)  # CSEE3827
     subject = db.Column(db.String(6), db.ForeignKey('subjects.id'), nullable=False)  # CSEE
     number = db.Column(db.String(6), nullable=False)  # 3827
-    name = db.Column(db.String(40), nullable=False)  # Fundamentals of Computer Systems
+    name = db.Column(db.String(100), nullable=False)  # Fundamentals of Computer Systems
     department = db.Column(db.String(6), db.ForeignKey('departments.id'), nullable=False)  # COMS
 
     def __init__(self, id=None, subject=None, number=None, name=None, department=None):
@@ -119,7 +119,7 @@ class Comment(db.Model):
     grade = db.Column(db.String(2), nullable=False)  # A+
     user = db.Column(db.String(40), db.ForeignKey('users.id'))
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    tags = db.Column(db.String(40), db.ForeignKey('tags.id'))
+    tags = db.Column(db.Integer, db.ForeignKey('tags.id'))
 
 
 class Term(db.Model):
