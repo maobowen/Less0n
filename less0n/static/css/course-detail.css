@@ -185,6 +185,11 @@ body {
           animation-duration: 2s;
           width: 80%;
           background: #EE3B3B; }
+  body #add-comment {
+    float: left;
+    width: 200px;
+    position: relative;
+    top: -130px; }
   body #sortby form {
     width: 230px;
     position: relative;
