@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <title>Less0n - Faculty Page</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,300italic' rel='stylesheet' type='text/css'>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="../static/css/faculty-page.css">
+    </head>
+
+	<body>
+		<div class="jumbotron jumbotron-fluid">
+			<div class="container">
+				<div class="faculty-pic">
+					<img src="../static/img/el.jpg" alt="Smiley face">
+				</div>
+				<div class="faculty-info">
+					<h1 class="display-4">Prof. Ewan Lowe</h1>
+					<p class="lead">Department: Computer Science</p>
+					<p class="lead">Personal Site: Here</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="statistics">
+			<div class="row">
+				<div class="stats_box col-md-6">
+					<div id="tag_list" class="stats_box_content">
+						<div class="tags">
+			                <a class="success">Nice</a> <a class="primary">No quiz</a> <a class="info">Interesting</a> <a class="danger">Has project</a> <a class="warning">Has final</a> <a class="success">Practical</a> <a class="danger">Google Cloud</a> <a class="info">Software</a> <a class="primary">Good instructor</a> <a class="warning">Good TAs</a>
+			            </div>
+					</div>
+				</div>
+
+				<div class="stats_box col-md-6">
+					<div id="bar_stats" class="stats_box_content">
+					    <div class="stat">
+					        Ratings: 4.5 <span></span>
+					    </div>
+					    <div class="progress">
+					        <div id="rating_progress_bar" class="progress_bar"></div>
+					    </div>
+					    <div class="stat">
+					        Grade: 4 <span></span>
+					    </div>
+					    <div class="progress">
+					        <div id="grade_progress_bar" class="progress_bar"></div>
+					    </div>
+					    <div class="stat">
+					       Workload: 4 <span></span>
+					    </div>
+					    <div class="progress">
+					        <div id="workload_progress_bar" class="progress_bar"></div>
+					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="sortby" class="container">
+			<form>
+				<select class="form-control">
+					<option>Sort by Popularity</option>
+					<option>Sort by Name</option>
+					<option>Sort by Rating</option>
+				</select>
+			</form>
+		</div>
+
+		<div class="container card-columns">
+			<div class="card">
+				<!-- <div class="card-header"></div> -->
+				<div class="card-body border-neutral">
+					<h3 class="card-title">COMS 4316</h3>
+					<h4 class="card-title">Advanced Software Engineering</h4>
+					<p class="card-text">Department: Computer Science</p>
+					<div class="btn neutral">Rating: 4.5</div>
+					<div class="btn good">Grade: 4</div> 
+					<div class="btn bad">Workload: 4</div>
+					<div class="btn comment">Comments: 35</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,234 @@
+@import "style-variables";
+
+$rating_width: 90%;
+$grade_width: 90%;
+$workload_width: 30%;
+
+/*progrss bar animation*/
+@mixin progress-bar($bar_name, $time) {
+  -webkit-animation-name: $bar_name; 
+  -webkit-animation-duration: $time;
+  -moz-animation-name: $bar_name;
+  -moz-animation-duration: $time;
+  -o-animation-name: $bar_name; 
+  -o-animation-duration: $time;
+  animation-name: $bar_name; 
+  animation-duration: $time;
+}
+
+@include keyframe(rating_progress_bar) {
+  0% {
+      width: 0px;
+  }
+
+  100% {
+      width: $rating_width;
+  }
+}
+
+@include keyframe(grade_progress_bar) {
+  0% {
+      width: 0px;
+  }
+
+  100% {
+      width: $grade_width;
+  }
+}
+
+@include keyframe(workload_progress_bar) {
+  0% {
+      width: 0px;
+  }
+
+  100% {
+      width: $workload_width;
+  }
+}
+
+body {
+  background-color: white;
+  font-family: $lato !important;
+
+  .jumbotron {
+  	background-color: $blue;
+  	height: $jumbotron;
+
+    .container {
+      margin-top: 50px;
+
+      .course-title {
+        float: left;
+      }
+
+      .faculty-pic img {
+      	@include border-radius(20px);
+        width: 240px;
+        height: 240px;
+        border: 5px solid white;
+        display: block;
+        float: left;
+        position: relative;
+        top: 20px;
+      }
+
+      .faculty-info {
+        float: left;
+        margin: 10px 0 0 60px;
+      }
+    }
+  }
+
+  .statistics {
+  	position: relative;
+  	top: -180px;
+    color: white;
+    background: $dark;
+    box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+    width: 49%;
+    margin-left: 34%;
+
+    .stats_box {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0;
+
+      .stats_box_content {
+        padding: 30px;
+      }
+
+      #tag_list {
+      	padding-left: 45px;
+
+        .tags a {
+          @include border-radius(2px);
+          color: white;
+          margin: 0 3px 6px 0;
+          padding: 5px 10px;
+          display: inline-block;
+        }
+
+        .tags a.primary {
+          @extend %color-primary;
+        }
+
+        .tags a.success {
+          @extend %color-success;
+        }
+
+        .tags a.info {
+          @extend %color-info;
+        }
+
+        .tags a.warning {
+          @extend %color-warning;
+        }
+
+        .tags a.danger{
+          @extend %color-danger;
+        }
+      }
+
+      #bar_stats {
+      	box-shadow: -3px 0px rgba(255, 255, 255, 0.1);
+      	padding-right: 45px;
+
+        .progress {
+          height: 6px;
+          background: rgba(0, 0, 0, 0.3);
+          margin-top: 10px;
+          margin-bottom: 15px;
+        
+          .progress_bar {
+            float: left;
+            @include border-radius(2px);
+          }
+
+          #rating_progress_bar {
+            @include progress-bar(rating_progress_bar, 2s);
+            width: $rating_width;
+            background: $neutral;
+          }
+
+          #grade_progress_bar {
+            @include progress-bar(grade_progress_bar, 2s);
+            width: $grade_width;
+            background: $good;
+          }
+
+          #workload_progress_bar {
+            @include progress-bar(workload_progress_bar, 2s);
+            width: $workload_width;
+            background: $bad;
+          }
+        }
+      }
+    }
+  }
+
+  #sortby {
+  	form {
+  		width: 230px;
+  		position: relative;
+  		top: -215px;  	
+  	}
+  }
+
+  .card-columns {
+    @include content-columns(2);
+    position: relative;
+    top: -170px;
+    max-height: 100vh;
+    overflow: auto;
+
+    .border-good {
+      border-top: 10px solid $border-good;
+    }
+
+    .border-neutral {
+      border-top: 10px solid $border-neutral;
+    }
+
+    .border-bad {
+      border-top: 10px solid $border-bad;
+    }
+
+    .card {
+      margin: 10px 0;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 5px 0 rgba(0, 0, 0, 0.1);
+
+      .card-text {
+      	color: #808080;
+      }
+
+      .btn {
+      	color: white;
+      	cursor: auto;
+      	margin-top: 8px;
+      }
+
+      .good {
+	      background-color: $good;
+	    }
+
+	    .neutral {
+	      background-color: $neutral;
+	    }
+
+	    .bad {
+	      background-color: $bad;
+	    }
+
+	    .comment {
+	      background-color: $comment;
+	    }
+
+      .list-group {
+        border: none;
+        font-size: 15px;
+      }
+    }
+  }
+}
+
