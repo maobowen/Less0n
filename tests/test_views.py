@@ -16,8 +16,7 @@ class MainTest(unittest.TestCase):
         database.init_db()
 
     def tearDown(self):
-        db.session.remove()
-        db.drop_all()
+        database.drop_db()
 
     def test_index(self):
         rv = self.app.get('/')

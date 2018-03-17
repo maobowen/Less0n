@@ -78,7 +78,7 @@ class Course(db.Model):
     department = db.Column(db.String(6), db.ForeignKey('departments.id'), nullable=False)  # COMS
 
     def __init__(self, id=None, subject=None, number=None, name=None, department=None):
-        db.Model.__init__(self, id=id, subject=subject, number=number, name=name, departmen=department)
+        db.Model.__init__(self, id=id, subject=subject, number=number, name=name, department=department)
 
     def __repr__(self):
         return '<Course %r>' % self.id
@@ -88,9 +88,12 @@ class Professor(db.Model):
     __tablename__ = 'professors'
     uni = db.Column(db.String(8), primary_key=True, nullable=False)  # etl2115
     name = db.Column(db.String(100), nullable=False)  # Ewan Lowe
-    department_id = db.Column(db.String(6), db.ForeignKey('departments.id'), nullable=False)  # COMS
+    department = db.Column(db.String(6), db.ForeignKey('departments.id'), nullable=False)  # COMS
     avatar = db.Column(db.String(200))  # Avatar
     url = db.Column(db.String(200))  # Personal website
+
+    def __init__(self, uni=None, name=None, department=None, avatar='', url=''):
+        db.Model.__init__(self, uni=uni, name=name, department=department, avatar=avatar, url=url)
 
     def __repr__(self):
         return '<Professor %r>' % self.name
