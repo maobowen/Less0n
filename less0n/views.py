@@ -7,6 +7,7 @@ from less0n.models import *
 import json
 import logging
 import re
+from collections import defaultdict
 from flask import url_for, redirect, render_template, session, request, flash
 from flask_login import login_required, login_user, logout_user, current_user
 from requests_oauthlib import OAuth2Session
@@ -98,6 +99,13 @@ def logout():
     logout_user()
     session.clear()
     return redirect(redirect_url)
+
+
+@app.route('/department')
+def department():
+    all_depts = Department.query.all()
+    context = {'depts': all_depts}
+    return render_template('department.html', **context)
 
 
 @app.errorhandler(500)
