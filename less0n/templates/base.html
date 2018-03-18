@@ -8,11 +8,13 @@
         <meta name="author" content="Less0n">
         <meta name="google-signin-client_id" content="404268012776-for6fmuj3um5i19k694gmd01ne0sd2fp.apps.googleusercontent.com">
         {% block head_meta %}{% endblock %}
+
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css">
         <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Lato:100,300,400,300italic'>
         <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
         {% block head_css %}{% endblock %}
+
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         {% block head_js %}{% endblock %}
@@ -20,12 +22,15 @@
 
     <body>
         {% block body_header %}{% endblock %}
+
         {% block body_main %}{% endblock %}
+
         <footer>
             <div class="row">
                 <p>&copy; Less0n 2018. All rights reserved.</p>
             </div>
         </footer>
+
         {% block body_js %}{% endblock %}
     </body>
 </html>
