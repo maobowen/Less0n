@@ -13,6 +13,7 @@ class MainTest(unittest.TestCase):
 
     def setUp(self):
         self.app = app.test_client()
+        database.drop_db()
         database.init_db()
 
     def tearDown(self):
