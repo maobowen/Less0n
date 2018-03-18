@@ -1,71 +1,47 @@
 {% extends "base2.html" %}
 
 {% block head_meta %}
-    <title>Less0n - Department Detail</title>
+        <title>Less0n - {{ dept.name }}</title>
 {% endblock %}
 
 {% block head_css %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/department-course.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/department-course.css') }}">
 {% endblock %}
 
 {% block body_main %}
-    <div class="jumbotron jumbotron-fluid">
-        <div class="container">
-            <div class="dept-info">
-                <h1 class="display-4">Department of Computer Science</h1>
-                <p class="lead">Official Site: Here</p>
-            </div>
-        </div>
-    </div>
-
-    <div id="sortby" class="container">
-        <form>
-            <select class="form-control">
-                <option>Sort by Name</option>
-                <option>Sort by Popularity</option>
-                <option>Sort by Rating</option>
-            </select>
-        </form>
-    </div>
-
-    <div class="container card-columns">
-        <div class="card">
-            <!-- <div class="card-header"></div> -->
-            <div class="card-body border-good">
-                <h3 class="card-title">COMS 4316</h3>
-                <h4 class="card-title">Advanced Software Engineering</h4>
-                <p class="card-text">Department: Computer Science</p>
-                <div class="btn neutral">Rating: 4.5</div>
-                <div class="btn good">Grade: 4</div>
-                <div class="btn bad">Workload: 4</div>
-                <div class="btn comment">Comments: 35</div>
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <div class="dept-info">
+                    <h1 class="display-4">Department of {{ dept.name }}</h1>
+                    <p class="lead">Website: <a href="{{ dept.url }}" target="_blankd">{{ dept.url }}</a></p>
+                </div>
             </div>
         </div>
 
-        <div class="card">
-            <!-- <div class="card-header"></div> -->
-            <div class="card-body border-neutral">
-                <h3 class="card-title">COMS 4316</h3>
-                <h4 class="card-title">User Interface Design</h4>
-                <p class="card-text">Department: Computer Science</p>
-                <div class="btn good">Rating: 4.5</div>
-                <div class="btn neutral">Grade: 3</div>
-                <div class="btn bad">Workload: 4</div>
-                <div class="btn comment">Comments: 35</div>
-            </div>
+        <div id="sortby" class="container">
+            <form>
+                <select class="form-control">
+                    <option>Sort by Name</option>
+                    <option>Sort by Popularity</option>
+                    <option>Sort by Rating</option>
+                </select>
+            </form>
         </div>
 
-        <div class="card">
-            <!-- <div class="card-header"></div> -->
-            <div class="card-body border-bad">
-                <h3 class="card-title">COMS 4316</h3>
-                <h4 class="card-title">Artificial Intelligence</h4>
-                <p class="card-text">Department: Computer Science</p>
-                <div class="btn bad">Rating: 4.5</div>
-                <div class="btn good">Grade: 4</div>
-                <div class="btn bad">Workload: 4</div>
-                <div class="btn comment">Comments: 35</div>
+        <div class="container card-columns">
+        {% for course in courses %}
+            <div class="card">
+                <!-- <div class="card-header"></div> -->
+                <div class="card-body border-good">
+                    <h3 class="card-title">{{ course.subject_id }} {{ course.number }}</h3>
+                    <h4 class="card-title">{{ course.name }}</h4>
+                    <p class="card-text">Subject: {{ course.subject_name }}</p>
+                    <div class="btn neutral">Rating: 4.5</div>
+                    <div class="btn good">Grade: 4</div>
+                    <div class="btn bad">Workload: 4</div>
+                    <div class="btn comment">Comments: 35</div>
+                </div>
             </div>
+        {% endfor %}
         </div>
-    </div>
 {% endblock %}

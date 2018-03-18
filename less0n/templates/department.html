@@ -45,7 +45,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ dept.name }}</h5>
                         <p class="card-text"></p>
-                        <a href="#" class="btn btn-primary">See all <i>{{ dept.courses|length }}</i> courses</a>
+                        <a href="{{ url_for('department_course', dept_arg=dept.id) }}" class="btn btn-primary">See all <i>{{ dept.courses|length }}</i> courses</a>
                     </div>
                 </div>
             </div>

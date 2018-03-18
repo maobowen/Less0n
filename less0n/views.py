@@ -12,7 +12,17 @@ from flask import url_for, redirect, render_template, session, request, flash
 from flask_login import login_required, login_user, logout_user, current_user
 from requests_oauthlib import OAuth2Session
 from requests.exceptions import HTTPError
+from werkzeug.routing import BaseConverter
 from config import Auth
+
+
+class RegexConverter(BaseConverter):
+    def __init__(self, url_map, *items):
+        super(RegexConverter, self).__init__(url_map)
+        self.regex = items[0]
+
+
+app.url_map.converters['regex'] = RegexConverter
 
 
 def get_google_auth(state=None, token=None):
@@ -106,6 +116,25 @@ def department():
     all_depts = Department.query.all()
     context = {'depts': all_depts}
     return render_template('department.html', **context)
+
+
+@app.route('/dept/<regex("[A-Za-z]{4}"):dept_arg>/')
+def department_course(dept_arg):
+    dept = Department.query.filter_by(id=dept_arg).first()
+    if dept is None:
+        return redirect(url_for('department'))
+    all_courses = Course.query.filter_by(department=dept.id).join(Subject, Course.subject == Subject.id).add_columns(
+        Course.id.label("id"),
+        Course.subject.label("subject_id"),
+        Course.number.label("number"),
+        Course.name.label("name"),
+        Subject.name.label("subject_name")
+    ).all()
+    context = {
+        'dept': dept,
+        'courses': all_courses,
+    }
+    return render_template('department-course.html', **context)
 
 
 @app.errorhandler(500)

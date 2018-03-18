@@ -16,15 +16,23 @@ def init_db():
     db.session.commit()
 
     depts = {
-        'AHAR': Department(id='AHAR', name='Art History and Archaeology'),
-        'COMS': Department(id='COMS', name='Computer Science'),
-        'EALC': Department(id='EALC', name='East Asian Languages and Cultures'),
-        'ECON': Department(id='ECON', name='Economics'),
-        'HSTB': Department(id='HSTB', name='History @Barnard'),
+        'AHAR': Department(id='AHAR', name='Art History and Archaeology',
+                           url='http://www.columbia.edu/cu/arthistory/'),
+        'COMS': Department(id='COMS', name='Computer Science',
+                           url='https://www.cs.columbia.edu/'),
+        'EALC': Department(id='EALC', name='East Asian Languages and Cultures',
+                           url='http://ealac.columbia.edu/'),
+        'ECON': Department(id='ECON', name='Economics',
+                           url='http://econ.columbia.edu/'),
+        'HSTB': Department(id='HSTB', name='History @Barnard',
+                           url='https://history.barnard.edu/'),
         'HUMC': Department(id='HUMC', name='Humanities (College)'),
-        'MATH': Department(id='MATH', name='Mathematics'),
-        'MUSI': Department(id='MUSI', name='Music'),
-        'STAT': Department(id='STAT', name='Statistics'),
+        'MATH': Department(id='MATH', name='Mathematics',
+                           url='https://www.math.columbia.edu/'),
+        'MUSI': Department(id='MUSI', name='Music',
+                           url='https://music.columbia.edu/'),
+        'STAT': Department(id='STAT', name='Statistics',
+                           url='https://stat.columbia.edu/'),
     }
     for _, dept in depts.items():
         db.session.add(dept)
