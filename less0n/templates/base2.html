@@ -1,25 +1,25 @@
 {% extends "base.html" %}
 
 {% block body_header %}
-        <header>
-            <nav class="sticky">
-                <div class="row">
-                    <img src="{{ url_for('static', filename='img/c-logo.jpg') }}" alt="logo" class="logo">
-                    <ul class="main-nav mr-auto">
-                        <li><a href="{{ url_for('index') }}">Home</a></li>
-                        <li><a href="#leadBoard">Leader board</a></li>
-                        <li><a href="{{ url_for('department') }}">Department</a></li>
-                    </ul>
-                    <ul class="main-nav">
-                        {%- if current_user.is_authenticated -%}
-                        <li><img src="{{current_user.avatar}}?sz=50" width="50" height="50" alt="{{current_user.name}}"> {{current_user.name}}</li>
-                        <li><a href="{{ url_for('logout') }}">Sign out</a></li>
-                        {%- else -%}
-                        <li><a href="{{ url_for('login') }}?redirect={{ request.path }}">Sign in with Lionmail</a></li>
-                        {%- endif -%}
-                    </ul>
-                    <a class="mobile-nav-icon js--nav-icon"><i class="ion-navicon-round"></i></a>
-                </div>
-            </nav>
-        </header>
+    <header>
+        <nav class="sticky">
+            <div class="row">
+                <img src="{{ url_for('static', filename='img/c-logo.jpg') }}" alt="logo" class="logo">
+                <ul class="main-nav mr-auto">
+                    <li><a class="active" href="#home">Home</a></li>
+                    <li><a href="#leadBoard">Leader board</a></li>
+                    <li><a href="#Department">Department</a></li>
+                </ul>
+                <ul class="main-nav">
+                    {%- if current_user.is_authenticated -%}
+                    <li><img src="{{current_user.avatar}}?sz=50" width="50" height="50" alt="{{current_user.name}}"> {{current_user.name}}</li>
+                    <li><a href="{{ url_for('logout') }}">Sign out</a></li>
+                    {%- else -%}
+                    <li><a href="{{ url_for('login') }}?redirect={{ request.path }}">Sign in with Lionmail</a></li>
+                    {%- endif -%}
+                </ul>
+                <a class="mobile-nav-icon js--nav-icon"><i class="ion-navicon-round"></i></a>
+            </div>
+        </nav>
+    </header>
 {% endblock %}
