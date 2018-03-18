@@ -17,8 +17,6 @@ jobs:
           POSTGRES_PASSWORD: "!Qazxsw2#Edcvfr4"
     steps:
       - checkout
-      - restore_cache:
-          key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
       - run:
           name: Set up Google App Engline SDK
           command: |
@@ -30,10 +28,6 @@ jobs:
             python3 -m venv less0n
             . less0n/bin/activate
             pip3 install -r requirements.txt
-      - save_cache:
-          key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
-          paths:
-            - "less0n"
       - run:
           name: Testing
           command: |
@@ -55,8 +49,6 @@ jobs:
       - image: google/cloud-sdk:latest
     steps:
       - checkout
-      - restore_cache:
-          key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
       - run:
           name: Authenticate with Google Cloud Platform
           command: |
@@ -70,10 +62,6 @@ jobs:
       - run:
           name: Discarding all changes
           command: git checkout -- .
-      - save_cache:
-          key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
-          paths:
-            - "less0n"
 
 workflows:
   version: 2
