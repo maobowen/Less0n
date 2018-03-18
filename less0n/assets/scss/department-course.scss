@@ -1,0 +1,138 @@
+@import "style-variables";
+
+$rating_width: 90%;
+$grade_width: 90%;
+$workload_width: 30%;
+
+/*progrss bar animation*/
+@mixin progress-bar($bar_name, $time) {
+  -webkit-animation-name: $bar_name; 
+  -webkit-animation-duration: $time;
+  -moz-animation-name: $bar_name;
+  -moz-animation-duration: $time;
+  -o-animation-name: $bar_name; 
+  -o-animation-duration: $time;
+  animation-name: $bar_name; 
+  animation-duration: $time;
+}
+
+@include keyframe(rating_progress_bar) {
+  0% {
+      width: 0px;
+  }
+
+  100% {
+      width: $rating_width;
+  }
+}
+
+@include keyframe(grade_progress_bar) {
+  0% {
+      width: 0px;
+  }
+
+  100% {
+      width: $grade_width;
+  }
+}
+
+@include keyframe(workload_progress_bar) {
+  0% {
+      width: 0px;
+  }
+
+  100% {
+      width: $workload_width;
+  }
+}
+
+body {
+  background-color: white;
+  font-family: $lato !important;
+
+  .jumbotron {
+  	background-color: $dark;
+  	height: $jumbotron;
+    color: white;
+
+    .container {
+      margin-top: 50px;
+
+      .course-title {
+        float: left;
+      }
+
+      .dept-info {
+        float: left;
+        margin-top: 10px;
+      }
+    }
+  }
+
+  #sortby {
+  	form {
+  		width: 230px;
+  		float: right;
+      position: relative;
+  		top: -220px;  	
+  	}
+  }
+
+  .card-columns {
+    @include content-columns(2);
+    position: relative;
+    top: -200px;
+    max-height: 100vh;
+    overflow: auto;
+    clear: both;
+
+    .border-good {
+      border-top: 10px solid $border-good;
+    }
+
+    .border-neutral {
+      border-top: 10px solid $border-neutral;
+    }
+
+    .border-bad {
+      border-top: 10px solid $border-bad;
+    }
+
+    .card {
+      margin: 10px 0;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 5px 0 rgba(0, 0, 0, 0.1);
+
+      .card-text {
+      	color: #808080;
+      }
+
+      .btn {
+      	color: white;
+      	cursor: auto;
+      	margin-top: 8px;
+      }
+
+      .good {
+	      background-color: $good;
+	    }
+
+	    .neutral {
+	      background-color: $neutral;
+	    }
+
+	    .bad {
+	      background-color: $bad;
+	    }
+
+	    .comment {
+	      background-color: $comment;
+	    }
+
+      .list-group {
+        border: none;
+        font-size: 15px;
+      }
+    }
+  }
+}
+
