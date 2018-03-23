@@ -35,8 +35,8 @@ class Role(db.Model):
 class Membership(db.Model):
     __tablename__ = 'memberships'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.String(40), db.ForeignKey('users.id'))
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    user_id = db.Column(db.String(40), db.ForeignKey('users.id'), nullable=False)
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
 
     def __repr__(self):
         return '<Membership %r>' % self.id
@@ -102,23 +102,23 @@ class Professor(db.Model):
 class Teaching(db.Model):
     __tablename__ = 'teachings'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # 1
-    course = db.Column(db.String(12), db.ForeignKey('courses.id'))  # CSEE3827
-    professor = db.Column(db.String(8), db.ForeignKey('professors.uni'))  # Ewan Lowe
+    course = db.Column(db.String(12), db.ForeignKey('courses.id'), nullable=False)  # CSEE3827
+    professor = db.Column(db.String(8), db.ForeignKey('professors.uni'), nullable=False)  # Ewan Lowe
     comments = db.relationship('Comment', backref='teaching_comment', lazy=True)
 
 
 class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # 1
-    teaching = db.Column(db.Integer, db.ForeignKey('teachings.id'))
+    teaching = db.Column(db.Integer, db.ForeignKey('teachings.id'), nullable=False)
     title = db.Column(db.String(100))  # Great course
     content = db.Column(db.Text)  # A very good teacher
-    term = db.Column(db.String(12), db.ForeignKey('terms.id'))
+    term = db.Column(db.String(12), db.ForeignKey('terms.id'), nullable=False)
     rating = db.Column(db.Integer, nullable=False)  # 5
     workload = db.Column(db.Integer, nullable=False)  # 1
     grade = db.Column(db.String(2), nullable=False)  # A+
-    user = db.Column(db.String(40), db.ForeignKey('users.id'))
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    user = db.Column(db.String(40), db.ForeignKey('users.id'), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     tags = db.Column(db.Integer, db.ForeignKey('tags.id'))
 
 
