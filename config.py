@@ -32,7 +32,8 @@ class TestConfig(Config):
 
 class ProdConfig(Config):
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://postgres:!Qazxsw2#Edcvfr4@/postgres?host=/cloudsql/swift-hope-195519:us-central1:less0n'
+    # SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://postgres:!Qazxsw2#Edcvfr4@/postgres?host=/cloudsql/swift-hope-195519:us-central1:less0n'  # Google Cloud
+    SQLALCHEMY_DATABASE_URI = 'postgresql://czhddyqxkfjgjc:5dbe636797c4869eb00d88a664019c2f2067f127e86c4c6b758336862f20428e@ec2-54-83-192-68.compute-1.amazonaws.com:5432/d90m40hhc3e0ha'  # Heroku
     GOOGLE_OAUTH_REDIRECT_URI = 'https://less0n.bmao.tech/oauth'
 
 
