@@ -1,3 +1,5 @@
+
+
 # Reference:
 # - http://bitwiser.in/2015/09/09/add-google-login-in-flask.html
 # - https://stackoverflow.com/questions/34235590/how-do-you-restrict-google-login-oauth2-to-emails-from-a-specific-google-apps
@@ -101,12 +103,23 @@ def logout():
     return redirect(redirect_url)
 
 
-@app.route('/department')
+@app.route('/department', methods = ["POST", "GET"])
 def department():
-    all_depts = Department.query.all()
-    context = {'depts': all_depts}
-    return render_template('department.html', **context)
+    """
+    Render the template with all departments if it is the "GET" request.
+    Render the template with departments having keywords if it is the "POST" request.
+    :return: rendered template
+    """
+    if request.method == "GET":
+        all_depts = Department.query.all()
+        context = {'depts': all_depts}
+        return render_template('department.html', **context)
 
+    elif request.method == "POST":
+        dept_keyword = request.form['dept_keyword']
+        depts = Department.query.filter(Department.name.contains(dept_keyword)).all()
+        context = {'depts': depts}
+        return render_template('department.html', **context)
 
 @app.errorhandler(500)
 def server_error(e):
