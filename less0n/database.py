@@ -8,6 +8,16 @@ def init_db():
 
     # Create data
     print('Dumping all data...')
+
+    # User Data
+    users = {
+        'zj2226': User(id='zj2226', avatar='', email='zj2226@columbia.edu', name='Zhijian Jiang', tokens=''),
+    }
+    for _, user in users.items():
+        db.session.add(user)
+    db.session.commit()
+
+
     # Roles
     role_student = Role(name='student')
     db.session.add(role_student)
@@ -105,11 +115,57 @@ def init_db():
     profs = {
         'mak2191': Professor(uni='mak2191', name='Martha A. Kim', department=depts['COMS'].id,
                              url='http://www.cs.columbia.edu/~martha/'),
+        'cs2035': Professor(uni='cs2035', name='Clifford Stein', department=depts['COMS'].id,
+                             url='http://www.columbia.edu/~cs2035/'),
     }
     for _, prof in profs.items():
         db.session.add(prof)
     db.session.commit()
-    
+
+    # tag data
+    tags = {
+        1: Tag(id=1, text="Interesting"),
+        2: Tag(id=2, text="Hot"),
+        3: Tag(id=3, text="Ace Professor"),
+    }
+    for _, tag in tags.items():
+        db.session.add(tag)
+    db.session.commit()
+
+    # Term Data
+    terms = {
+        "Spring": Term(id="Spring"),
+        "Summer": Term(id="Summer"),
+        "Fall": Term(id="Fall"),
+        "Winter": Term(id="Winter"),
+    }
+    for _, term in terms.items():
+        db.session.add(term)
+    db.session.commit()
+
+    # Teaching Data
+    teachings = {
+        1: Teaching(id=1, course='COMS4701', professor='mak2191'),
+        2: Teaching(id=2, course='COMS4705', professor='cs2035')
+    }
+    for _, teaching in teachings.items():
+        db.session.add(teaching)
+    db.session.commit()
+
+    from datetime import datetime
+    # Comment Data
+    comments = {
+        1: Comment(id=1, teaching=1, title='Great Course', content='A very good teacher', term='Spring',
+                   rating=5, workload=1, grade='A+', user='zj2226', timestamp=datetime.now(), tags=1),
+    }
+    for _, comment in comments.items():
+        db.session.add(comment)
+    db.session.commit()
+
+
+
+
+
     print('Done!')
 
 
