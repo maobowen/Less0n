@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/comment.css') }}">
 {% endblock %}
 
+{% block head_js %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/course-detail.js') }}"></script>
+{% endblock %}
+
 {% block body_main %}
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
@@ -31,13 +35,13 @@
                 <div id="faculty_choice" class="stats_box_content">
                     <div class="row">
                         <div class="col-md-3">
-                            <i class="fa fa-chevron-circle-left"></i>
+                            <button id="left"><i class="fa fa-chevron-circle-left"></i></button>
                         </div>
                         <div class="col-md-6">
-                            <img src="../static/img/el.jpg" alt="Smiley face">
+                            <img id="prof-pic" src="../static/img/el.jpg" alt="Smiley face">
                         </div>
                         <div class="col-md-3">
-                            <i class="fa fa-chevron-circle-right"></i>
+                            <button id="right"><i class="fa fa-chevron-circle-right"></i></button>
                         </div>
                     </div>
                     <h4>Prof. Ewan Lowe</h4>

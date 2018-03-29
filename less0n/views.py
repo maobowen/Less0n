@@ -26,7 +26,7 @@ def get_google_auth(state=None, token=None):
 @app.route('/')
 def index():
     """Return a friendly HTTP greeting."""
-    return render_template('index.html')
+    return render_template('course-detail.html')
 
 
 @app.route('/login')

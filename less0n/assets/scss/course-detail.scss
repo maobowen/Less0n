@@ -95,15 +95,20 @@ body {
           margin-right: auto;
         }
 
-        i {
-          font-size: 40px;
-          color: $green;
-          line-height: 120px;
+        button {
+          background: transparent;
+          border: none;
           text-align: center;
           vertical-align: middle;
           display: block;
           margin-left: auto;
           margin-right: auto;
+
+          i {
+            font-size: 40px;
+            color: $green;
+            line-height: 120px;
+          }
         }
 
         h4 {
