@@ -28,6 +28,38 @@ class MainTest(unittest.TestCase):
         assert(rv._status_code == 302)
         assert(Auth.AUTH_URI in rv.location)
 
+    def test_department_course_with_valid_input(self):
+        """
+        Test if department_course() return department-course.html with valid department name
+        Test cases:
+        --------------------------------------------------
+        Input                             Expected Output
+        /dept/COMS/                       COMS in html
+        """
+        rv = self.app.get('/dept/COMS/')
+        assert rv._status_code == 200
+        assert rv.content_type == 'text/html; charset=utf-8'
+        data = rv.data.decode('utf-8').lower() # convert data to lower case
+        assert 'department-course' in data
+        assert 'coms' in data
+
+    def test_department_course_with_unvalid_input(self):
+        """
+        Test if department_course() return department-course.html with unvalid department name
+        Test cases:
+        --------------------------------------------------
+        Input                             Expected Output
+        /dept/AAAA/                       department in html
+        """
+        rv = self.app.get('/dept/AAAA/')
+        assert rv._status_code == 302
+        assert rv.content_type == 'text/html; charset=utf-8'
+        data = rv.data.decode('utf-8').lower() # convert data to lower case
+        assert 'department' in data
+
+    def test_department_course_with_empty_input(self):
+        pass
+
 
 if __name__ == '__main__':
     unittest.main()
