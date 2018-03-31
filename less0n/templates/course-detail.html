@@ -11,7 +11,55 @@
 {% endblock %}
 
 {% block body_js %}
-    <script src="{{ url_for('static', filename='js/course-detail.js') }}"></script>
+    <script>
+
+        var cur = 0;
+
+        function changeProf(index, data) {
+            $('#prof-pic').attr("src", data[index]["pic"]);
+            $('#faculty_choice h4').text(data[index]["name"]);
+            for (var i=1; i<11; i++) {
+                $('#tag_list .tags a:nth-child('+i+')').text(data[index]["tag"][i-1]);
+            }
+            $('#rating_progress_bar').css("width", data[index]["rating"]);
+            $('#grade_progress_bar').css("width", data[index]["grade"]);
+            $('#workload_progress_bar').css("width", data[index]["workload"]);
+        }
+
+        $('#left i').click(function() {
+
+            $.ajax({
+                type: 'GET',
+                url: '/static/js/json.json',
+                dataType: 'json',
+                success: function (data) {
+                    if (cur == -1) {
+                        cur = data.length-1;
+                    }
+                    changeProf(cur, data);
+                    cur --;
+                }
+            });
+        });
+
+        $('#right i').click(function() {
+
+            $.ajax({
+                type: 'GET',
+                url: '/static/js/json.json',
+                dataType: 'json',
+                success: function (data) {
+                    if (cur == data.length) {
+                        cur = 0;
+                    }
+                    changeProf(cur, data);
+                    cur ++;
+                }
+            });
+
+        });
+    </script>
+{#    <script src="{{ url_for('static', filename='js/course-detail.js') }}"></script>#}
 {% endblock %}
 
 {% block body_main %}
