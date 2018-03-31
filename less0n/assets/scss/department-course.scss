@@ -78,11 +78,9 @@ body {
   	}
   }
 
-  .card-columns {
-    @include content-columns(2);
+  .cardcol {
     position: relative;
     top: -200px;
-    max-height: 100vh;
     overflow: auto;
     clear: both;
 
