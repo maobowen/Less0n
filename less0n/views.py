@@ -134,10 +134,41 @@ def department_course(dept_arg):
     dept = Department.query.filter_by(id=dept_arg.upper()).first()
     if dept is None:
         return redirect(url_for('department'))
+
+    statistics = {}
     all_courses = Course.query.filter_by(department=dept).all()
+    for c in all_courses:
+        sum_rating = sum_workload = sum_grade = 0
+        count_all_comments = count_nonempty_comments = 0
+        statistics[c] = {}
+
+        all_teachings = Teaching.query.filter_by(course=c).all()
+        if len(all_teachings) == 0:  # If there is no teaching, return -1 for rating, workload and grade
+            statistics[c]['rating'] = statistics[c]['workload'] = statistics[c]['grade'] = -1
+            statistics[c]['comment'] = 0
+        else:  # Otherwise, iterate each teaching
+            for teaching in all_teachings:
+                all_comments = teaching.comments
+                for comment in all_comments:  # Iterate each comment
+                    count_all_comments += 1
+                    sum_rating += comment.rating
+                    sum_workload += comment.workload
+                    sum_grade += helpers.letter_grade_to_numeric(comment.grade)
+                    if not (not comment.title.strip()) and not (not comment.content.strip()):
+                        count_nonempty_comments += 1
+
+            if count_all_comments == 0:  # If there is no comment, return -1 for rating, workload and grade
+                statistics[c]['rating'] = statistics[c]['workload'] = statistics[c]['grade'] = -1
+                statistics[c]['comment'] = 0
+            else:
+                statistics[c]['rating'] = sum_rating / count_all_comments
+                statistics[c]['workload'] = sum_workload / count_all_comments
+                statistics[c]['grade'] = sum_grade / count_all_comments
+                statistics[c]['comment'] = count_nonempty_comments
+
     context = {
         'dept': dept,
-        'courses': all_courses,
+        'courses': statistics,
     }
     return render_template('department-course.html', **context)
 
