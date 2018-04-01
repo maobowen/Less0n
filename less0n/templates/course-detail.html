@@ -17,7 +17,7 @@
                     <h1 class="display-4">{{ course.name }}</h1>
                 </div>
                 <div class="course-info">
-                    <p class="lead">Department: {{ course.department.name }}</p>
+                    <p class="lead">Department: <a href="{{ url_for('department_course', dept_arg=course.department.id) }}">{{ course.department.name }}</a></p>
                     <p class="lead">Subject: {{ course.subject.name }}</p>
                 </div>
             </div>
@@ -32,7 +32,7 @@
                                 <button id="left"><i class="fa fa-chevron-circle-left"></i></button>
                             </div>
                             <div class="col-md-6">
-                                <img id="prof-pic" src="" alt="Professor">
+                                <img id="prof-pic" src="">
                             </div>
                             <div class="col-md-3">
                                 <button id="right"><i class="fa fa-chevron-circle-right"></i></button>
@@ -241,7 +241,7 @@
                 else if (n >=0 && n < 2.5)
                     return '#EE3B3B';
                 else
-                    return 'text-secondary';
+                    return '#6C757D';
             }
 
             function gpa_to_color(n) {
@@ -252,7 +252,7 @@
                 else if (n >=0 && n < 2.33)
                     return '#EE3B3B';
                 else
-                    return 'text-secondary';
+                    return '#6C757D';
             }
 
             function workload_to_color(n) {
@@ -263,7 +263,7 @@
                 else if (n >=0 && n < 2.5)
                     return '#4FA584';
                 else
-                    return 'text-secondary';
+                    return '#6C757D';
             }
 
             function changeProf(index, all_profs) {
