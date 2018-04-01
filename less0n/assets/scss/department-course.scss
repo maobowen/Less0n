@@ -1,54 +1,17 @@
 @import "style-variables";
 
-$rating_width: 90%;
-$grade_width: 90%;
-$workload_width: 30%;
-
-/*progrss bar animation*/
-@mixin progress-bar($bar_name, $time) {
-  -webkit-animation-name: $bar_name; 
-  -webkit-animation-duration: $time;
-  -moz-animation-name: $bar_name;
-  -moz-animation-duration: $time;
-  -o-animation-name: $bar_name; 
-  -o-animation-duration: $time;
-  animation-name: $bar_name; 
-  animation-duration: $time;
-}
-
-@include keyframe(rating_progress_bar) {
-  0% {
-      width: 0px;
-  }
-
-  100% {
-      width: $rating_width;
-  }
-}
-
-@include keyframe(grade_progress_bar) {
-  0% {
-      width: 0px;
-  }
-
-  100% {
-      width: $grade_width;
-  }
-}
-
-@include keyframe(workload_progress_bar) {
-  0% {
-      width: 0px;
-  }
-
-  100% {
-      width: $workload_width;
-  }
-}
-
 body {
   background-color: white;
   font-family: $lato !important;
+
+  a {
+    color: black;
+  }
+
+  a:hover {
+    color: darkslateblue;
+    text-decoration: none;
+  }
 
   .jumbotron {
   	background-color: $dark;
@@ -65,6 +28,15 @@ body {
       .dept-info {
         float: left;
         margin-top: 10px;
+
+        a {
+          color: white;
+        }
+
+        a:hover {
+          color: lightgoldenrodyellow;
+          text-decoration: none;
+        }
       }
     }
   }

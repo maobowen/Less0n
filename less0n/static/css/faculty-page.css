@@ -23,66 +23,6 @@ body .statistics .stats_box #tag_list .tags a.danger {
 
 /*mixins*/
 /*progrss bar animation*/
-@-webkit-keyframes rating_progress_bar {
-  0% {
-    width: 0px; }
-  100% {
-    width: 90%; } }
-@-moz-keyframes rating_progress_bar {
-  0% {
-    width: 0px; }
-  100% {
-    width: 90%; } }
-@-o-keyframes rating_progress_bar {
-  0% {
-    width: 0px; }
-  100% {
-    width: 90%; } }
-@keyframes rating_progress_bar {
-  0% {
-    width: 0px; }
-  100% {
-    width: 90%; } }
-@-webkit-keyframes grade_progress_bar {
-  0% {
-    width: 0px; }
-  100% {
-    width: 90%; } }
-@-moz-keyframes grade_progress_bar {
-  0% {
-    width: 0px; }
-  100% {
-    width: 90%; } }
-@-o-keyframes grade_progress_bar {
-  0% {
-    width: 0px; }
-  100% {
-    width: 90%; } }
-@keyframes grade_progress_bar {
-  0% {
-    width: 0px; }
-  100% {
-    width: 90%; } }
-@-webkit-keyframes workload_progress_bar {
-  0% {
-    width: 0px; }
-  100% {
-    width: 30%; } }
-@-moz-keyframes workload_progress_bar {
-  0% {
-    width: 0px; }
-  100% {
-    width: 30%; } }
-@-o-keyframes workload_progress_bar {
-  0% {
-    width: 0px; }
-  100% {
-    width: 30%; } }
-@keyframes workload_progress_bar {
-  0% {
-    width: 0px; }
-  100% {
-    width: 30%; } }
 body {
   background-color: white;
   font-family: "Lato", "Arial", sans-serif !important; }
