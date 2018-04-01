@@ -16,36 +16,6 @@ $workload_width: 80%;
   animation-duration: $time;
 }
 
-//@include keyframe(rating_progress_bar) {
-//  0% {
-//      width: 0px;
-//  }
-//
-//  100% {
-//      width: $rating_width;
-//  }
-//}
-//
-//@include keyframe(grade_progress_bar) {
-//  0% {
-//      width: 0px;
-//  }
-//
-//  100% {
-//      width: $grade_width;
-//  }
-//}
-//
-//@include keyframe(workload_progress_bar) {
-//  0% {
-//      width: 0px;
-//  }
-//
-//  100% {
-//      width: $workload_width;
-//  }
-//}
-
 body {
   background-color: white;
   font-family: $lato !important;
@@ -56,13 +26,35 @@ body {
 
     .container {
       margin-top: 50px;
+
       .course-title {
+        max-width: 70%;
+        overflow: auto;
         float: left;
+
+        h3 {
+          font-weight: lighter;
+        }
+
+        h1 {
+          font-weight: lighter;
+        }
       }
 
       .course-info {
         float: right;
         margin-top: 20px;
+        max-width: 25%;
+        overflow: auto;
+
+        a {
+          color: black;
+        }
+
+        a:hover {
+          color: darkslateblue;
+          text-decoration: none;
+        }
       }
     }
   }

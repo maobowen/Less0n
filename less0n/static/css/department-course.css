@@ -5,11 +5,6 @@
 body {
   background-color: white;
   font-family: "Lato", "Arial", sans-serif !important; }
-  body a {
-    color: black; }
-  body a:hover {
-    color: darkslateblue;
-    text-decoration: none; }
   body .jumbotron {
     background-color: #3D3D3D;
     height: 450px;
@@ -45,6 +40,11 @@ body {
     body .cardcol .card {
       margin: 10px 0;
       box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 5px 0 rgba(0, 0, 0, 0.1); }
+      body .cardcol .card a {
+        color: black; }
+      body .cardcol .card a:hover {
+        color: darkslateblue;
+        text-decoration: none; }
       body .cardcol .card .card-text {
         color: #808080; }
       body .cardcol .card .btn {

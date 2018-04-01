@@ -32,10 +32,23 @@ body {
     body .jumbotron .container {
       margin-top: 50px; }
       body .jumbotron .container .course-title {
+        max-width: 70%;
+        overflow: auto;
         float: left; }
+        body .jumbotron .container .course-title h3 {
+          font-weight: lighter; }
+        body .jumbotron .container .course-title h1 {
+          font-weight: lighter; }
       body .jumbotron .container .course-info {
         float: right;
-        margin-top: 20px; }
+        margin-top: 20px;
+        max-width: 25%;
+        overflow: auto; }
+        body .jumbotron .container .course-info a {
+          color: black; }
+        body .jumbotron .container .course-info a:hover {
+          color: darkslateblue;
+          text-decoration: none; }
   body .statistics {
     position: relative;
     top: -170px;

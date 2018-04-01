@@ -4,15 +4,6 @@ body {
   background-color: white;
   font-family: $lato !important;
 
-  a {
-    color: black;
-  }
-
-  a:hover {
-    color: darkslateblue;
-    text-decoration: none;
-  }
-
   .jumbotron {
   	background-color: $dark;
   	height: $jumbotron;
@@ -43,10 +34,10 @@ body {
 
   #sortby {
   	form {
-  		width: 230px;
-  		float: right;
+      width: 230px;
+      float: right;
       position: relative;
-  		top: -220px;  	
+      top: -220px;
   	}
   }
 
@@ -71,6 +62,15 @@ body {
     .card {
       margin: 10px 0;
       box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 5px 0 rgba(0, 0, 0, 0.1);
+
+      a {
+        color: black;
+      }
+
+      a:hover {
+        color: darkslateblue;
+        text-decoration: none;
+      }
 
       .card-text {
       	color: #808080;

@@ -13,8 +13,8 @@
         <div class="jumbotron jumbotron-fluid">
             <div class="container">
                 <div class="course-title">
-                    <h1 class="display-3">{{ course.subject.id }} {{ course.number }}</h1>
-                    <h1 class="display-4">{{ course.name }}</h1>
+                    <h3 class="display-4">{{ course.subject.id }} {{ course.number }}</h3>
+                    <h1 class="display-5">{{ course.name }}</h1>
                 </div>
                 <div class="course-info">
                     <p class="lead">Department: <a href="{{ url_for('department_course', dept_arg=course.department.id) }}">{{ course.department.name }}</a></p>
