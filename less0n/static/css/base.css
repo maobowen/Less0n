@@ -123,11 +123,29 @@ footer {
     background-color: #333;
     padding: 50px;
     font-size: 80%;
+    text-align: center;
 }
 
-footer p {
+footer p, footer li {
     margin: 0 auto;
     color: #888;
     text-align: center;
+}
+
+footer p {
     font-size: 1.2em;
+}
+
+footer li {
+    font-size: 1.8em;
+}
+
+footer li a:link,
+footer li a:visited {
+    color: inherit;
+    text-decoration: none;
+}
+
+footer li a:hover {
+    color: #DACEDE;
 }
