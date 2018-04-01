@@ -45,16 +45,6 @@
                 <div class="stats_box col-md-4">
                     <div id="tag_list" class="stats_box_content">
                         <div class="tags">
-{#                            <a class="success">Has mid-term</a>#}
-{#                            <a class="primary">No quiz</a>#}
-{#                            <a class="info">Interesting</a>#}
-{#                            <a class="danger">Has project</a>#}
-{#                            <a class="warning">Has final</a>#}
-{#                            <a class="success">Practical</a>#}
-{#                            <a class="danger">Google Cloud</a>#}
-{#                            <a class="info">Software</a>#}
-{#                            <a class="primary">Good instructor</a>#}
-{#                            <a class="warning">Good TAs</a>#}
                         </div>
                     </div>
                 </div>
@@ -284,7 +274,7 @@
                 $('#tag_list .tags').empty();
                 for (var i = 0; i < current_prof['tags'].length; i++) {
                     var color = i%5;
-                    $('#tag_list .tags').append('<a class="' + color_pool[i] + '">' + current_prof['tags'][i] + '</a>');
+                    $('#tag_list .tags').append('<a class="' + color_pool[color] + '">' + current_prof['tags'][i] + '</a>');
                 }
 
                 $('#rating_progress_bar').css('width', current_prof['rating'] / 5 * 100 + '%');
