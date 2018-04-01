@@ -6,8 +6,6 @@ from less0n import app, database
 from less0n.models import *
 from config import Auth
 import re
-# import flask_testing
-# from flask import Flask
 
 
 class MainTest(unittest.TestCase):
@@ -136,4 +134,3 @@ class MainTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-    # flask_testing.main()
