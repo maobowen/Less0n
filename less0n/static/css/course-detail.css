@@ -120,15 +120,18 @@ body {
         display: block;
         margin-left: auto;
         margin-right: auto; }
-      body .statistics .stats_box #faculty_choice i {
-        font-size: 40px;
-        color: #4FA584;
-        line-height: 120px;
+      body .statistics .stats_box #faculty_choice button {
+        background: transparent;
+        border: none;
         text-align: center;
         vertical-align: middle;
         display: block;
         margin-left: auto;
         margin-right: auto; }
+        body .statistics .stats_box #faculty_choice button i {
+          font-size: 40px;
+          color: #4FA584;
+          line-height: 120px; }
       body .statistics .stats_box #faculty_choice h4 {
         text-align: center;
         padding-top: 30px; }

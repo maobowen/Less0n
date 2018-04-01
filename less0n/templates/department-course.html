@@ -28,20 +28,24 @@
             </form>
         </div>
 
-        <div class="container card-columns">
-        {% for course in courses %}
-            <div class="card">
-                <!-- <div class="card-header"></div> -->
-                <div class="card-body border-good">
-                    <h3 class="card-title">{{ course.subject_id }} {{ course.number }}</h3>
-                    <h4 class="card-title">{{ course.name }}</h4>
-                    <p class="card-text">Subject: {{ course.subject.name }}</p>
-                    <div class="btn neutral">Rating: 4.5</div>
-                    <div class="btn good">Grade: 4</div>
-                    <div class="btn bad">Workload: 4</div>
-                    <div class="btn comment">Comments: 35</div>
+        <div class="container cardcol">
+            <div class="row">
+            {% for course in courses %}
+                <div class="col-md-6">
+                    <div class="card">
+                        <!-- <div class="card-header"></div> -->
+                        <div class="card-body border-good">
+                            <h3 class="card-title">{{ course.subject_id }} {{ course.number }}</h3>
+                            <h4 class="card-title">{{ course.name }}</h4>
+                            <p class="card-text">Subject: {{ course.subject.name }}</p>
+                            <div class="btn neutral">Rating: 4.5</div>
+                            <div class="btn good">Grade: 4</div>
+                            <div class="btn bad">Workload: 4</div>
+                            <div class="btn comment">Comments: 35</div>
+                        </div>
+                    </div>
                 </div>
+            {% endfor %}
             </div>
-        {% endfor %}
         </div>
 {% endblock %}

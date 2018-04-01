@@ -10,6 +10,67 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/comment.css') }}">
 {% endblock %}
 
+{% block body_js %}
+    <script>
+
+        var cur = 0;
+
+        $.ajax({
+            type: 'GET',
+            url: '/static/js/json.json',
+            dataType: 'json',
+            success: function (data) {
+                changeProf(0, data);
+            }
+        });
+
+        function changeProf(index, data) {
+            $('#prof-pic').attr("src", data[index]["pic"]);
+            $('#faculty_choice h4').text(data[index]["name"]);
+            for (var i=1; i<11; i++) {
+                $('#tag_list .tags a:nth-child('+i+')').text(data[index]["tag"][i-1]);
+            }
+            $('#rating_progress_bar').css("width", data[index]["rating"]);
+            $('#grade_progress_bar').css("width", data[index]["grade"]);
+            $('#workload_progress_bar').css("width", data[index]["workload"]);
+        }
+
+        $('#left i').click(function() {
+
+            $.ajax({
+                type: 'GET',
+                url: '/static/js/json.json',
+                dataType: 'json',
+                success: function (data) {
+                    cur --;
+                    if (cur == -1) {
+                        cur = data.length-1;
+                    }
+                    changeProf(cur, data);
+                }
+            });
+        });
+
+        $('#right i').click(function() {
+
+            $.ajax({
+                type: 'GET',
+                url: '/static/js/json.json',
+                dataType: 'json',
+                success: function (data) {
+                    cur ++;
+                    if (cur == data.length) {
+                        cur = 0;
+                    }
+                    changeProf(cur, data);
+                }
+            });
+
+        });
+    </script>
+{#    <script src="{{ url_for('static', filename='js/course-detail.js') }}"></script>#}
+{% endblock %}
+
 {% block body_main %}
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
@@ -31,13 +92,13 @@
                 <div id="faculty_choice" class="stats_box_content">
                     <div class="row">
                         <div class="col-md-3">
-                            <i class="fa fa-chevron-circle-left"></i>
+                            <button id="left"><i class="fa fa-chevron-circle-left"></i></button>
                         </div>
                         <div class="col-md-6">
-                            <img src="../static/img/el.jpg" alt="Smiley face">
+                            <img id="prof-pic" src="../static/img/el.jpg" alt="Smiley face">
                         </div>
                         <div class="col-md-3">
-                            <i class="fa fa-chevron-circle-right"></i>
+                            <button id="right"><i class="fa fa-chevron-circle-right"></i></button>
                         </div>
                     </div>
                     <h4>Prof. Ewan Lowe</h4>
@@ -47,7 +108,16 @@
             <div class="stats_box col-md-4">
                 <div id="tag_list" class="stats_box_content">
                     <div class="tags">
-                        <a class="success">Has mid-term</a> <a class="primary">No quiz</a> <a class="info">Interesting</a> <a class="danger">Has project</a> <a class="warning">Has final</a> <a class="success">Practical</a> <a class="danger">Google Cloud</a> <a class="info">Software</a> <a class="primary">Good instructor</a> <a class="warning">Good TAs</a>
+                        <a class="success">Has mid-term</a>
+                        <a class="primary">No quiz</a>
+                        <a class="info">Interesting</a>
+                        <a class="danger">Has project</a>
+                        <a class="warning">Has final</a>
+                        <a class="success">Practical</a>
+                        <a class="danger">Google Cloud</a>
+                        <a class="info">Software</a>
+                        <a class="primary">Good instructor</a>
+                        <a class="warning">Good TAs</a>
                     </div>
                 </div>
             </div>
