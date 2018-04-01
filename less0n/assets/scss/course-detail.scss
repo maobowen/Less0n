@@ -1,0 +1,232 @@
+@import "style-variables";
+
+$rating_width: 50%;
+$grade_width: 70%;
+$workload_width: 80%;
+
+/*progrss bar animation*/
+@mixin progress-bar($bar_name, $time) {
+  -webkit-animation-name: $bar_name; 
+  -webkit-animation-duration: $time;
+  -moz-animation-name: $bar_name;
+  -moz-animation-duration: $time;
+  -o-animation-name: $bar_name; 
+  -o-animation-duration: $time;
+  animation-name: $bar_name; 
+  animation-duration: $time;
+}
+
+body {
+  background-color: white;
+  font-family: $lato !important;
+
+  .jumbotron {
+  	background-color: $yellow;
+  	height: $jumbotron;
+
+    .container {
+      margin-top: 50px;
+
+      .course-title {
+        max-width: 70%;
+        overflow: auto;
+        float: left;
+
+        h3 {
+          font-weight: lighter;
+        }
+
+        h1 {
+          font-weight: lighter;
+        }
+      }
+
+      .course-info {
+        float: right;
+        margin-top: 20px;
+        max-width: 25%;
+        overflow: auto;
+
+        a {
+          color: black;
+        }
+
+        a:hover {
+          color: darkslateblue;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+
+  .statistics {
+  	position: relative;
+  	top: -170px;
+    color: white;
+    background: $dark;
+    box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+
+    .stats_box {
+      box-shadow: -3px 0px rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .stats_box_content {
+        padding: 30px;
+      }
+
+      #faculty_choice {
+        img {
+          @include border-radius(60px);
+          width: 120px;
+          height: 120px;
+          border: 5px solid white;
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        button {
+          background: transparent;
+          border: none;
+          text-align: center;
+          vertical-align: middle;
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+
+          i {
+            font-size: 40px;
+            color: $green;
+            line-height: 120px;
+          }
+        }
+
+        h4 {
+          text-align: center;
+          padding-top: 30px;
+        }
+      }
+
+      #tag_list {
+        .tags a {
+          @include border-radius(2px);
+          color: white;
+          margin: 0 3px 6px 0;
+          padding: 5px 10px;
+          display: inline-block;
+        }
+
+        .tags a.primary {
+          @extend %color-primary;
+        }
+
+        .tags a.success {
+          @extend %color-success;
+        }
+
+        .tags a.info {
+          @extend %color-info;
+        }
+
+        .tags a.warning {
+          @extend %color-warning;
+        }
+
+        .tags a.danger{
+          @extend %color-danger;
+        }
+      }
+
+      #bar_stats {
+        .progress {
+          height: 6px;
+          background: rgba(0, 0, 0, 0.3);
+          margin-top: 10px;
+          margin-bottom: 15px;
+        
+          .progress_bar {
+            float: left;
+            @include border-radius(2px);
+          }
+
+          #rating_progress_bar {
+            @include progress-bar(rating_progress_bar, 2s);
+            width: $rating_width;
+            background: $neutral;
+          }
+
+          #grade_progress_bar {
+            @include progress-bar(grade_progress_bar, 2s);
+            width: $grade_width;
+            background: $good;
+          }
+
+          #workload_progress_bar {
+            @include progress-bar(workload_progress_bar, 2s);
+            width: $workload_width;
+            background: $bad;
+          }
+        }
+      }
+    }
+  }
+
+  #add-comment {
+    float: left;
+    width: 200px;
+    position: relative;
+    top: -130px;
+  }
+
+  #sortby {
+    form {
+      width: 230px;
+      position: relative;
+      top: -130px;
+      left: 0;
+      float: right;
+    }
+  }
+
+  .card-columns {
+    @include content-columns(3);
+    position: relative;
+    top: -100px;
+    max-height: 100vh;
+    overflow: auto;
+    clear: both;
+
+    .good {
+      border-left: 7px solid $good;
+    }
+
+    .neutral {
+      border-left: 7px solid $neutral;
+    }
+
+    .bad {
+      border-left: 7px solid $bad;
+    }
+
+    .card {
+      margin: 10px 0;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 5px 0 rgba(0, 0, 0, 0.1);
+
+      .list-group {
+        border: none;
+        font-size: 15px;
+      }
+
+      .fa-star {
+        color: $star;
+      }
+
+      .fa-pencil {
+        color: $workload;
+      }
+    }
+  }
+}
+

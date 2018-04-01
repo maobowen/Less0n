@@ -2,17 +2,27 @@
 # - http://bitwiser.in/2015/09/09/add-google-login-in-flask.html
 # - https://stackoverflow.com/questions/34235590/how-do-you-restrict-google-login-oauth2-to-emails-from-a-specific-google-apps
 
-from less0n import app, db
+from less0n import app, helpers
 from less0n.models import *
 import json
 import logging
 import re
 from collections import defaultdict
-from flask import url_for, redirect, render_template, session, request, flash
+from flask import url_for, redirect, render_template, session, request, flash, jsonify
 from flask_login import login_required, login_user, logout_user, current_user
 from requests_oauthlib import OAuth2Session
 from requests.exceptions import HTTPError
+from werkzeug.routing import BaseConverter
 from config import Auth
+
+
+class RegexConverter(BaseConverter):
+    def __init__(self, url_map, *items):
+        super(RegexConverter, self).__init__(url_map)
+        self.regex = items[0]
+
+
+app.url_map.converters['regex'] = RegexConverter
 
 
 def get_google_auth(state=None, token=None):
@@ -106,6 +116,95 @@ def department():
     all_depts = Department.query.all()
     context = {'depts': all_depts}
     return render_template('department.html', **context)
+
+
+@app.route('/dept/<regex("[A-Za-z]{4}"):dept_arg>/')
+def department_course(dept_arg):
+    dept = Department.query.filter_by(id=dept_arg.upper()).first()
+    if dept is None:
+        return redirect(url_for('department'))
+    all_courses = Course.query.filter_by(department=dept).all()
+    context = {
+        'dept': dept,
+        'courses': all_courses,
+    }
+    return render_template('department-course.html', **context)
+
+
+@app.route('/course/<regex("[A-Za-z]{4}[A-Za-z0-9]{4,5}"):course_arg>/')
+def course(course_arg):
+    c = Course.query.filter_by(id=course_arg.upper()).first()
+    if c is None:
+        return redirect(url_for('department'))
+    context = {
+        'course': c,
+    }
+    return render_template('course-detail.html', **context)
+
+
+@app.route('/course/<regex("[A-Za-z]{4}[A-Za-z0-9]{4,5}"):course_arg>/json/')
+def course_json(course_arg):
+    c = Course.query.filter_by(id=course_arg.upper()).first()
+    if c is None:
+        pass
+
+    all_teachings = Teaching.query.filter_by(course=c).all()
+    all_ratings = {}
+    for teaching in all_teachings:
+        prof = teaching.professor
+        # Read the current ratings
+        properties = all_ratings.get(prof, {})
+        sum_rating = properties.get('sum_ratings', 0)
+        sum_workload = properties.get('sum_workload', 0)
+        sum_grade = properties.get('sum_grade', 0)
+        tags_count = properties.get('tags_count', {})
+        # Accumulate each new ratings
+        new_comments = teaching.comments
+        for comment in new_comments:
+            sum_rating += comment.rating
+            sum_workload += comment.rating
+            sum_grade += helpers.letter_grade_to_numeric(comment.grade)
+            # Count the frequency of all tags
+            for tag in comment.tags:
+                tags_count[tag] = tags_count.get(tag, 0) + 1
+            # Only show comments that have titles or contents
+            if not (not comment.title.strip()) and not (not comment.content.strip()):
+                existing_comments = properties.get('comments', [])
+                existing_comments.append({
+                    'title': comment.title,
+                    'content': comment.content,
+                    'term': comment.term.id,
+                    'rating': comment.rating,
+                    'workload': comment.workload,
+                    'grade': comment.grade,
+                    'timestamp': comment.timestamp,
+                })
+                properties['comments'] = existing_comments
+        # Store the new ratings
+        properties['sum_rating'] = sum_rating
+        properties['sum_workload'] = sum_workload
+        properties['sum_grade'] = sum_grade
+        properties['tags_count'] = tags_count
+        all_ratings[prof] = properties
+
+    # Return JSON
+    ret = []
+    for prof, properties in all_ratings.items():
+        length = len(properties.get('comments', []))
+        # Sort and find the most frequent tags
+        tags_count = properties.get('tags_count', {})
+        tags = [tag.text for tag in sorted(tags_count, key=tags_count.get, reverse=True)][:10]
+
+        ret.append({
+            'name': prof.name,
+            'avatar': prof.avatar,
+            'rating': 0 if length == 0 else properties.get('sum_rating', 0) / length,
+            'workload': 0 if length == 0 else properties.get('sum_workload', 0) / length,
+            'grade': 0.0 if length == 0 else properties.get('sum_grade', 0.0) / length,
+            'tags': tags,
+            'comments': properties.get('comments', [])
+        })
+    return jsonify(ret)
 
 
 @app.errorhandler(500)

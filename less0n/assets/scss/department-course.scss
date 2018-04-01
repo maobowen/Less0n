@@ -1,0 +1,108 @@
+@import "style-variables";
+
+body {
+  background-color: white;
+  font-family: $lato !important;
+
+  .jumbotron {
+  	background-color: $dark;
+  	height: $jumbotron;
+    color: white;
+
+    .container {
+      margin-top: 50px;
+
+      .course-title {
+        float: left;
+      }
+
+      .dept-info {
+        float: left;
+        margin-top: 10px;
+
+        a {
+          color: white;
+        }
+
+        a:hover {
+          color: lightgoldenrodyellow;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+
+  #sortby {
+  	form {
+      width: 230px;
+      float: right;
+      position: relative;
+      top: -220px;
+  	}
+  }
+
+  .cardcol {
+    position: relative;
+    top: -200px;
+    overflow: auto;
+    clear: both;
+
+    .border-good {
+      border-top: 10px solid $border-good;
+    }
+
+    .border-neutral {
+      border-top: 10px solid $border-neutral;
+    }
+
+    .border-bad {
+      border-top: 10px solid $border-bad;
+    }
+
+    .card {
+      margin: 10px 0;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 5px 0 rgba(0, 0, 0, 0.1);
+
+      a {
+        color: black;
+      }
+
+      a:hover {
+        color: darkslateblue;
+        text-decoration: none;
+      }
+
+      .card-text {
+      	color: #808080;
+      }
+
+      .btn {
+      	color: white;
+      	cursor: auto;
+      	margin-top: 8px;
+      }
+
+      .good {
+	      background-color: $good;
+	    }
+
+	    .neutral {
+	      background-color: $neutral;
+	    }
+
+	    .bad {
+	      background-color: $bad;
+	    }
+
+	    .comment {
+	      background-color: $comment;
+	    }
+
+      .list-group {
+        border: none;
+        font-size: 15px;
+      }
+    }
+  }
+}
+

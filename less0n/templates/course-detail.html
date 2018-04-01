@@ -1,0 +1,337 @@
+{% extends "base2.html" %}
+
+{% block head_meta %}
+        <title>Less0n - {{ course.subject.id }} {{ course.number }}</title>
+{% endblock %}
+
+{% block head_css %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/course-detail.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/comment.css') }}">
+{% endblock %}
+
+{% block body_main %}
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <div class="course-title">
+                    <h3 class="display-4">{{ course.subject.id }} {{ course.number }}</h3>
+                    <h1 class="display-5">{{ course.name }}</h1>
+                </div>
+                <div class="course-info">
+                    <p class="lead">Department: <a href="{{ url_for('department_course', dept_arg=course.department.id) }}">{{ course.department.name }}</a></p>
+                    <p class="lead">Subject: {{ course.subject.name }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="statistics container">
+            <div class="row">
+                <div class="stats_box col-md-4">
+                    <div id="faculty_choice" class="stats_box_content">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <button id="left"><i class="fa fa-chevron-circle-left"></i></button>
+                            </div>
+                            <div class="col-md-6">
+                                <img id="prof-pic" src="">
+                            </div>
+                            <div class="col-md-3">
+                                <button id="right"><i class="fa fa-chevron-circle-right"></i></button>
+                            </div>
+                        </div>
+                        <h4>Professor</h4>
+                    </div>
+                </div>
+
+                <div class="stats_box col-md-4">
+                    <div id="tag_list" class="stats_box_content">
+                        <div class="tags">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats_box col-md-4">
+                    <div id="bar_stats" class="stats_box_content">
+                        <div class="stat">Ratings: <span id="rating_numerical"></span></div>
+                        <div class="progress">
+                            <div id="rating_progress_bar" class="progress_bar"></div>
+                        </div>
+                        <div class="stat">Grade: <span id="grade_numerical"></span></div>
+                        <div class="progress">
+                            <div id="grade_progress_bar" class="progress_bar"></div>
+                        </div>
+                        <div class="stat">Workload: <span id="workload_numerical"></span></div>
+                        <div class="progress">
+                            <div id="workload_progress_bar" class="progress_bar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <button id="add-comment" type="button" class="btn btn-warning" data-toggle="modal" data-target="#commentModal">
+                <i class="fa fa-edit"></i> Add Comment
+            </button>
+
+            <div id="sortby">
+                <form>
+                    <select class="form-control">
+                        <option>Sort by Popularity</option>
+                        <option>Sort by Name</option>
+                        <option>Sort by Rating</option>
+                    </select>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal fade bd-example-modal-lg" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="comment-bar">
+                        <div class="comment-classname">
+                            <p>Advanced Software Engineering</p>
+                        </div>
+                        <div id="professor">
+                            <p>Professor</p>
+                        </div>
+                        <div>
+                            <select name="find-us" id="professor-selection">
+                                <option value="Choose" selected>Choose your Professor</option>
+                                <option value="EwanLowe">Ewan Lowe</option>
+                                <option value="xx">xx</option>
+                                <option value="yy">yy</option>
+                            </select>
+                        </div>
+                        <button type="button" class="close close-icon" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="section-form">
+                            <div>
+                                <h2>Add Comment</h2>
+                            </div>
+                            <div>
+                                <form method="post" action="#" class="contact-form">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="semester">Semester</label>
+                                        </div>
+                                        <div class="col">
+                                            <select name="semester" id="semester">
+                                                <option value="2018fall" selected>2018 Fall</option>
+                                                <option value="2018spring">2018 Spring</option>
+                                                <option value="2017fall">2017 Fall</option>
+                                                <option value="2018spring">2018 Spring</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="Grade">Grade</label>
+                                        </div>
+                                        <div class="col">
+                                            <select name="Grade" id="grade">
+                                                <option value="A+" selected>A+</option>
+                                                <option value="A">A</option>
+                                                <option value="A-">A-</option>
+                                                <option value="B+">B+</option>
+                                                <option value="B">B</option>
+                                                <option value="B-">B-</option>
+                                                <option value="C+">C+</option>
+                                                <option value="C">C</option>
+                                                <option value="C-">C-</option>
+                                                <option value="D">D</option>
+                                                <option value="F">F</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="Rating">Rating</label>
+                                        </div>
+                                        <div class="col">
+                                            <select name="Rating" id="rating">
+                                                <option value="5" selected>5</option>
+                                                <option value="4">4</option>
+                                                <option value="3">3</option>
+                                                <option value="2">2</option>
+                                                <option value="1">1</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="Workload">Workload</label>
+                                        </div>
+                                        <div class="col">
+                                            <select name="Workload" id="workload">
+                                                <option value="5" selected>5</option>
+                                                <option value="4">4</option>
+                                                <option value="3">3</option>
+                                                <option value="2">2</option>
+                                                <option value="1">1</option>
+                                            </select>
+                                        </div>
+                                    </div>
+    <!--                            <div id="stars-existing" class="starrr" data-rating='4'></div>-->
+                                    <div class="row">
+                                        <div class="col">
+                                            <label>Anonymous？</label>
+                                        </div>
+                                        <div class="col span-2-of-3">
+                                            <input type="checkbox" name="news" id="news" checked> Yes
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label>Drop us a line</label>
+                                        </div>
+                                        <div class="col span-2-of-3">
+                                            <textarea name="message" placeholder="Your message"></textarea>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comment-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container card-columns"></div>
+{% endblock %}
+
+{% block body_js %}
+        <script type="text/javascript">
+            var cur = 0;
+            var all_profs = null;
+            var color_pool = ['success', 'primary', 'info', 'danger', 'warning'];
+
+            $.ajax({
+                type: 'GET',
+                url: '/course/{{ course.id }}/json/',
+                dataType: 'json',
+                success: function(data) {
+                    all_profs = data;
+                    changeProf(0, all_profs);
+                }
+            });
+
+            function numeric_to_color(n) {
+                if (n >= 3.5 && n <= 5)
+                    return 'good';
+                else if (n >= 2.5 && n < 3.5)
+                    return 'neutral';
+                else if (n >=0 && n < 2.5)
+                    return 'bad';
+                else
+                    return 'text-secondary';
+            }
+
+            function rating_to_color(n) {
+                if (n >= 3.5 && n <= 5)
+                    return '#4FA584';
+                else if (n >= 2.5 && n < 3.5)
+                    return '#FFD700';
+                else if (n >=0 && n < 2.5)
+                    return '#EE3B3B';
+                else
+                    return '#6C757D';
+            }
+
+            function gpa_to_color(n) {
+                if (n >= 3.67 && n <= 4.33)
+                    return '#4FA584';
+                else if (n >= 2.33 && n < 3.67)
+                    return '#FFD700';
+                else if (n >=0 && n < 2.33)
+                    return '#EE3B3B';
+                else
+                    return '#6C757D';
+            }
+
+            function workload_to_color(n) {
+                if (n >= 3.5 && n <= 5)
+                    return '#EE3B3B';
+                else if (n >= 2.5 && n < 3.5)
+                    return '#FFD700';
+                else if (n >=0 && n < 2.5)
+                    return '#4FA584';
+                else
+                    return '#6C757D';
+            }
+
+            function changeProf(index, all_profs) {
+                var current_prof = all_profs[index];
+                $('#prof-pic').attr('src', current_prof['avatar']);
+                $('#faculty_choice h4').text(current_prof['name']);
+
+                $('#tag_list .tags').empty();
+                for (var i = 0; i < current_prof['tags'].length; i++) {
+                    var color = i%5;
+                    $('#tag_list .tags').append('<a class="' + color_pool[color] + '">' + current_prof['tags'][i] + '</a>');
+                }
+
+                $('#rating_progress_bar').css('width', current_prof['rating'] / 5 * 100 + '%');
+                $('#rating_progress_bar').css('background', rating_to_color(current_prof['rating']));
+                $('#rating_numerical').text(current_prof['rating']);
+                $('#grade_progress_bar').css('width', current_prof['grade'] / 4.33 * 100 + '%');
+                $('#grade_progress_bar').css('background', gpa_to_color(current_prof['grade']))
+                $('#grade_numerical').text(current_prof['grade']);
+                $('#workload_progress_bar').css('width', current_prof['workload'] / 5 * 100 + '%');
+                $('#workload_progress_bar').css('background', workload_to_color(current_prof['workload']));
+                $('#workload_numerical').text(current_prof['workload']);
+
+                // Load comments
+                $('.container.card-columns').empty();
+                for (var i = 0; i < current_prof['comments'].length; i++) {
+                    var current_comment = current_prof['comments'][i];
+
+                    var rating_html = '';
+                    var workload_html = '';
+                    for (var j = 0; j < current_comment['rating']; j++)
+                        rating_html += '<i class="fa fa-star"></i>';
+                    for (var j = 0; j < current_comment['workload']; j++)
+                        workload_html += '<i class="fa fa-pencil"></i>';
+
+                    $('.container.card-columns').append(
+                        '<div class="card">' +
+                            '<div class="card-body ' + numeric_to_color(current_comment['rating']) + '">' +
+                                '<h5 class="card-title">' + current_comment['title'] + '</h5>' +
+                                '<p class="card-text">' + current_comment['content'] + '</p>' +
+                                '<a class="btn btn-light" data-toggle="collapse" href="#c' + i + '" role="button" aria-expanded="false" aria-controls="c' + i + '">Show Details <i class="fa fa-caret-down"></i></a>' +
+                                '<div class="collapse" id="c' + i + '">' +
+                                    '<ul class="list-group">' +
+                                        '<li class="list-group-item">Term: ' + current_comment['term'] + '</li>' +
+                                        '<li class="list-group-item">Instructor: ' + current_prof['name'] + '</li>' +
+                                        '<li class="list-group-item">Rating: ' + rating_html + '</li>' +
+                                        '<li class="list-group-item">Workload: ' + workload_html + '</li>' +
+                                        '<li class="list-group-item">Grade: '  + current_comment['grade'] +  '</li>' +
+                                        '<li class="list-group-item">'  + current_comment['timestamp'] +  '</li>' +
+                                    '</ul>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>');
+                }
+            }
+
+            $('#left i').click(function() {
+                cur--;
+                if (cur < 0)
+                    cur = all_profs.length - 1;
+                changeProf(cur, all_profs);
+            });
+
+            $('#right i').click(function() {
+                cur++;
+                if (cur >= all_profs.length)
+                    cur = 0;
+                changeProf(cur, all_profs);
+            });
+        </script>
+{% endblock %}
