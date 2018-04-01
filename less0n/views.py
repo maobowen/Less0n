@@ -111,12 +111,23 @@ def logout():
     return redirect(redirect_url)
 
 
-@app.route('/department')
+@app.route('/department', methods = ["POST", "GET"])
 def department():
-    all_depts = Department.query.all()
-    context = {'depts': all_depts}
-    return render_template('department.html', **context)
+    """
+    Render the template with all departments if it is the "GET" request.
+    Render the template with departments having keywords if it is the "POST" request.
+    :return: rendered template
+    """
+    if request.method == "GET":
+        all_depts = Department.query.all()
+        context = {'depts': all_depts}
+        return render_template('department.html', **context)
 
+    elif request.method == "POST":
+        dept_keyword = request.form['dept_keyword']
+        depts = Department.query.filter(Department.name.contains(dept_keyword)).all()
+        context = {'depts': depts}
+        return render_template('department.html', **context)
 
 @app.route('/dept/<regex("[A-Za-z]{4}"):dept_arg>/')
 def department_course(dept_arg):

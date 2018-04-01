@@ -5,6 +5,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.
 from less0n import app, database
 from less0n.models import *
 from config import Auth
+import re
 
 
 class MainTest(unittest.TestCase):
@@ -28,6 +29,76 @@ class MainTest(unittest.TestCase):
         assert(rv._status_code == 302)
         assert(Auth.AUTH_URI in rv.location)
 
+    # Test /department
+
+    def test_department(self):
+        """
+        Test if department() with GET return rendered department.html
+        """
+        rv = self.app.get('/department')
+        assert rv._status_code == 200
+        assert rv.content_type == 'text/html; charset=utf-8'
+        assert 'department' in rv.data.decode('utf-8').lower()  # "department.html" must have Department
+
+    def testDepartmentSearchWithValidInput(self):
+        """
+        Test if department() with POST return department.html with correct department name
+
+        Test cases:
+        --------------------------------------------------
+        dept_keyword Input                Expected Output
+        computer                          computer in html
+        """
+        rv = self.app.post('/department', data=dict(
+            dept_keyword="computer"
+        ))
+        assert rv._status_code == 200
+        assert rv.content_type == 'text/html; charset=utf-8'
+        data = rv.data.decode('utf-8').lower()  # convert data to lower case
+        assert 'department' in data
+        # assert 'computer' in data
+
+    def testDepartmentSearchWithUnvalidInput(self):
+        """
+        Test if department() with POST return department.html with correct department name
+
+        Test cases:
+        --------------------------------------------------
+        dept_keyword Input                Expected Output
+        zhongwenxi                        No word between <section id="sort-alphabetical" data-filter-group="dept"> and </section>
+        """
+        rv = self.app.post('/department', data=dict(
+            dept_keyword="zhongwenxi"
+        ))
+        assert rv._status_code == 200
+        assert rv.content_type == 'text/html; charset=utf-8'
+        data = rv.data.decode('utf-8').lower()  # convert data to lower case
+        assert 'department' in data
+
+        # search <div class="row" id="alphabetical-card"> \n \n .. </div>
+        pattern = re.compile('<div class="row" id="alphabetical-card">(\s*\n\s*)+</div>')
+        assert pattern.search(data) is not None
+
+    def testDepartmentSearchWithEmptyInput(self):
+        """
+        Test if department() with POST return department.html with correct department name
+
+        Test cases:
+        --------------------------------------------------
+        dept_keyword Input                Expected Output
+        empty string                      'computer science' in department.html
+        """
+        rv = self.app.post('/department', data=dict(
+            dept_keyword=""
+        ))
+        assert rv._status_code == 200
+        assert rv.content_type == 'text/html; charset=utf-8'
+        data = rv.data.decode('utf-8').lower()  # convert data to lower case
+        assert 'department' in data
+        assert 'computer science' in data
+
+    # Test /dept/COURSE
+
     def test_department_course_with_valid_input(self):
         """
         Test if department_course() return department-course.html with valid department name
@@ -39,7 +110,7 @@ class MainTest(unittest.TestCase):
         rv = self.app.get('/dept/COMS/')
         assert rv._status_code == 200
         assert rv.content_type == 'text/html; charset=utf-8'
-        data = rv.data.decode('utf-8').lower() # convert data to lower case
+        data = rv.data.decode('utf-8').lower()  # convert data to lower case
         assert 'department-course' in data
         assert 'coms' in data
 
@@ -54,7 +125,7 @@ class MainTest(unittest.TestCase):
         rv = self.app.get('/dept/AAAA/')
         assert rv._status_code == 302
         assert rv.content_type == 'text/html; charset=utf-8'
-        data = rv.data.decode('utf-8').lower() # convert data to lower case
+        data = rv.data.decode('utf-8').lower()  # convert data to lower case
         assert 'department' in data
 
     def test_department_course_with_empty_input(self):
