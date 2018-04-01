@@ -45,16 +45,16 @@
                 <div class="stats_box col-md-4">
                     <div id="tag_list" class="stats_box_content">
                         <div class="tags">
-                            <a class="success">Has mid-term</a>
-                            <a class="primary">No quiz</a>
-                            <a class="info">Interesting</a>
-                            <a class="danger">Has project</a>
-                            <a class="warning">Has final</a>
-                            <a class="success">Practical</a>
-                            <a class="danger">Google Cloud</a>
-                            <a class="info">Software</a>
-                            <a class="primary">Good instructor</a>
-                            <a class="warning">Good TAs</a>
+{#                            <a class="success">Has mid-term</a>#}
+{#                            <a class="primary">No quiz</a>#}
+{#                            <a class="info">Interesting</a>#}
+{#                            <a class="danger">Has project</a>#}
+{#                            <a class="warning">Has final</a>#}
+{#                            <a class="success">Practical</a>#}
+{#                            <a class="danger">Google Cloud</a>#}
+{#                            <a class="info">Software</a>#}
+{#                            <a class="primary">Good instructor</a>#}
+{#                            <a class="warning">Good TAs</a>#}
                         </div>
                     </div>
                 </div>
@@ -220,6 +220,7 @@
         <script type="text/javascript">
             var cur = 0;
             var all_profs = null;
+            var color_pool = ['success', 'primary', 'info', 'danger', 'warning'];
 
             $.ajax({
                 type: 'GET',
@@ -242,13 +243,35 @@
                     return 'text-secondary';
             }
 
+            function rating_to_color(n) {
+                if (n >= 3.5 && n <= 5)
+                    return '#4FA584';
+                else if (n >= 2.5 && n < 3.5)
+                    return '#FFD700';
+                else if (n >=0 && n < 2.5)
+                    return '#EE3B3B';
+                else
+                    return 'text-secondary';
+            }
+
             function gpa_to_color(n) {
                 if (n >= 3.67 && n <= 4.33)
-                    return 'good';
+                    return '#4FA584';
                 else if (n >= 2.33 && n < 3.67)
-                    return 'neutral';
+                    return '#FFD700';
                 else if (n >=0 && n < 2.33)
-                    return 'bad';
+                    return '#EE3B3B';
+                else
+                    return 'text-secondary';
+            }
+
+            function workload_to_color(n) {
+                if (n >= 3.5 && n <= 5)
+                    return '#EE3B3B';
+                else if (n >= 2.5 && n < 3.5)
+                    return '#FFD700';
+                else if (n >=0 && n < 2.5)
+                    return '#4FA584';
                 else
                     return 'text-secondary';
             }
@@ -257,17 +280,21 @@
                 var current_prof = all_profs[index];
                 $('#prof-pic').attr('src', current_prof['avatar']);
                 $('#faculty_choice h4').text(current_prof['name']);
+
+                $('#tag_list .tags').empty();
                 for (var i = 0; i < current_prof['tags'].length; i++) {
-                    $('#tag_list .tags a:nth-child(' + (i + 1) +')').text(current_prof['tags'][i]);
+                    var color = i%5;
+                    $('#tag_list .tags').append('<a class="' + color_pool[i] + '">' + current_prof['tags'][i] + '</a>');
                 }
+
                 $('#rating_progress_bar').css('width', current_prof['rating'] / 5 * 100 + '%');
-                $('#rating_progress_bar').css('background', numeric_to_color(current_prof['rating']));
+                $('#rating_progress_bar').css('background', rating_to_color(current_prof['rating']));
                 $('#rating_numerical').text(current_prof['rating']);
                 $('#grade_progress_bar').css('width', current_prof['grade'] / 4.33 * 100 + '%');
                 $('#grade_progress_bar').css('background', gpa_to_color(current_prof['grade']))
                 $('#grade_numerical').text(current_prof['grade']);
                 $('#workload_progress_bar').css('width', current_prof['workload'] / 5 * 100 + '%');
-                $('#workload_progress_bar').css('background', numeric_to_color(current_prof['workload']));
+                $('#workload_progress_bar').css('background', workload_to_color(current_prof['workload']));
                 $('#workload_numerical').text(current_prof['workload']);
 
                 // Load comments

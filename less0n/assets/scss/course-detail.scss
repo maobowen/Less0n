@@ -16,35 +16,35 @@ $workload_width: 80%;
   animation-duration: $time;
 }
 
-@include keyframe(rating_progress_bar) {
-  0% {
-      width: 0px;
-  }
-
-  100% {
-      width: $rating_width;
-  }
-}
-
-@include keyframe(grade_progress_bar) {
-  0% {
-      width: 0px;
-  }
-
-  100% {
-      width: $grade_width;
-  }
-}
-
-@include keyframe(workload_progress_bar) {
-  0% {
-      width: 0px;
-  }
-
-  100% {
-      width: $workload_width;
-  }
-}
+//@include keyframe(rating_progress_bar) {
+//  0% {
+//      width: 0px;
+//  }
+//
+//  100% {
+//      width: $rating_width;
+//  }
+//}
+//
+//@include keyframe(grade_progress_bar) {
+//  0% {
+//      width: 0px;
+//  }
+//
+//  100% {
+//      width: $grade_width;
+//  }
+//}
+//
+//@include keyframe(workload_progress_bar) {
+//  0% {
+//      width: 0px;
+//  }
+//
+//  100% {
+//      width: $workload_width;
+//  }
+//}
 
 body {
   background-color: white;
