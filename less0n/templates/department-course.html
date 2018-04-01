@@ -35,8 +35,8 @@
                     <div class="card">
                         <!-- <div class="card-header"></div> -->
                         <div class="card-body border-good">
-                            <h3 class="card-title">{{ course.subject_id }} {{ course.number }}</h3>
-                            <h4 class="card-title">{{ course.name }}</h4>
+                            <h3 class="card-title"><a href="{{ url_for('course', course_arg=course.id) }}">{{ course.subject_id }} {{ course.number }}</a></h3>
+                            <h4 class="card-title"><a href="{{ url_for('course', course_arg=course.id) }}">{{ course.name }}</a></h4>
                             <p class="card-text">Subject: {{ course.subject.name }}</p>
                             <div class="btn neutral">Rating: 4.5</div>
                             <div class="btn good">Grade: 4</div>
