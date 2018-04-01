@@ -1,374 +1,320 @@
 {% extends "base2.html" %}
 
 {% block head_meta %}
-    <title>Less0n - Course Detail</title>
+        <title>Less0n - {{ course.subject.id }} {{ course.number }}</title>
 {% endblock %}
 
 {% block head_css %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/course-detail.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/comment.css') }}">
-{% endblock %}
-
-{% block body_js %}
-    <script>
-
-        var cur = 0;
-
-        $.ajax({
-            type: 'GET',
-            url: '/static/js/json.json',
-            dataType: 'json',
-            success: function (data) {
-                changeProf(0, data);
-            }
-        });
-
-        function changeProf(index, data) {
-            $('#prof-pic').attr("src", data[index]["pic"]);
-            $('#faculty_choice h4').text(data[index]["name"]);
-            for (var i=1; i<11; i++) {
-                $('#tag_list .tags a:nth-child('+i+')').text(data[index]["tag"][i-1]);
-            }
-            $('#rating_progress_bar').css("width", data[index]["rating"]);
-            $('#grade_progress_bar').css("width", data[index]["grade"]);
-            $('#workload_progress_bar').css("width", data[index]["workload"]);
-        }
-
-        $('#left i').click(function() {
-
-            $.ajax({
-                type: 'GET',
-                url: '/static/js/json.json',
-                dataType: 'json',
-                success: function (data) {
-                    cur --;
-                    if (cur == -1) {
-                        cur = data.length-1;
-                    }
-                    changeProf(cur, data);
-                }
-            });
-        });
-
-        $('#right i').click(function() {
-
-            $.ajax({
-                type: 'GET',
-                url: '/static/js/json.json',
-                dataType: 'json',
-                success: function (data) {
-                    cur ++;
-                    if (cur == data.length) {
-                        cur = 0;
-                    }
-                    changeProf(cur, data);
-                }
-            });
-
-        });
-    </script>
-{#    <script src="{{ url_for('static', filename='js/course-detail.js') }}"></script>#}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/course-detail.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/comment.css') }}">
 {% endblock %}
 
 {% block body_main %}
-    <div class="jumbotron jumbotron-fluid">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <div class="course-title">
+                    <h1 class="display-3">{{ course.subject.id }} {{ course.number }}</h1>
+                    <h1 class="display-4">{{ course.name }}</h1>
+                </div>
+                <div class="course-info">
+                    <p class="lead">Department: {{ course.department.name }}</p>
+                    <p class="lead">Subject: {{ course.subject.name }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="statistics container">
+            <div class="row">
+                <div class="stats_box col-md-4">
+                    <div id="faculty_choice" class="stats_box_content">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <button id="left"><i class="fa fa-chevron-circle-left"></i></button>
+                            </div>
+                            <div class="col-md-6">
+                                <img id="prof-pic" src="" alt="Professor">
+                            </div>
+                            <div class="col-md-3">
+                                <button id="right"><i class="fa fa-chevron-circle-right"></i></button>
+                            </div>
+                        </div>
+                        <h4>Professor</h4>
+                    </div>
+                </div>
+
+                <div class="stats_box col-md-4">
+                    <div id="tag_list" class="stats_box_content">
+                        <div class="tags">
+                            <a class="success">Has mid-term</a>
+                            <a class="primary">No quiz</a>
+                            <a class="info">Interesting</a>
+                            <a class="danger">Has project</a>
+                            <a class="warning">Has final</a>
+                            <a class="success">Practical</a>
+                            <a class="danger">Google Cloud</a>
+                            <a class="info">Software</a>
+                            <a class="primary">Good instructor</a>
+                            <a class="warning">Good TAs</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats_box col-md-4">
+                    <div id="bar_stats" class="stats_box_content">
+                        <div class="stat">Ratings: <span id="rating_numerical"></span></div>
+                        <div class="progress">
+                            <div id="rating_progress_bar" class="progress_bar"></div>
+                        </div>
+                        <div class="stat">Grade: <span id="grade_numerical"></span></div>
+                        <div class="progress">
+                            <div id="grade_progress_bar" class="progress_bar"></div>
+                        </div>
+                        <div class="stat">Workload: <span id="workload_numerical"></span></div>
+                        <div class="progress">
+                            <div id="workload_progress_bar" class="progress_bar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="container">
-            <div class="course-title">
-                <h1 class="display-3">COMS4156</h1>
-                <h1 class="display-4">Advanced Software Engineering</h1>
-            </div>
-            <div class="course-info">
-                <p class="lead">Department: Computer Science</p>
-                <p class="lead">Category: Theory</p>
-                <p class="lead">Official Site: Here</p>
-            </div>
-        </div>
-    </div>
+            <button id="add-comment" type="button" class="btn btn-warning" data-toggle="modal" data-target="#commentModal">
+                <i class="fa fa-edit"></i> Add Comment
+            </button>
 
-    <div class="statistics container">
-        <div class="row">
-            <div class="stats_box col-md-4">
-                <div id="faculty_choice" class="stats_box_content">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <button id="left"><i class="fa fa-chevron-circle-left"></i></button>
-                        </div>
-                        <div class="col-md-6">
-                            <img id="prof-pic" src="../static/img/el.jpg" alt="Smiley face">
-                        </div>
-                        <div class="col-md-3">
-                            <button id="right"><i class="fa fa-chevron-circle-right"></i></button>
-                        </div>
-                    </div>
-                    <h4>Prof. Ewan Lowe</h4>
-                </div>
-            </div>
-
-            <div class="stats_box col-md-4">
-                <div id="tag_list" class="stats_box_content">
-                    <div class="tags">
-                        <a class="success">Has mid-term</a>
-                        <a class="primary">No quiz</a>
-                        <a class="info">Interesting</a>
-                        <a class="danger">Has project</a>
-                        <a class="warning">Has final</a>
-                        <a class="success">Practical</a>
-                        <a class="danger">Google Cloud</a>
-                        <a class="info">Software</a>
-                        <a class="primary">Good instructor</a>
-                        <a class="warning">Good TAs</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="stats_box col-md-4">
-                <div id="bar_stats" class="stats_box_content">
-                    <div class="stat">
-                        Ratings: 3 <span></span>
-                    </div>
-                    <div class="progress">
-                        <div id="rating_progress_bar" class="progress_bar"></div>
-                    </div>
-                    <div class="stat">
-                        Grade: 4 <span></span>
-                    </div>
-                    <div class="progress">
-                        <div id="grade_progress_bar" class="progress_bar"></div>
-                    </div>
-                    <div class="stat">
-                       Workload: 4 <span></span>
-                    </div>
-                    <div class="progress">
-                        <div id="workload_progress_bar" class="progress_bar"></div>
-                    </div>
-                </div>
+            <div id="sortby">
+                <form>
+                    <select class="form-control">
+                        <option>Sort by Popularity</option>
+                        <option>Sort by Name</option>
+                        <option>Sort by Rating</option>
+                    </select>
+                </form>
             </div>
         </div>
-    </div>
 
-    <div class="container">
-        <button id="add-comment" type="button" class="btn btn-warning" data-toggle="modal" data-target="#commentModal">
-            <i class="fa fa-edit"></i> Add Comment
-        </button>
-
-        <div id="sortby">
-            <form>
-                <select class="form-control">
-                    <option>Sort by Popularity</option>
-                    <option>Sort by Name</option>
-                    <option>Sort by Rating</option>
-                </select>
-            </form>
-        </div>
-    </div>
-
-    <div class="modal fade bd-example-modal-lg" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="comment-bar">
-                    <div class="comment-classname">
-                        <p>Advanced Software Engineering</p>
-                    </div>
-                    <div id="professor">
-                        <p>Professor</p>
-                    </div>
-                    <div>
-                        <select name="find-us" id="professor-selection">
-                            <option value="Choose" selected>Choose your Professor</option>
-                            <option value="EwanLowe">Ewan Lowe</option>
-                            <option value="xx">xx</option>
-                            <option value="yy">yy</option>
-                        </select>
-                    </div>
-                    <button type="button" class="close close-icon" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="section-form">
-                        <div>
-                            <h2>Add Comment</h2>
+        <div class="modal fade bd-example-modal-lg" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="comment-bar">
+                        <div class="comment-classname">
+                            <p>Advanced Software Engineering</p>
+                        </div>
+                        <div id="professor">
+                            <p>Professor</p>
                         </div>
                         <div>
-                            <form method="post" action="#" class="contact-form">
-                                <div class="row">
-                                    <div class="col">
-                                        <label for="semester">Semester</label>
+                            <select name="find-us" id="professor-selection">
+                                <option value="Choose" selected>Choose your Professor</option>
+                                <option value="EwanLowe">Ewan Lowe</option>
+                                <option value="xx">xx</option>
+                                <option value="yy">yy</option>
+                            </select>
+                        </div>
+                        <button type="button" class="close close-icon" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="section-form">
+                            <div>
+                                <h2>Add Comment</h2>
+                            </div>
+                            <div>
+                                <form method="post" action="#" class="contact-form">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="semester">Semester</label>
+                                        </div>
+                                        <div class="col">
+                                            <select name="semester" id="semester">
+                                                <option value="2018fall" selected>2018 Fall</option>
+                                                <option value="2018spring">2018 Spring</option>
+                                                <option value="2017fall">2017 Fall</option>
+                                                <option value="2018spring">2018 Spring</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="col">
-                                        <select name="semester" id="semester">
-                                            <option value="2018fall" selected>2018 Fall</option>
-                                            <option value="2018spring">2018 Spring</option>
-                                            <option value="2017fall">2017 Fall</option>
-                                            <option value="2018spring">2018 Spring</option>
-                                        </select>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="Grade">Grade</label>
+                                        </div>
+                                        <div class="col">
+                                            <select name="Grade" id="grade">
+                                                <option value="A+" selected>A+</option>
+                                                <option value="A">A</option>
+                                                <option value="A-">A-</option>
+                                                <option value="B+">B+</option>
+                                                <option value="B">B</option>
+                                                <option value="B-">B-</option>
+                                                <option value="C+">C+</option>
+                                                <option value="C">C</option>
+                                                <option value="C-">C-</option>
+                                                <option value="D">D</option>
+                                                <option value="F">F</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <label for="Grade">Grade</label>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="Rating">Rating</label>
+                                        </div>
+                                        <div class="col">
+                                            <select name="Rating" id="rating">
+                                                <option value="5" selected>5</option>
+                                                <option value="4">4</option>
+                                                <option value="3">3</option>
+                                                <option value="2">2</option>
+                                                <option value="1">1</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="col">
-                                        <select name="Grade" id="grade">
-                                            <option value="A+" selected>A+</option>
-                                            <option value="A">A</option>
-                                            <option value="A-">A-</option>
-                                            <option value="B+">B+</option>
-                                            <option value="B">B</option>
-                                            <option value="B-">B-</option>
-                                            <option value="C+">C+</option>
-                                            <option value="C">C</option>
-                                            <option value="C-">C-</option>
-                                            <option value="D+">D+</option>
-                                            <option value="D">D</option>
-                                            <option value="D-">D-</option>
-                                            <option value="F">F</option>
-                                        </select>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="Workload">Workload</label>
+                                        </div>
+                                        <div class="col">
+                                            <select name="Workload" id="workload">
+                                                <option value="5" selected>5</option>
+                                                <option value="4">4</option>
+                                                <option value="3">3</option>
+                                                <option value="2">2</option>
+                                                <option value="1">1</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <label for="Rating">Rating</label>
+    <!--                            <div id="stars-existing" class="starrr" data-rating='4'></div>-->
+                                    <div class="row">
+                                        <div class="col">
+                                            <label>Anonymous？</label>
+                                        </div>
+                                        <div class="col span-2-of-3">
+                                            <input type="checkbox" name="news" id="news" checked> Yes
+                                        </div>
                                     </div>
-                                    <div class="col">
-                                        <select name="Rating" id="rating">
-                                            <option value="5" selected>5</option>
-                                            <option value="4">4</option>
-                                            <option value="3">3</option>
-                                            <option value="2">2</option>
-                                            <option value="1">1</option>
-                                        </select>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label>Drop us a line</label>
+                                        </div>
+                                        <div class="col span-2-of-3">
+                                            <textarea name="message" placeholder="Your message"></textarea>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <label for="Workload">Workload</label>
-                                    </div>
-                                    <div class="col">
-                                        <select name="Workload" id="workload">
-                                            <option value="5" selected>5</option>
-                                            <option value="4">4</option>
-                                            <option value="3">3</option>
-                                            <option value="2">2</option>
-                                            <option value="1">1</option>
-                                        </select>
-                                    </div>
-                                </div>
-<!--                            <div id="stars-existing" class="starrr" data-rating='4'></div>-->
-                                <div class="row">
-                                    <div class="col">
-                                        <label>Anonymous？</label>
-                                    </div>
-                                    <div class="col span-2-of-3">
-                                        <input type="checkbox" name="news" id="news" checked> Yes
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <label>Drop us a line</label>
-                                    </div>
-                                    <div class="col span-2-of-3">
-                                        <textarea name="message" placeholder="Your message"></textarea>
-                                    </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="comment-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary">Submit</button>
+                    <div class="comment-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary">Submit</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="container card-columns">
-        <div class="card">
-            <div class="card-body neutral">
-                <h5 class="card-title">Great Course</h5>
-                <p class="card-text">Very good teacher with detailed explanation.</p>
-                <a class="btn btn-light" data-toggle="collapse" href="#c1" role="button" aria-expanded="false" aria-controls="c1">Show Details <i class="fa fa-caret-down"></i></a>
-                <div class="collapse" id="c1">
-                    <ul class="list-group">
-                        <li class="list-group-item">Course Time: Fall 2017</li>
-                        <li class="list-group-item">Faculty: Prof. Ewan Lowe</li>
-                        <li class="list-group-item">Rating: <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></li>
-                        <li class="list-group-item">Workload: <i class="fa fa-pencil"></i><i class="fa fa-pencil"></i><i class="fa fa-pencil"></i></li>
-                        <li class="list-group-item">Grade: A</li>
-                        <li class="list-group-item">Comment Time: Feb 2nd, 2018</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body good">
-                <h5 class="card-title">A helpful course</h5>
-                <p class="card-text">It is very helpful in internships.</p>
-                <a class="btn btn-light" data-toggle="collapse" href="#c4" role="button" aria-expanded="false" aria-controls="c4">Show Details <i class="fa fa-caret-down"></i></a>
-                <div class="collapse" id="c4">
-                    <ul class="list-group">
-                        <li class="list-group-item">Course Time: Fall 2017</li>
-                        <li class="list-group-item">Faculty: Prof. Ewan Lowe</li>
-                        <li class="list-group-item">Rating: <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></li>
-                        <li class="list-group-item">Workload: <i class="fa fa-pencil"></i><i class="fa fa-pencil"></i><i class="fa fa-pencil"></i></li>
-                        <li class="list-group-item">Grade: A</li>
-                        <li class="list-group-item">Comment Time: Feb 2nd, 2018</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body bad">
-                <h5 class="card-title">Enjoyable Courses</h5>
-                <p class="card-text">The tutor is nice and seems to give good grading on assignments. The workload is not heavy. </p>
-                <a class="btn btn-light" data-toggle="collapse" href="#c2" role="button" aria-expanded="false" aria-controls="c2">Show Details <i class="fa fa-caret-down"></i></a>
-                <div class="collapse" id="c2">
-                    <ul class="list-group">
-                        <li class="list-group-item">Course Time: Fall 2017</li>
-                        <li class="list-group-item">Faculty: Prof. Ewan Lowe</li>
-                        <li class="list-group-item">Rating: <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></li>
-                        <li class="list-group-item">Workload: <i class="fa fa-pencil"></i><i class="fa fa-pencil"></i><i class="fa fa-pencil"></i></li>
-                        <li class="list-group-item">Grade: A</li>
-                        <li class="list-group-item">Comment Time: Feb 2nd, 2018</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body neutral">
-                <h5 class="card-title">Will recommend to others</h5>
-                <p class="card-text">I will definitely recommend the course to my friends.</p>
-                <a class="btn btn-light" data-toggle="collapse" href="#c5" role="button" aria-expanded="false" aria-controls="c5">Show Details <i class="fa fa-caret-down"></i></a>
-                <div class="collapse" id="c5">
-                    <ul class="list-group">
-                        <li class="list-group-item">Course Time: Fall 2017</li>
-                        <li class="list-group-item">Faculty: Prof. Ewan Lowe</li>
-                        <li class="list-group-item">Rating: <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></li>
-                        <li class="list-group-item">Workload: <i class="fa fa-pencil"></i><i class="fa fa-pencil"></i><i class="fa fa-pencil"></i></li>
-                        <li class="list-group-item">Grade: A</li>
-                        <li class="list-group-item">Comment Time: Feb 2nd, 2018</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body good">
-                <h5 class="card-title">Love it</h5>
-                <p class="card-text">The professor is super nice and the course is really fabulous and relaxing! The project is not difficult, one just need to put some critical thinking into it.</p>
-                <a class="btn btn-light" data-toggle="collapse" href="#c3" role="button" aria-expanded="false" aria-controls="c3">Show Details <i class="fa fa-caret-down"></i></a>
-                <div class="collapse" id="c3">
-                    <ul class="list-group">
-                        <li class="list-group-item">Course Time: Fall 2017</li>
-                        <li class="list-group-item">Faculty: Prof. Ewan Lowe</li>
-                        <li class="list-group-item">Rating: <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></li>
-                        <li class="list-group-item">Workload: <i class="fa fa-pencil"></i><i class="fa fa-pencil"></i><i class="fa fa-pencil"></i></li>
-                        <li class="list-group-item">Grade: A</li>
-                        <li class="list-group-item">Comment Time: Feb 2nd, 2018</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+        <div class="container card-columns"></div>
+{% endblock %}
+
+{% block body_js %}
+        <script type="text/javascript">
+            var cur = 0;
+            var all_profs = null;
+
+            $.ajax({
+                type: 'GET',
+                url: '/course/{{ course.id }}/json/',
+                dataType: 'json',
+                success: function(data) {
+                    all_profs = data;
+                    changeProf(0, all_profs);
+                }
+            });
+
+            function numeric_to_color(n) {
+                if (n >= 3.5 && n <= 5)
+                    return 'good';
+                else if (n >= 2.5 && n < 3.5)
+                    return 'neutral';
+                else if (n >=0 && n < 2.5)
+                    return 'bad';
+                else
+                    return 'text-secondary';
+            }
+
+            function gpa_to_color(n) {
+                if (n >= 3.67 && n <= 4.33)
+                    return 'good';
+                else if (n >= 2.33 && n < 3.67)
+                    return 'neutral';
+                else if (n >=0 && n < 2.33)
+                    return 'bad';
+                else
+                    return 'text-secondary';
+            }
+
+            function changeProf(index, all_profs) {
+                var current_prof = all_profs[index];
+                $('#prof-pic').attr('src', current_prof['avatar']);
+                $('#faculty_choice h4').text(current_prof['name']);
+                for (var i = 0; i < current_prof['tags'].length; i++) {
+                    $('#tag_list .tags a:nth-child(' + (i + 1) +')').text(current_prof['tags'][i]);
+                }
+                $('#rating_progress_bar').css('width', current_prof['rating'] / 5 * 100 + '%');
+                $('#rating_progress_bar').css('background', numeric_to_color(current_prof['rating']));
+                $('#rating_numerical').text(current_prof['rating']);
+                $('#grade_progress_bar').css('width', current_prof['grade'] / 4.33 * 100 + '%');
+                $('#grade_progress_bar').css('background', gpa_to_color(current_prof['grade']))
+                $('#grade_numerical').text(current_prof['grade']);
+                $('#workload_progress_bar').css('width', current_prof['workload'] / 5 * 100 + '%');
+                $('#workload_progress_bar').css('background', numeric_to_color(current_prof['workload']));
+                $('#workload_numerical').text(current_prof['workload']);
+
+                // Load comments
+                $('.container.card-columns').empty();
+                for (var i = 0; i < current_prof['comments'].length; i++) {
+                    var current_comment = current_prof['comments'][i];
+
+                    var rating_html = '';
+                    var workload_html = '';
+                    for (var j = 0; j < current_comment['rating']; j++)
+                        rating_html += '<i class="fa fa-star"></i>';
+                    for (var j = 0; j < current_comment['workload']; j++)
+                        workload_html += '<i class="fa fa-pencil"></i>';
+
+                    $('.container.card-columns').append(
+                        '<div class="card">' +
+                            '<div class="card-body ' + numeric_to_color(current_comment['rating']) + '">' +
+                                '<h5 class="card-title">' + current_comment['title'] + '</h5>' +
+                                '<p class="card-text">' + current_comment['content'] + '</p>' +
+                                '<a class="btn btn-light" data-toggle="collapse" href="#c' + i + '" role="button" aria-expanded="false" aria-controls="c' + i + '">Show Details <i class="fa fa-caret-down"></i></a>' +
+                                '<div class="collapse" id="c' + i + '">' +
+                                    '<ul class="list-group">' +
+                                        '<li class="list-group-item">Term: ' + current_comment['term'] + '</li>' +
+                                        '<li class="list-group-item">Instructor: ' + current_prof['name'] + '</li>' +
+                                        '<li class="list-group-item">Rating: ' + rating_html + '</li>' +
+                                        '<li class="list-group-item">Workload: ' + workload_html + '</li>' +
+                                        '<li class="list-group-item">Grade: '  + current_comment['grade'] +  '</li>' +
+                                        '<li class="list-group-item">'  + current_comment['timestamp'] +  '</li>' +
+                                    '</ul>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>');
+                }
+            }
+
+            $('#left i').click(function() {
+                cur--;
+                if (cur < 0)
+                    cur = all_profs.length - 1;
+                changeProf(cur, all_profs);
+            });
+
+            $('#right i').click(function() {
+                cur++;
+                if (cur >= all_profs.length)
+                    cur = 0;
+                changeProf(cur, all_profs);
+            });
+        </script>
 {% endblock %}

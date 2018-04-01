@@ -167,17 +167,19 @@ def course_json(course_arg):
             # Count the frequency of all tags
             for tag in comment.tags:
                 tags_count[tag] = tags_count.get(tag, 0) + 1
-            existing_comments = properties.get('comments', [])
-            existing_comments.append({
-                'title': comment.title,
-                'content': comment.content,
-                'term': comment.term.id,
-                'rating': comment.rating,
-                'workload': comment.workload,
-                'grade': comment.grade,
-                'timestamp': comment.timestamp,
-            })
-            properties['comments'] = existing_comments
+            # Only show comments that have titles or contents
+            if not (not comment.title.strip()) and not (not comment.content.strip()):
+                existing_comments = properties.get('comments', [])
+                existing_comments.append({
+                    'title': comment.title,
+                    'content': comment.content,
+                    'term': comment.term.id,
+                    'rating': comment.rating,
+                    'workload': comment.workload,
+                    'grade': comment.grade,
+                    'timestamp': comment.timestamp,
+                })
+                properties['comments'] = existing_comments
         # Store the new ratings
         properties['sum_rating'] = sum_rating
         properties['sum_workload'] = sum_workload
@@ -191,7 +193,7 @@ def course_json(course_arg):
         length = len(properties.get('comments', []))
         # Sort and find the most frequent tags
         tags_count = properties.get('tags_count', {})
-        tags = [tag.text for tag in sorted(tags_count, key=tags_count.get, reverse=True)][:8]
+        tags = [tag.text for tag in sorted(tags_count, key=tags_count.get, reverse=True)][:10]
 
         ret.append({
             'name': prof.name,

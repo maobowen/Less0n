@@ -163,6 +163,7 @@ def init_db():
         8: Teaching(id=8, course=courses['COMS4115'], professor=profs['rt2515']),
         9: Teaching(id=9, course=courses['COMS4156'], professor=profs['etl2115']),
         10: Teaching(id=10, course=courses['HIST1302'], professor=profs['lt95']),
+        11: Teaching(id=11, course=courses['COMS4156'], professor=profs['db2711']),
     }
     for _, teaching in teachings.items():
         db.session.add(teaching)
@@ -197,12 +198,12 @@ def init_db():
                    content='A very good teacher!',
                    rating=5, workload=1, grade='A+', user=users['zj2226'], timestamp=datetime.now(),
                    tags=[tags[1], tags[2]]),
-        2: Comment(id=2, teaching=teachings[9], term=terms['Spring 2018'],
+        2: Comment(id=2, teaching=teachings[11], term=terms['Spring 2018'],
                    title='Super excited',
                    content='Excited!',
                    rating=4, workload=2, grade='A', user=users['zj2226'], timestamp=datetime.now(),
                    tags=[tags[1], tags[3]]),
-        3: Comment(id=3, teaching=teachings[9], term=terms['Spring 2018'],
+        3: Comment(id=3, teaching=teachings[11], term=terms['Spring 2018'],
                    title='Wow',
                    content='Excellent!',
                    rating=4, workload=1, grade='A+', user=users['zj2226'], timestamp=datetime.now(),
