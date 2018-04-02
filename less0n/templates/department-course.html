@@ -33,7 +33,7 @@
             {% for course, statistics in courses.items() %}
                 <div class="col-md-6">
                     <div class="card">
-                        <div class="card-body border-good">
+                        <div class="card-body">
                             <h3 class="card-title"><a href="{{ url_for('course', course_arg=course.id) }}">{{ course.subject_id }} {{ course.number }}</a></h3>
                             <h4 class="card-title"><a href="{{ url_for('course', course_arg=course.id) }}">{{ course.name }}</a></h4>
                             <p class="card-text">Subject: {{ course.subject.name }}</p>

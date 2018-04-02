@@ -7,15 +7,10 @@ $(".card").each(function(index) {
     var grade = gradediv.attr("data-stat-value");
     var workload = workloaddiv.attr("data-stat-value");
 
-    ratingdiv.removeClass();
-    ratingdiv.addClass('btn');
     ratingdiv.addClass(rating_to_color(rating));
-
-    gradediv.removeClass();
-    gradediv.addClass('btn');
     gradediv.addClass(gpa_to_color(grade));
-
-    workloaddiv.removeClass();
-    workloaddiv.addClass('btn');
     workloaddiv.addClass(workload_to_color(workload));
+
+    var borderdiv = $(".row .col-md-6:nth-child("+(index+1)+") .card .card-body");
+    borderdiv.addClass('border-'+rating_to_color(rating));
 });
