@@ -6,7 +6,7 @@ function rating_to_color(n) {
     else if (n >=0 && n < 2.5)
         return 'bad';
     else
-        return 'text-secondary';
+        return 'bg-secondary';
 }
 
 function gpa_to_color(n) {
@@ -17,7 +17,7 @@ function gpa_to_color(n) {
     else if (n >=0 && n < 2.33)
         return 'bad';
     else
-        return 'text-secondary';
+        return 'bg-secondary';
 }
 
 function workload_to_color(n) {
@@ -28,5 +28,5 @@ function workload_to_color(n) {
     else if (n >=0 && n < 2.5)
         return 'good';
     else
-        return 'text-secondary';
+        return 'bg-secondary';
 }
