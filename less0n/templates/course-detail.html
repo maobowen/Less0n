@@ -206,17 +206,17 @@
         <div class="container card-columns"></div>
 {% endblock %}
 
-{% block body_js %}
-    <script type="text/javascript" src="{{ url_for('static', filename='js/course-detail.js') }}"></script>
-    <script type="text/javascript">
-        $.ajax({
-            type: 'GET',
-            url: '/course/{{ course.id }}/json/',
-            dataType: 'json',
-            success: function(data) {
-                all_profs = data;
-                changeProf(0, all_profs);
-            }
-        });
-    </script>
+{% block body2_js %}
+        <script type="text/javascript" src="{{ url_for('static', filename='js/course-detail.js') }}"></script>
+        <script type="text/javascript">
+            $.ajax({
+                type: 'GET',
+                url: '/course/{{ course.id }}/json/',
+                dataType: 'json',
+                success: function(data) {
+                    all_profs = data;
+                    changeProf(0, all_profs);
+                }
+            });
+        </script>
 {% endblock %}

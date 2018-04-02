@@ -123,8 +123,7 @@ body {
           -o-animation-duration: 2s;
           animation-name: rating_progress_bar;
           animation-duration: 2s;
-          width: 50%;
-          background: #FFD700; }
+          width: 50%; }
         body .statistics .stats_box #bar_stats .progress #grade_progress_bar {
           -webkit-animation-name: grade_progress_bar;
           -webkit-animation-duration: 2s;
@@ -134,8 +133,7 @@ body {
           -o-animation-duration: 2s;
           animation-name: grade_progress_bar;
           animation-duration: 2s;
-          width: 70%;
-          background: #4FA584; }
+          width: 70%; }
         body .statistics .stats_box #bar_stats .progress #workload_progress_bar {
           -webkit-animation-name: workload_progress_bar;
           -webkit-animation-duration: 2s;
@@ -145,8 +143,7 @@ body {
           -o-animation-duration: 2s;
           animation-name: workload_progress_bar;
           animation-duration: 2s;
-          width: 80%;
-          background: #EE3B3B; }
+          width: 80%; }
   body #add-comment {
     float: left;
     width: 200px;

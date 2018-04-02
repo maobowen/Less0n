@@ -166,19 +166,16 @@ body {
           #rating_progress_bar {
             @include progress-bar(rating_progress_bar, 2s);
             width: $rating_width;
-            background: $neutral;
           }
 
           #grade_progress_bar {
             @include progress-bar(grade_progress_bar, 2s);
             width: $grade_width;
-            background: $good;
           }
 
           #workload_progress_bar {
             @include progress-bar(workload_progress_bar, 2s);
             width: $workload_width;
-            background: $bad;
           }
         }
       }

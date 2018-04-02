@@ -2,50 +2,6 @@ var cur = 0;
 var all_profs = null;
 var color_pool = ['success', 'primary', 'info', 'danger', 'warning'];
 
-function border_to_color(n) {
-    if (n >= 3.5 && n <= 5)
-        return 'good';
-    else if (n >= 2.5 && n < 3.5)
-        return 'neutral';
-    else if (n >=0 && n < 2.5)
-        return 'bad';
-    else
-        return 'text-secondary';
-}
-
-function rating_to_color(n) {
-    if (n >= 3.5 && n <= 5)
-        return 'good';
-    else if (n >= 2.5 && n < 3.5)
-        return 'neutral';
-    else if (n >=0 && n < 2.5)
-        return 'bad';
-    else
-        return 'text-secondary';
-}
-
-function gpa_to_color(n) {
-    if (n >= 3.67 && n <= 4.33)
-        return 'good';
-    else if (n >= 2.33 && n < 3.67)
-        return 'neutral';
-    else if (n >=0 && n < 2.33)
-        return 'bad';
-    else
-        return 'text-secondary';
-}
-
-function workload_to_color(n) {
-    if (n >= 3.5 && n <= 5)
-        return 'bad';
-    else if (n >= 2.5 && n < 3.5)
-        return 'neutral';
-    else if (n >=0 && n < 2.5)
-        return 'good';
-    else
-        return 'text-secondary';
-}
-
 function changeProf(index, all_profs) {
     var current_prof = all_profs[index];
     $('#prof-pic').attr('src', current_prof['avatar']);
@@ -58,12 +14,18 @@ function changeProf(index, all_profs) {
     }
 
     $('#rating_progress_bar').css('width', current_prof['rating'] / 5 * 100 + '%');
+    $('#rating_progress_bar').removeClass();
+    $('#rating_progress_bar').addClass('progress_bar');
     $('#rating_progress_bar').addClass(rating_to_color(current_prof['rating']));
     $('#rating_numerical').text(current_prof['rating']);
     $('#grade_progress_bar').css('width', current_prof['grade'] / 4.33 * 100 + '%');
+    $('#grade_progress_bar').removeClass();
+    $('#grade_progress_bar').addClass('progress_bar');
     $('#grade_progress_bar').addClass(gpa_to_color(current_prof['grade']))
     $('#grade_numerical').text(current_prof['grade']);
     $('#workload_progress_bar').css('width', current_prof['workload'] / 5 * 100 + '%');
+    $('#workload_progress_bar').removeClass();
+    $('#workload_progress_bar').addClass('progress_bar');
     $('#workload_progress_bar').addClass(workload_to_color(current_prof['workload']));
     $('#workload_numerical').text(current_prof['workload']);
 
@@ -81,7 +43,7 @@ function changeProf(index, all_profs) {
 
         $('.container.card-columns').append(
             '<div class="card">' +
-                '<div class="card-body ' + border_to_color(current_comment['rating']) + '">' +
+                '<div class="card-body ' + rating_to_color(current_comment['rating']) + '">' +
                     '<h5 class="card-title">' + current_comment['title'] + '</h5>' +
                     '<p class="card-text">' + current_comment['content'] + '</p>' +
                     '<a class="btn btn-light" data-toggle="collapse" href="#c' + i + '" role="button" aria-expanded="false" aria-controls="c' + i + '">Show Details <i class="fa fa-caret-down"></i></a>' +

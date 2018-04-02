@@ -32,11 +32,11 @@ body {
     overflow: auto;
     clear: both; }
     body .cardcol .border-good {
-      border-top: 10px solid #e67300; }
+      border-top: 8px solid #e67300; }
     body .cardcol .border-neutral {
-      border-top: 10px solid #ffa64d; }
+      border-top: 8px solid #ffa64d; }
     body .cardcol .border-bad {
-      border-top: 10px solid #ffbf80; }
+      border-top: 8px solid #ffbf80; }
     body .cardcol .card {
       margin: 10px 0;
       box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 5px 0 rgba(0, 0, 0, 0.1); }
