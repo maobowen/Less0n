@@ -12,6 +12,7 @@ GPA_TABLE = {
     'F':  0.00,
 }
 
+
 def letter_grade_to_numeric(letter: str) -> float:
     """Convert a letter grade to a numerical grade.
 
