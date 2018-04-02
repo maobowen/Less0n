@@ -217,6 +217,49 @@ def course_json(course_arg):
         })
     return jsonify(ret)
 
+@app.route('/search/<type>/<arg>/')
+def search_department(type, arg):
+    """
+    :param
+        type: (str) {dept, subj, course, prof}
+        arg: (str) department keyword like COMS, computer
+    :return: rendered template
+
+    Examples:
+        /search/prof/daniel/
+    """
+    keywords = arg.split('\s+')
+    results = []
+
+    if type == 'dept':
+        for keyword in keywords:
+            for result in Department.query.filter((Department.id.like("%%" + keyword + "%")) |
+                                            (Department.name.like("%%" + keyword + "%"))).all():
+                results.append(result)
+        context = {type + 's': results}
+    elif type == 'subj':
+        for keyword in keywords:
+            for result in Subject.query.filter((Subject.id.like("%%" + keyword + "%")) |
+                                            (Subject.name.like("%%" + keyword + "%"))).all():
+                results.append(result)
+        context = {type + 's': results}
+    elif type == 'course':
+        for keyword in keywords:
+            for result in Course.query.filter((Course.id.like("%%" + keyword + "%")) |
+                                            (Course.name.like("%%" + keyword + "%"))).all():
+                results.append(result)
+        context = {type + 's': results}
+    else:
+        for keyword in keywords:
+            for result in Professor.query.filter((Professor.uni.like("%%" + keyword + "%")) |
+                                            (Professor.name.like("%%" + keyword + "%"))).all():
+                results.append(result)
+        context = {type + 's': results}
+
+    print(context)
+    return render_template('index.html') # for test
+
+
 
 @app.errorhandler(500)
 def server_error(e):
