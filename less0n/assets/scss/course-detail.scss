@@ -20,6 +20,18 @@ body {
   background-color: white;
   font-family: $lato !important;
 
+  .good {
+    background-color: $good;
+  }
+
+  .neutral {
+    background-color: $neutral;
+  }
+
+  .bad {
+    background-color: $bad;
+  }
+
   .jumbotron {
   	background-color: $yellow;
   	height: $jumbotron;
@@ -200,14 +212,17 @@ body {
 
     .good {
       border-left: 7px solid $good;
+      background-color: transparent;
     }
 
     .neutral {
       border-left: 7px solid $neutral;
+      background-color: transparent;
     }
 
     .bad {
       border-left: 7px solid $bad;
+      background-color: transparent;
     }
 
     .card {
