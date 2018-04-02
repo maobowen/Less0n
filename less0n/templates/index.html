@@ -27,7 +27,7 @@
                     </ul>
                     <ul class="main-nav">
                         {%- if current_user.is_authenticated -%}
-                        <li><img src="{{current_user.avatar}}?sz=50" width="50" height="50" alt="{{current_user.name}}"> {{current_user.name}}</li>
+                        <li class="loginall1"><img class="user-logo" src="{{current_user.avatar}}?sz=50" width="50" height="50" alt="{{current_user.name}}"> {{current_user.name}}</li>
                         <li><a href="{{ url_for('logout') }}">Sign out</a></li>
                         {%- else -%}
                         <li><a href="{{ url_for('login') }}?redirect={{ request.path }}">Sign in with Lionmail</a></li>
