@@ -30,8 +30,6 @@
 {% endblock %}
 
 {% block body_js %}
-    <script type="text/javascript" src="{{ url_for('static', filename='js/base2.js') }}"></script>
-
-    {% block body2_js %}
-    {% endblock %}
+        <script type="text/javascript" src="{{ url_for('static', filename='js/base2.js') }}"></script>
+        {% block body2_js %}{% endblock %}
 {% endblock %}

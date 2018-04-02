@@ -129,6 +129,7 @@ def department():
         context = {'depts': depts}
         return render_template('department.html', **context)
 
+
 @app.route('/dept/<regex("[A-Za-z]{4}"):dept_arg>/')
 def department_course(dept_arg):
     dept = Department.query.filter_by(id=dept_arg.upper()).first()
@@ -204,7 +205,7 @@ def course_json(course_arg):
         new_comments = teaching.comments
         for comment in new_comments:
             sum_rating += comment.rating
-            sum_workload += comment.rating
+            sum_workload += comment.workload
             sum_grade += helpers.letter_grade_to_numeric(comment.grade)
             # Count the frequency of all tags
             for tag in comment.tags:
