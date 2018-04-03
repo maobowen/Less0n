@@ -1,34 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-        <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,300italic' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-        <link rel="stylesheet" type="text/css" href="../static/css/base-res.css">
-        <link rel="stylesheet" type="text/css" href="../static/css/base.css">
-        <link rel="stylesheet" type="text/css" href="../static/css/search-result.css">
-    
-    </head>
-    <body>
-        <header>
-            <nav class="sticky">
-                <div class="row">
-                    <img src="../static/img/c-logo.jpeg" alt="logo" class="logo">
-                    <ul class="main-nav mr-auto">
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#leaderboard">LeaderBoard</a></li>
-                        <li><a href="#department">Department</a></li>
-                    </ul>
-                    <ul class="main-nav">
-                        <li><a href="#sign-up">Sign up</a></li>
-                        <li><a href="#sign-in">Sign in</a></li>
-                    </ul>
-                    <a class="mobile-nav-icon js--nav-icon"><i class="ion-navicon-round"></i></a>
-                </div>
-            </nav>
-        </header>
+{% extends "base2.html" %}
+
+{% block head_meta %}
+        <title>Less0n</title>
+{% endblock %}
+
+{% block head_css %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/search-result.css') }}">
+{% endblock %}
+
+{% block body_main %}
         <nav class="navbar navbar-expand-lg navbar-light bg-light nav-child">
           <a class="navbar-brand" href="#">Search Result</a>
           <a>About <i>1</i> results</a>
@@ -163,9 +143,4 @@
             </li>
           </ul>
         </nav>
-        <script src="../static/js/jquery-3.3.1.min.js"></script> 
-        <script src="../static/js/jquery-ui.min.js"></script>
-        <script src="../static/js/department.js"></script>
-    </body>  
-    
-</html>
+{% endblock %}
