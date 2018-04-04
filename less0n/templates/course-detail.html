@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block head_css %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-tagsinput.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/course-detail.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/comment.css') }}">
 {% endblock %}
@@ -174,6 +175,14 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="Tags">Tags</label>
+                                        </div>
+                                        <div class="col">
+                                            <input type="text" value="Interesting, Useful" data-role="tagsinput" id="tags" class="form-control">
+                                        </div>
+                                    </div>
     <!--                            <div id="stars-existing" class="starrr" data-rating='4'></div>-->
                                     <div class="row">
                                         <div class="col">
@@ -184,7 +193,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col">
+                                        <div cla ss="col">
                                             <label>Drop us a line</label>
                                         </div>
                                         <div class="col span-2-of-3">
@@ -207,6 +216,7 @@
 {% endblock %}
 
 {% block body2_js %}
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.js"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/course-detail.js') }}"></script>
         <script type="text/javascript">
             $.ajax({
@@ -219,4 +229,6 @@
                 }
             });
         </script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-tagsinput.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-tagsinput-angular.min.js') }}"></script>
 {% endblock %}
