@@ -203,7 +203,9 @@ select{
 }
 .search-icon i{
     position: relative;
-    top: -4px;
+    top: -9px;
+    font-size: 34px;
+    color: white;
 }
 
 

@@ -19,9 +19,6 @@
                 <div class="course-info">
                     <p class="lead">Department: <a href="{{ url_for('department_course', dept_arg=course.department.id) }}">{{ course.department.name }}</a></p>
                     <p class="lead">Subject: {{ course.subject.name }}</p>
-                    <button id="add-prof" type="button" class="btn btn-info" data-toggle="modal" data-target="#profModal">
-                        <i class="fa fa-user-plus"></i> Add Instructor
-                    </button>
                 </div>
             </div>
         </div>
@@ -143,6 +140,9 @@
         <div class="container">
             <button id="add-comment" type="button" class="btn btn-warning" data-toggle="modal" data-target="#commentModal">
                 <i class="fa fa-edit"></i> Add Comment
+            </button>
+            <button id="add-prof" type="button" class="btn btn-info" data-toggle="modal" data-target="#profModal">
+                <i class="fa fa-user-plus"></i> Add Instructor
             </button>
 
             <div id="sortby">
