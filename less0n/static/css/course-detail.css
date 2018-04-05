@@ -32,6 +32,8 @@ body {
     background-color: #FFD700; }
   body .bad {
     background-color: #EE3B3B; }
+  body #notif:hover {
+    text-decoration: none; }
   body .jumbotron {
     background-color: #FFEC8B;
     height: 450px; }
@@ -55,6 +57,8 @@ body {
         body .jumbotron .container .course-info a:hover {
           color: darkslateblue;
           text-decoration: none; }
+        body .jumbotron .container .course-info #add-prof {
+          width: 180px; }
   body .statistics {
     position: relative;
     top: -170px;
@@ -164,15 +168,16 @@ body {
       color: whitesmoke;
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
-      background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url(../img/background-img.jpg); }
+      background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url(../img/background-img.jpg);
+      padding: 10px 0; }
       body .modal-content .comment-bar .comment-classname {
         font-size: 32px;
-        margin: 30px 0;
+        margin: 20px 0;
         text-align: center; }
       body .modal-content .comment-bar #professor {
         font-size: 20px;
         font-weight: 300;
-        margin: 0 0 0 20%; }
+        margin: 0 0 10px 20%; }
         body .modal-content .comment-bar #professor p {
           text-align: right;
           padding-right: 20px;
@@ -183,11 +188,11 @@ body {
           font-weight: 300; }
       body .modal-content .comment-bar .close-icon {
         font-size: 25px;
-        position: relative;
-        top: -140px;
-        right: 20px;
         font-weight: 300;
-        color: whitesmoke; }
+        color: whitesmoke;
+        position: absolute;
+        top: 15px;
+        right: 20px; }
     body .modal-content .contact-form {
       width: 75%;
       margin: 0 auto;

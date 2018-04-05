@@ -32,6 +32,10 @@ body {
     background-color: $bad;
   }
 
+  #notif:hover {
+    text-decoration: none;
+  }
+
   .jumbotron {
   	background-color: $yellow;
   	height: $jumbotron;
@@ -66,6 +70,10 @@ body {
         a:hover {
           color: darkslateblue;
           text-decoration: none;
+        }
+
+        #add-prof {
+          width: 180px;
         }
       }
     }
@@ -207,17 +215,18 @@ body {
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
       background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url(../img/background-img.jpg);
+      padding: 10px 0;
 
       .comment-classname {
         font-size: 32px;
-        margin: 30px 0;
+        margin: 20px 0;
         text-align: center;
       }
 
       #professor{
         font-size: 20px;
         font-weight: 300;
-        margin: 0 0 0 20%;
+        margin: 0 0 10px 20%;
 
         p {
           text-align: right;
@@ -232,13 +241,13 @@ body {
         }
       }
 
-      .close-icon{
+      .close-icon {
         font-size: 25px;
-        position: relative;
-        top: -140px;
-        right: 20px;
         font-weight: 300;
         color: whitesmoke;
+        position: absolute;
+        top: 15px;
+        right: 20px;
       }
     }
 

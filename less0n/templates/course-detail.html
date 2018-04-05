@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block head_css %}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-tagsinput.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/course-detail.css') }}">
 {% endblock %}
@@ -19,6 +20,78 @@
                 <div class="course-info">
                     <p class="lead">Department: <a href="{{ url_for('department_course', dept_arg=course.department.id) }}">{{ course.department.name }}</a></p>
                     <p class="lead">Subject: {{ course.subject.name }}</p>
+                    <button id="add-prof" type="button" class="btn btn-info" data-toggle="modal" data-target="#profModal">
+                        <i class="fa fa-user-plus"></i> Add Instructor
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bd-example-modal-lg" id="profModal" tabindex="-1" role="dialog" aria-labelledby="profModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="comment-bar">
+                        <div class="comment-classname">Add Instructor for COMS4156</div>
+                        <button type="button" class="close close-icon" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="section-form">
+                            <div>
+                                <form method="post" action="#" class="contact-form">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Full Name <span class="required">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" name="Fullname" placeholder="Instructor Full Name" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="Department">Department <span class="required">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <select name="Department" id="department" class="form-control" required>
+                                                <option value="Choose" selected="true" disabled="disabled">Choose the department</option>
+                                                <option value="Computer Science">Computer Science</option>
+                                                <option value="Electronic Engineering">Electronic Engineering</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="semester" class="control-label">Semester <span class="required">*</span></label>
+                                        </div>
+                                        <div class="col-md-8 sem">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <select name="Profyear" id="profyear" class="form-control" required>
+                                                        <option value="2018" selected>2018</option>
+                                                        <option value="2017">2017</option>
+                                                        <option value="2016">2016</option>
+                                                        <option value="2015">2015</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <select name="Profsemester" id="profsemester" class="form-control" required>
+                                                        <option value="fall" selected>Fall</option>
+                                                        <option value="spring">Spring</option>
+                                                        <option value="summer">Summer</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comment-footer">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -120,7 +193,7 @@
                                         <div class="col-md-8 sem">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <select name="year" id="year" class="form-control" required>
+                                                    <select name="Year" id="year" class="form-control" required>
                                                         <option value="2018" selected>2018</option>
                                                         <option value="2017">2017</option>
                                                         <option value="2016">2016</option>
@@ -128,7 +201,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <select name="semester" id="semester" class="form-control">
+                                                    <select name="Semester" id="semester" class="form-control" required>
                                                         <option value="fall" selected>Fall</option>
                                                         <option value="spring">Spring</option>
                                                         <option value="summer">Summer</option>
@@ -244,6 +317,8 @@
 
 {% block body2_js %}
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.js"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-notify.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-notify.min.js') }}"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/course-detail.js') }}"></script>
         <script type="text/javascript">
             $.ajax({
