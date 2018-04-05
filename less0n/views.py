@@ -82,7 +82,7 @@ def oauth2callback():
             email = user_data['email']
             uni, hd = email.split('@')
             if (hd != 'columbia.edu' and hd != 'barnard.edu') or not re.compile(r'([a-z]{2,3}\d{1,4})').match(uni):
-                flash('You cannot login using this email', 'error')
+                flash('You cannot login using this email. Please use Lionmail instead.', 'error')
                 return redirect(session.get('oauth_redirect', url_for('index')))
 
             user = User.query.filter_by(email=email).first()
