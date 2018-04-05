@@ -248,6 +248,10 @@ body {
       font-size: 20px;
       font-weight: 300;
 
+      .required {
+        color: $bad;
+      }
+
       .row {
         margin: 8px;
       }
@@ -340,7 +344,7 @@ body {
       }
 
       textarea {
-        height: 100px;
+        height: 80px;
       }
 
       *:focus {outline: none;}

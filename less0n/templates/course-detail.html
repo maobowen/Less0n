@@ -7,7 +7,6 @@
 {% block head_css %}
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-tagsinput.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/course-detail.css') }}">
-{#        <link rel="stylesheet" href="{{ url_for('static', filename='css/comment.css') }}">#}
 {% endblock %}
 
 {% block body_main %}
@@ -91,9 +90,9 @@
                     <div class="comment-bar">
                         <div class="comment-classname">Add Comment for COMS4156</div>
                         <div id="professor" class="row">
-                            <p>Faculty</p>
+                            <p>Instructor</p>
                             <select name="find-us" id="professor-selection" class="form-control">
-                                <option value="Choose" selected>Choose your Professor</option>
+                                <option value="Choose" selected="true" disabled="disabled">Choose your instructor</option>
                                 <option value="EwanLowe">Ewan Lowe</option>
                                 <option value="xx">Daniel Bauer</option>
                             </select>
@@ -108,12 +107,20 @@
                                 <form method="post" action="#" class="contact-form">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <label for="semester" class="control-label">Semester</label>
+                                            <label>Comment Title</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" name="Title" placeholder="Title" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="semester" class="control-label">Semester <span class="required">*</span></label>
                                         </div>
                                         <div class="col-md-8 sem">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <select name="year" id="year" class="form-control">
+                                                    <select name="year" id="year" class="form-control" required>
                                                         <option value="2018" selected>2018</option>
                                                         <option value="2017">2017</option>
                                                         <option value="2016">2016</option>
@@ -132,18 +139,10 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <label>Comment Title</label>
+                                            <label for="Grade">Grade <span class="required">*</span></label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input type="text" name="Title" placeholder="Title" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <label for="Grade">Grade</label>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <select name="Grade" id="grade" class="form-control">
+                                            <select name="Grade" id="grade" class="form-control" required>
                                                 <option value="A+" selected>A+</option>
                                                 <option value="A">A</option>
                                                 <option value="A-">A-</option>
@@ -160,7 +159,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <label for="Rating">Rating</label>
+                                            <label for="Rating">Rating <span class="required">*</span></label>
                                         </div>
                                         <div class="col-md-8">
                                             <div class='rating-stars text-center'>
@@ -182,12 +181,12 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <input type="hidden" name="Rating" id="rating">
+                                            <input type="hidden" name="Rating" id="rating" required>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <label for="Workload">Workload</label>
+                                            <label for="Workload">Workload <span class="required">*</span></label>
                                         </div>
                                         <div class="col-md-8 penswork">
                                             <div class='workload-pens text-center'>
@@ -209,7 +208,7 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <input type="hidden" name="Workload" id="workload">
+                                            <input type="hidden" name="Workload" id="workload" required>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -233,7 +232,7 @@
                         </div>
                     </div>
                     <div class="comment-footer">
-                        <button type="button" class="btn btn-success">Submit</button>
+                        <button type="submit" class="btn btn-success">Submit</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
