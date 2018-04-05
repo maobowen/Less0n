@@ -71,10 +71,6 @@ body {
           color: darkslateblue;
           text-decoration: none;
         }
-
-        #add-prof {
-          width: 180px;
-        }
       }
     }
   }
@@ -190,11 +186,12 @@ body {
     }
   }
 
-  #add-comment {
+  #add-comment, #add-prof {
     float: left;
     width: 200px;
     position: relative;
     top: -130px;
+    margin-right: 10px;
   }
 
   #sortby {
