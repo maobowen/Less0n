@@ -1,9 +1,9 @@
-.contact-form {
-    width: 60%;
-    margin: 0 auto;
-    font-size: 20px;
-    font-weight: 300;
-}
+/*.contact-form {*/
+    /*width: 60%;*/
+    /*margin: 0 auto;*/
+    /*font-size: 20px;*/
+    /*font-weight: 300;*/
+/*}*/
 
 input[type=text],
 input[type=email],
@@ -26,39 +26,39 @@ input[type=checkbox] {
 *:focus {outline: none;}
 
 /*header*/
-.comment-bar{
-    height: 130px;
-    background-color: #343332;
-    color: #d9d9d9;
-    font-weight: 300;
-}
-#professor{
-    position: relative;
-    float: left;
-    font-size: 25px;
-    margin-left: 100px;
-    margin-top: -10px;
-}
-#professor-selection{
-    display: inline-block;
-    width: 200px;
-    margin-left: 30px;
-}
+/*.comment-bar{*/
+    /*height: 130px;*/
+    /*background-color: #343332;*/
+    /*color: #d9d9d9;*/
+    /*font-weight: 300;*/
+/*}*/
+/*#professor{*/
+    /*position: relative;*/
+    /*float: left;*/
+    /*font-size: 25px;*/
+    /*margin-left: 100px;*/
+    /*margin-top: -10px;*/
+/*}*/
+/*#professor-selection{*/
+    /*display: inline-block;*/
+    /*width: 200px;*/
+    /*margin-left: 30px;*/
+/*}*/
 
-.comment-classname{
-    font-size: 30px;
-    margin-top: 20px;
-    margin-left: 100px;
-}
+/*.comment-classname{*/
+    /*font-size: 30px;*/
+    /*margin-top: 20px;*/
+    /*margin-left: 100px;*/
+/*}*/
 
-.close-icon{
-    vertical-align: middle;
-    margin-top: -80px;
-    font-size: 30px;
-    margin-right: 20px;
-    color: #fff;
-    
-}
+/*.close-icon{*/
+    /*vertical-align: middle;*/
+    /*margin-top: -80px;*/
+    /*font-size: 30px;*/
+    /*margin-right: 20px;*/
+    /*color: #fff;*/
+    /**/
+/*}*/
 
 
 /*comment form*/
@@ -70,11 +70,11 @@ input[type=checkbox] {
 }
 
 /*footer*/
-.comment-footer{
-    text-align: center;
-    margin-bottom: 20px;
-    font-weight: 300;
-}
+/*.comment-footer{*/
+    /*text-align: center;*/
+    /*margin-bottom: 20px;*/
+    /*font-weight: 300;*/
+/*}*/
 
 input,select,textarea{
     font-weight: 300;

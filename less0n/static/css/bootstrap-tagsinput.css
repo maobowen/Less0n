@@ -1,7 +1,7 @@
 .label {
   display: inline;
   padding: .2em .6em .3em;
-  font-size: 75%;
+  font-size: 15px;
   font-weight: 700;
   line-height: 1;
   color: #fff;
@@ -20,7 +20,7 @@
   color: #555;
   vertical-align: middle;
   border-radius: 4px;
-  max-width: 100%;
+  min-width: 100%;
   line-height: 22px;
   cursor: text;
 }
@@ -30,9 +30,9 @@
   outline: none;
   background-color: transparent;
   padding: 0 6px;
-  margin: 0;
+  margin: 10px 0 0 0;
   width: auto;
-  max-width: inherit;
+  min-width: 100%;
 }
 .bootstrap-tagsinput.form-control input::-moz-placeholder {
   color: #777;

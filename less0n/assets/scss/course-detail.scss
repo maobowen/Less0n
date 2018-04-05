@@ -199,6 +199,165 @@ body {
     }
   }
 
+  .modal-content {
+    @include border-radius(11px);
+
+    .comment-bar{
+      color: whitesmoke;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url(../img/background-img.jpg);
+
+      .comment-classname {
+        font-size: 32px;
+        margin: 30px 0;
+        text-align: center;
+      }
+
+      #professor{
+        font-size: 20px;
+        font-weight: 300;
+        margin: 0 0 0 20%;
+
+        p {
+          text-align: right;
+          padding-right: 20px;
+          width: 30%;
+        }
+
+        #professor-selection{
+          width: 30%;
+          float: left;
+          font-weight: 300;
+        }
+      }
+
+      .close-icon{
+        font-size: 25px;
+        position: relative;
+        top: -140px;
+        right: 20px;
+        font-weight: 300;
+        color: whitesmoke;
+      }
+    }
+
+    .contact-form {
+      width: 75%;
+      margin: 0 auto;
+      font-size: 20px;
+      font-weight: 300;
+
+      .row {
+        margin: 8px;
+      }
+
+      .col-md-4 {
+        text-align: right;
+      }
+
+      .sem {
+        padding: 0px;
+        margin: 0px;
+
+        .row {
+          margin: 0px;
+
+          .col-md-6:nth-child(1) {
+            padding-right: 5px;
+          }
+
+          .col-md-6:nth-child(2) {
+            padding-left: 5px;
+          }
+        }
+      }
+
+      .rating-stars {
+        ul {
+          padding: 0;
+          margin: 5px 0 0 0;
+          list-style-type: none;
+          -moz-user-select:none;
+          -webkit-user-select:none;
+          text-align: left;
+
+          li.star {
+            padding-right: 5px;
+            display:inline-block;
+
+            i.fa {
+              font-size: 25px;
+              color: lightgray;
+            }
+          }
+
+          li.star.hover i.fa {
+            color: $star;
+          }
+
+          li.star.selected i.fa {
+            color: $star;
+          }
+        }
+      }
+
+      .workload-pens {
+        ul {
+          padding: 0;
+          margin: 0;
+          list-style-type: none;
+          -moz-user-select:none;
+          -webkit-user-select:none;
+          text-align: left;
+
+          li.pen {
+            padding-right: 6px;
+            display:inline-block;
+
+            i.fa {
+              font-size: 25px;
+              color: lightgray;
+            }
+          }
+
+          li.pen.hover i.fa {
+            color: $workload;
+          }
+
+          li.pen.selected i.fa {
+            color: $workload;
+          }
+        }
+      }
+
+      input, select, textarea {
+        width: 100%;
+        padding: 7px;
+        font-weight: 300;
+        padding-left: 10px;
+        @include border-radius(3px);
+      }
+
+      textarea {
+        height: 100px;
+      }
+
+      *:focus {outline: none;}
+    }
+
+    .comment-footer{
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 300;
+
+      button {
+        width: 100px;
+        margin: 5px;
+      }
+    }
+  }
+
   .card-columns {
     @include content-columns(3);
     position: relative;

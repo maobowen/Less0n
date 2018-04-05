@@ -75,3 +75,77 @@ $('#right i').click(function() {
         cur = 0;
     changeProf(cur, all_profs);
 });
+
+
+
+// Star effect
+// hover
+$('#stars li').on('mouseover', function() {
+    var onStar = parseInt($(this).data('value'));
+    $(this).parent().children('li.star').each(function(e) {
+        if (e < onStar) {
+            $(this).addClass('hover');
+        }
+        else {
+            $(this).removeClass('hover');
+        }
+    });
+}).on('mouseout', function() {
+    $(this).parent().children('li.star').each(function(e) {
+        $(this).removeClass('hover');
+    });
+});
+
+// click
+$('#stars li').on('click', function() {
+    var onStar = parseInt($(this).data('value'), 10);
+    var stars = $(this).parent().children('li.star');
+
+    for (i = 0; i < stars.length; i++) {
+        $(stars[i]).removeClass('selected');
+    }
+
+    for (i = 0; i < onStar; i++) {
+        $(stars[i]).addClass('selected');
+    }
+
+    // response
+    var ratingValue = parseInt($('#stars li.selected').last().data('value'));
+    $('#rating').val(ratingValue);
+});
+
+// Pen effect
+// hover
+$('#pens li').on('mouseover', function() {
+    var onPen = parseInt($(this).data('value'));
+    $(this).parent().children('li.pen').each(function(e) {
+        if (e < onPen) {
+            $(this).addClass('hover');
+        }
+        else {
+            $(this).removeClass('hover');
+        }
+    });
+}).on('mouseout', function() {
+    $(this).parent().children('li.pen').each(function(e) {
+        $(this).removeClass('hover');
+    });
+});
+
+// click
+$('#pens li').on('click', function() {
+    var onPen = parseInt($(this).data('value'), 10);
+    var pens = $(this).parent().children('li.pen');
+
+    for (i = 0; i < pens.length; i++) {
+        $(pens[i]).removeClass('selected');
+    }
+
+    for (i = 0; i < onPen; i++) {
+        $(pens[i]).addClass('selected');
+    }
+
+    // response
+    var workloadValue = parseInt($('#pens li.selected').last().data('value'));
+    $('#workload').val(workloadValue);
+});
