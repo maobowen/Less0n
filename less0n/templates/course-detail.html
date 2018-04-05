@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block head_css %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-tagsinput.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/course-detail.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/comment.css') }}">
 {% endblock %}
 
 {% block body_main %}
@@ -19,6 +19,78 @@
                 <div class="course-info">
                     <p class="lead">Department: <a href="{{ url_for('department_course', dept_arg=course.department.id) }}">{{ course.department.name }}</a></p>
                     <p class="lead">Subject: {{ course.subject.name }}</p>
+                    <button id="add-prof" type="button" class="btn btn-info" data-toggle="modal" data-target="#profModal">
+                        <i class="fa fa-user-plus"></i> Add Instructor
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bd-example-modal-lg" id="profModal" tabindex="-1" role="dialog" aria-labelledby="profModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="comment-bar">
+                        <div class="comment-classname">Add Instructor for COMS4156</div>
+                        <button type="button" class="close close-icon" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="section-form">
+                            <div>
+                                <form method="post" action="#" class="contact-form">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Full Name <span class="required">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" name="Fullname" placeholder="Instructor Full Name" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="Department">Department <span class="required">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <select name="Department" id="department" class="form-control" required>
+                                                <option value="Choose" selected="true" disabled="disabled">Choose the department</option>
+                                                <option value="Computer Science">Computer Science</option>
+                                                <option value="Electronic Engineering">Electronic Engineering</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="semester" class="control-label">Semester <span class="required">*</span></label>
+                                        </div>
+                                        <div class="col-md-8 sem">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <select name="Profyear" id="profyear" class="form-control" required>
+                                                        <option value="2018" selected>2018</option>
+                                                        <option value="2017">2017</option>
+                                                        <option value="2016">2016</option>
+                                                        <option value="2015">2015</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <select name="Profsemester" id="profsemester" class="form-control" required>
+                                                        <option value="fall" selected>Fall</option>
+                                                        <option value="spring">Spring</option>
+                                                        <option value="summer">Summer</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comment-footer">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,18 +160,13 @@
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="comment-bar">
-                        <div class="comment-classname">
-                            <p>Advanced Software Engineering</p>
-                        </div>
-                        <div id="professor">
-                            <p>Professor</p>
-                        </div>
-                        <div>
-                            <select name="find-us" id="professor-selection">
-                                <option value="Choose" selected>Choose your Professor</option>
-                                <option value="EwanLowe">Ewan Lowe</option>
-                                <option value="xx">xx</option>
-                                <option value="yy">yy</option>
+                        <div class="comment-classname">Add Comment for COMS4156</div>
+                        <div id="professor" class="row">
+                            <p>Instructor</p>
+                            <select name="find-us" id="professor-selection" class="form-control">
+                                <option value="Choose" selected="true" disabled="disabled">Choose your instructor</option>
+                                <option value="Ewan T. Lowe">Ewan T. Lowe</option>
+                                <option value="Daniel Bauer">Daniel Bauer</option>
                             </select>
                         </div>
                         <button type="button" class="close close-icon" data-dismiss="modal" aria-label="Close">
@@ -109,29 +176,45 @@
                     <div class="modal-body">
                         <div class="section-form">
                             <div>
-                                <h2>Add Comment</h2>
-                            </div>
-                            <div>
                                 <form method="post" action="#" class="contact-form">
                                     <div class="row">
-                                        <div class="col">
-                                            <label for="semester">Semester</label>
+                                        <div class="col-md-4">
+                                            <label>Comment Title</label>
                                         </div>
-                                        <div class="col">
-                                            <select name="semester" id="semester">
-                                                <option value="2018fall" selected>2018 Fall</option>
-                                                <option value="2018spring">2018 Spring</option>
-                                                <option value="2017fall">2017 Fall</option>
-                                                <option value="2018spring">2018 Spring</option>
-                                            </select>
+                                        <div class="col-md-8">
+                                            <input type="text" name="Title" placeholder="Title" class="form-control">
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col">
-                                            <label for="Grade">Grade</label>
+                                        <div class="col-md-4">
+                                            <label for="semester" class="control-label">Semester <span class="required">*</span></label>
                                         </div>
-                                        <div class="col">
-                                            <select name="Grade" id="grade">
+                                        <div class="col-md-8 sem">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <select name="Year" id="year" class="form-control" required>
+                                                        <option value="2018" selected>2018</option>
+                                                        <option value="2017">2017</option>
+                                                        <option value="2016">2016</option>
+                                                        <option value="2015">2015</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <select name="Semester" id="semester" class="form-control" required>
+                                                        <option value="fall" selected>Fall</option>
+                                                        <option value="spring">Spring</option>
+                                                        <option value="summer">Summer</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="Grade">Grade <span class="required">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <select name="Grade" id="grade" class="form-control" required>
                                                 <option value="A+" selected>A+</option>
                                                 <option value="A">A</option>
                                                 <option value="A-">A-</option>
@@ -147,48 +230,73 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col">
-                                            <label for="Rating">Rating</label>
+                                        <div class="col-md-4">
+                                            <label for="Rating">Rating <span class="required">*</span></label>
                                         </div>
-                                        <div class="col">
-                                            <select name="Rating" id="rating">
-                                                <option value="5" selected>5</option>
-                                                <option value="4">4</option>
-                                                <option value="3">3</option>
-                                                <option value="2">2</option>
-                                                <option value="1">1</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <label for="Workload">Workload</label>
-                                        </div>
-                                        <div class="col">
-                                            <select name="Workload" id="workload">
-                                                <option value="5" selected>5</option>
-                                                <option value="4">4</option>
-                                                <option value="3">3</option>
-                                                <option value="2">2</option>
-                                                <option value="1">1</option>
-                                            </select>
-                                        </div>
-                                    </div>
-    <!--                            <div id="stars-existing" class="starrr" data-rating='4'></div>-->
-                                    <div class="row">
-                                        <div class="col">
-                                            <label>Anonymous？</label>
-                                        </div>
-                                        <div class="col span-2-of-3">
-                                            <input type="checkbox" name="news" id="news" checked> Yes
+                                        <div class="col-md-8">
+                                            <div class='rating-stars text-center'>
+                                                <ul id='stars'>
+                                                    <li class='star' title='Poor' data-value='1'>
+                                                        <i class='fa fa-star'></i>
+                                                    </li>
+                                                    <li class='star' title='Fair' data-value='2'>
+                                                        <i class='fa fa-star'></i>
+                                                    </li>
+                                                    <li class='star' title='Good' data-value='3'>
+                                                        <i class='fa fa-star'></i>
+                                                    </li>
+                                                    <li class='star' title='Excellent' data-value='4'>
+                                                        <i class='fa fa-star'></i>
+                                                    </li>
+                                                    <li class='star' title='WOW!!!' data-value='5'>
+                                                        <i class='fa fa-star'></i>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <input type="hidden" name="Rating" id="rating" required>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col">
+                                        <div class="col-md-4">
+                                            <label for="Workload">Workload <span class="required">*</span></label>
+                                        </div>
+                                        <div class="col-md-8 penswork">
+                                            <div class='workload-pens text-center'>
+                                                <ul id='pens'>
+                                                    <li class='pen' title='WOW!!' data-value='1'>
+                                                        <i class='fa fa-pencil'></i>
+                                                    </li>
+                                                    <li class='pen' title='Comfortable' data-value='2'>
+                                                        <i class='fa fa-pencil'></i>
+                                                    </li>
+                                                    <li class='pen' title='Fair' data-value='3'>
+                                                        <i class='fa fa-pencil'></i>
+                                                    </li>
+                                                    <li class='pen' title='Tired' data-value='4'>
+                                                        <i class='fa fa-pencil'></i>
+                                                    </li>
+                                                    <li class='pen' title='Heavy!!' data-value='5'>
+                                                        <i class='fa fa-pencil'></i>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <input type="hidden" name="Workload" id="workload" required>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="Tags">Tags</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" value="Interesting, Useful" data-role="tagsinput" id="tags" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
                                             <label>Drop us a line</label>
                                         </div>
-                                        <div class="col span-2-of-3">
-                                            <textarea name="message" placeholder="Your message"></textarea>
+                                        <div class="col-md-8 span-2-of-3">
+                                            <textarea name="message" placeholder="Your message" class="form-control"></textarea>
                                         </div>
                                     </div>
                                 </form>
@@ -196,8 +304,8 @@
                         </div>
                     </div>
                     <div class="comment-footer">
+                        <button type="submit" class="btn btn-success">Submit</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary">Submit</button>
                     </div>
                 </div>
             </div>
@@ -207,6 +315,9 @@
 {% endblock %}
 
 {% block body2_js %}
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.js"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-tagsinput.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-tagsinput-angular.min.js') }}"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/course-detail.js') }}"></script>
         <script type="text/javascript">
             $.ajax({

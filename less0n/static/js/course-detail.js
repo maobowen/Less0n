@@ -60,6 +60,9 @@ function changeProf(index, all_profs) {
                 '</div>' +
             '</div>');
     }
+
+    // Default prof
+    $('#professor-selection').val(current_prof['name']);
 }
 
 $('#left i').click(function() {
@@ -74,4 +77,118 @@ $('#right i').click(function() {
     if (cur >= all_profs.length)
         cur = 0;
     changeProf(cur, all_profs);
+});
+
+
+
+// Star effect
+// hover
+$('#stars li').on('mouseover', function() {
+    var onStar = parseInt($(this).data('value'));
+    $(this).parent().children('li.star').each(function(e) {
+        if (e < onStar) {
+            $(this).addClass('hover');
+        }
+        else {
+            $(this).removeClass('hover');
+        }
+    });
+}).on('mouseout', function() {
+    $(this).parent().children('li.star').each(function(e) {
+        $(this).removeClass('hover');
+    });
+});
+
+// click
+$('#stars li').on('click', function() {
+    var onStar = parseInt($(this).data('value'), 10);
+    var stars = $(this).parent().children('li.star');
+
+    for (i = 0; i < stars.length; i++) {
+        $(stars[i]).removeClass('selected');
+    }
+
+    for (i = 0; i < onStar; i++) {
+        $(stars[i]).addClass('selected');
+    }
+
+    // response
+    var ratingValue = parseInt($('#stars li.selected').last().data('value'));
+    $('#rating').val(ratingValue);
+});
+
+// Pen effect
+// hover
+$('#pens li').on('mouseover', function() {
+    var onPen = parseInt($(this).data('value'));
+    $(this).parent().children('li.pen').each(function(e) {
+        if (e < onPen) {
+            $(this).addClass('hover');
+        }
+        else {
+            $(this).removeClass('hover');
+        }
+    });
+}).on('mouseout', function() {
+    $(this).parent().children('li.pen').each(function(e) {
+        $(this).removeClass('hover');
+    });
+});
+
+// click
+$('#pens li').on('click', function() {
+    var onPen = parseInt($(this).data('value'), 10);
+    var pens = $(this).parent().children('li.pen');
+
+    for (i = 0; i < pens.length; i++) {
+        $(pens[i]).removeClass('selected');
+    }
+
+    for (i = 0; i < onPen; i++) {
+        $(pens[i]).addClass('selected');
+    }
+
+    // response
+    var workloadValue = parseInt($('#pens li.selected').last().data('value'));
+    $('#workload').val(workloadValue);
+});
+
+// Alert notify
+$('#add-comment').on('click', function () {
+    $.notify({
+        message: 'Please <a id="notif" href="">sign in</a> with your Lionmail before leaving a comment.'
+    },{
+        element: 'body',
+        position: 'fixed',
+        type: "danger",
+        allow_dismiss: true,
+        placement: {
+            from: "top",
+            align: "center"
+        },
+        offset: 60,
+        spacing: 10,
+        z_index: 1031,
+        delay: 3000,
+        timer: 1000,
+        url_target: '_blank',
+        animate: {
+            enter: 'animated fadeInDown',
+            exit: 'animated fadeOutUp'
+        },
+        onShow: null,
+        onShown: null,
+        onClose: null,
+        onClosed: null,
+        icon_type: 'class',
+        template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+            '<span data-notify="icon"></span> ' +
+            '<span data-notify="title">{1}</span> ' +
+            '<span data-notify="message">{2}</span>' +
+            '<div class="progress" data-notify="progressbar">' +
+                '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+            '</div>' +
+            '<a href="{3}" target="{4}" data-notify="url"></a>' +
+        '</div>'
+    });
 });
