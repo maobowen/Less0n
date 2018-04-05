@@ -39,8 +39,17 @@
 
             <section class="search-area">
                 <div class="search-back">
-                    <div class="search-text">
-                        Search courses/professors
+{#                    <div class="search-text">#}
+{#                        Search courses/professors#}
+{#                    </div>#}
+                    <div class="custom-select">
+                      <select>
+                            <option value="0" selected>Course Number</option>
+                            <option value="1">Course Name</option>
+                            <option value="2">Department</option>
+                            <option value="3">Subject</option>
+                            <option value="4">Professor</option>
+                      </select>
                     </div>
                     <input type="text" name="search" class="search" placeholder="Course Name/Professor" required>
                     <div class="search-icon">
