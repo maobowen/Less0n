@@ -60,6 +60,9 @@ function changeProf(index, all_profs) {
                 '</div>' +
             '</div>');
     }
+
+    // Default prof
+    $('#professor-selection').val(current_prof['name']);
 }
 
 $('#left i').click(function() {
