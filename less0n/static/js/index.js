@@ -18,6 +18,7 @@ for (i = 0; i < x.length; i++) {
   a = document.createElement("DIV");
   a.setAttribute("class", "select-selected");
   a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+    $("#input-search").attr('placeholder',"Course Number / Course Name");
   x[i].appendChild(a);
   /*for each element, create a new DIV that will contain the option list:*/
   b = document.createElement("DIV");
@@ -36,6 +37,13 @@ for (i = 0; i < x.length; i++) {
           if (s.options[i].innerHTML == this.innerHTML) {
             s.selectedIndex = i;
             h.innerHTML = this.innerHTML;
+            if (h.innerHTML==="Courses"){
+                $("#input-search").attr('placeholder',"Course Number / Course Name");
+            }else{
+                $("#input-search").attr('placeholder',h.innerHTML);
+            }
+
+
             break;
           }
         }
@@ -51,6 +59,16 @@ for (i = 0; i < x.length; i++) {
       closeAllSelect(this);
       this.nextSibling.classList.toggle("select-hide");
       this.classList.toggle("select-arrow-active");
+
+      // $("#input-search").attr('placeholder',"newww");
+        // $('input').attr('placeholder',"请输入");
+        // $('textarea').attr('placeholder',"请输入");
+        // $("#b1").blur(function(){
+        //     if($(this).val()==""){
+        //     $(this).attr('placeholder','${sessionScope.xxxxxxx}');
+        //     }
+        // });
+
   });
 }
 function closeAllSelect(elmnt) {
