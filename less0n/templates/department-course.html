@@ -37,9 +37,9 @@
                             <h3 class="card-title"><a href="{{ url_for('course', course_arg=course.id) }}">{{ course.subject_id }} {{ course.number }}</a></h3>
                             <h4 class="card-title"><a href="{{ url_for('course', course_arg=course.id) }}">{{ course.name }}</a></h4>
                             <p class="card-text">Subject: {{ course.subject.name }}</p>
-                            <div class="btn" data-stat-value="{{ statistics['rating'] }}">Rating: {{ statistics['rating'] if statistics['rating'] >= 0 else 'N/A' }}</div>
-                            <div class="btn" data-stat-value="{{ statistics['grade'] }}">Grade: {{ statistics['grade'] if statistics['grade'] >= 0 else 'N/A' }}</div>
-                            <div class="btn" data-stat-value="{{ statistics['workload'] }}">Workload: {{ statistics['workload'] if statistics['workload'] >= 0 else 'N/A' }}</div>
+                            <div class="btn" data-stat-value="{{ statistics['rating'] }}">Rating: {{ '%0.2f' % statistics['rating'] if statistics['rating'] >= 0 else 'N/A' }}</div>
+                            <div class="btn" data-stat-value="{{ statistics['grade'] }}">Grade: {{ '%0.2f' % statistics['grade'] if statistics['grade'] >= 0 else 'N/A' }}</div>
+                            <div class="btn" data-stat-value="{{ statistics['workload'] }}">Workload: {{ '%0.2f' % statistics['workload'] if statistics['workload'] >= 0 else 'N/A' }}</div>
                             <div class="btn comment">Comments: {{ statistics['comment'] }}</div>
                         </div>
                     </div>

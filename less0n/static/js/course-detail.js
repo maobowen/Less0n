@@ -19,7 +19,7 @@ function changeProf(index, all_profs) {
     if (current_prof['rating'] == -1) {
         $('#rating_numerical').text('N/A');
     } else {
-        $('#rating_numerical').text(current_prof['rating']);
+        $('#rating_numerical').text(current_prof['rating'].toFixed(2));
     }
 
     $('#grade_progress_bar').css('width', current_prof['grade'] / 4.33 * 100 + '%');
@@ -29,7 +29,7 @@ function changeProf(index, all_profs) {
     if (current_prof['grade'] == -1) {
         $('#grade_numerical').text('N/A');
     } else {
-        $('#grade_numerical').text(current_prof['grade']);
+        $('#grade_numerical').text(current_prof['grade'].toFixed(2));
     }
 
     $('#workload_progress_bar').css('width', current_prof['workload'] / 5 * 100 + '%');
@@ -39,7 +39,7 @@ function changeProf(index, all_profs) {
     if (current_prof['workload'] == -1) {
         $('#workload_numerical').text('N/A');
     } else {
-        $('#workload_numerical').text(current_prof['workload']);
+        $('#workload_numerical').text(current_prof['workload'].toFixed(2));
     }
 
     // Load comments
