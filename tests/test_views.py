@@ -183,13 +183,11 @@ class MainTest(unittest.TestCase):
         Test case:
         --------------------------------------------------
         Input                             Expected Output
-        /course/COMS1234/json             empty JSON data
+        /course/COMS1234/json             404
         /course/ABCDEFG/json              404
         """
         rv = self.app.get('/course/COMS1234/json/')
-        assert rv._status_code == 200
-        assert rv.content_type == 'application/json'
-        assert rv.data.decode('utf-8') == '[]\n'
+        assert rv._status_code == 404
 
         rv = self.app.get('/course/ABCDEFG/json/')
         assert rv._status_code == 404

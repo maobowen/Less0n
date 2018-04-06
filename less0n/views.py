@@ -8,7 +8,7 @@ import json
 import logging
 import re
 from collections import defaultdict
-from flask import url_for, redirect, render_template, session, request, flash, jsonify
+from flask import url_for, redirect, render_template, session, request, flash, jsonify, abort
 from flask_login import login_required, login_user, logout_user, current_user
 from requests_oauthlib import OAuth2Session
 from requests.exceptions import HTTPError
@@ -36,7 +36,6 @@ def get_google_auth(state=None, token=None):
 
 @app.route('/')
 def index():
-    """Return a friendly HTTP greeting."""
     return render_template('index.html')
 
 
@@ -111,7 +110,7 @@ def logout():
     return redirect(redirect_url)
 
 
-@app.route('/department', methods = ["POST", "GET"])
+@app.route('/department', methods=["POST", "GET"])
 def department():
     """
     Render the template with all departments if it is the "GET" request.
@@ -189,7 +188,7 @@ def course(course_arg):
 def course_json(course_arg):
     c = Course.query.filter_by(id=course_arg.upper()).first()
     if c is None:
-        pass
+        abort(404)
 
     all_teachings = Teaching.query.filter_by(course=c).all()
     all_statistics = {}
@@ -289,3 +288,9 @@ def server_error(e):
     An internal error occurred: <pre>{}</pre>
     See logs for full stacktrace.
     """.format(e), 500
+
+
+@app.errorhandler(404)
+def page_not_found_error(e):
+    logging.exception('Page not found.')
+    return render_template('404.html'), 404
