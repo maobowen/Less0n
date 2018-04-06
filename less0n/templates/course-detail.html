@@ -138,10 +138,10 @@
         </div>
 
         <div class="container">
-            <button id="add-comment" type="button" class="btn btn-warning" data-toggle="modal" data-target="#commentModal">
+            <button id="add-comment" type="button" class="btn btn-warning" data-target="#commentModal">
                 <i class="fa fa-edit"></i> Add Comment
             </button>
-            <button id="add-prof" type="button" class="btn btn-info" data-toggle="modal" data-target="#profModal">
+            <button id="add-prof" type="button" class="btn btn-info" data-target="#profModal">
                 <i class="fa fa-user-plus"></i> Add Instructor
             </button>
 
@@ -328,6 +328,94 @@
                     all_profs = data;
                     changeProf(0, all_profs);
                 }
+            });
+
+            $('#add-comment').on('click', function() {
+                {%- if current_user.is_authenticated -%}
+                    $("#commentModal").modal("show");
+                {%- else -%}
+                    $("#commentModal").modal("hide");
+                    $.notify({
+                        message: 'Please <a id="notif" href="">sign in</a> with your Lionmail before leaving a comment.'
+                    },{
+                        element: 'body',
+                        position: 'fixed',
+                        type: "danger",
+                        allow_dismiss: true,
+                        placement: {
+                            from: "top",
+                            align: "center"
+                        },
+                        offset: 60,
+                        spacing: 10,
+                        z_index: 1031,
+                        delay: 3000,
+                        timer: 1000,
+                        url_target: '_blank',
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                        onShow: null,
+                        onShown: null,
+                        onClose: null,
+                        onClosed: null,
+                        icon_type: 'class',
+                        template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                            '<span data-notify="icon"></span> ' +
+                            '<span data-notify="title">{1}</span> ' +
+                            '<span data-notify="message">{2}</span>' +
+                            '<div class="progress" data-notify="progressbar">' +
+                                '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                            '</div>' +
+                            '<a href="{3}" target="{4}" data-notify="url"></a>' +
+                        '</div>'
+                    });
+                {%- endif -%}
+            });
+
+            $('#add-prof').on('click', function() {
+                {%- if current_user.is_authenticated -%}
+                    $("#profModal").modal("show");
+                {%- else -%}
+                    $("#profModal").modal("hide");
+                    $.notify({
+                        message: 'Please <a id="notif" href="">sign in</a> with your Lionmail before adding an instructor.'
+                    },{
+                        element: 'body',
+                        position: 'fixed',
+                        type: "danger",
+                        allow_dismiss: true,
+                        placement: {
+                            from: "top",
+                            align: "center"
+                        },
+                        offset: 60,
+                        spacing: 10,
+                        z_index: 1031,
+                        delay: 3000,
+                        timer: 1000,
+                        url_target: '_blank',
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                        onShow: null,
+                        onShown: null,
+                        onClose: null,
+                        onClosed: null,
+                        icon_type: 'class',
+                        template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                            '<span data-notify="icon"></span> ' +
+                            '<span data-notify="title">{1}</span> ' +
+                            '<span data-notify="message">{2}</span>' +
+                            '<div class="progress" data-notify="progressbar">' +
+                                '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                            '</div>' +
+                            '<a href="{3}" target="{4}" data-notify="url"></a>' +
+                        '</div>'
+                    });
+                {%- endif -%}
             });
         </script>
 {% endblock %}
