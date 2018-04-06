@@ -192,28 +192,43 @@ def course_json(course_arg):
         pass
 
     all_teachings = Teaching.query.filter_by(course=c).all()
-    all_ratings = {}
+    all_statistics = {}
+
+    # Statistics of all professors
+    all_profs_sum_rating = all_profs_sum_workload = all_profs_sum_grade = 0
+    all_profs_tags_count = {}
+    all_profs_count_all_comments = 0
+    all_profs_nonempty_comments = []
+
     for teaching in all_teachings:
-        prof = teaching.professor
-        # Read the current ratings
-        properties = all_ratings.get(prof, {})
-        sum_rating = properties.get('sum_ratings', 0)
-        sum_workload = properties.get('sum_workload', 0)
-        sum_grade = properties.get('sum_grade', 0)
-        tags_count = properties.get('tags_count', {})
-        # Accumulate each new ratings
-        new_comments = teaching.comments
-        for comment in new_comments:
-            sum_rating += comment.rating
-            sum_workload += comment.workload
-            sum_grade += helpers.letter_grade_to_numeric(comment.grade)
+        # Statistics of the current professor in the current teaching
+        # Each professor in all_teachings is unique
+        cur_prof = teaching.professor
+        cur_prof_sum_rating = cur_prof_sum_workload = cur_prof_sum_grade = 0
+        cur_prof_tags_count = {}
+        cur_prof_count_all_comments = 0
+        cur_prof_nonempty_comments = []
+
+        # Accumulate each ratings
+        all_comments = teaching.comments
+        for comment in all_comments:
+            cur_prof_sum_rating += comment.rating
+            cur_prof_sum_workload += comment.workload
+            cur_prof_sum_grade += helpers.letter_grade_to_numeric(comment.grade)
+            cur_prof_count_all_comments += 1
+            all_profs_sum_rating += comment.rating
+            all_profs_sum_workload += comment.workload
+            all_profs_sum_grade += helpers.letter_grade_to_numeric(comment.grade)
+            all_profs_count_all_comments += 1
+
             # Count the frequency of all tags
             for tag in comment.tags:
-                tags_count[tag] = tags_count.get(tag, 0) + 1
+                cur_prof_tags_count[tag] = cur_prof_tags_count.get(tag, 0) + 1
+                all_profs_tags_count[tag] = all_profs_tags_count.get(tag, 0) + 1
+
             # Only show comments that have titles or contents
             if not (not comment.title.strip()) and not (not comment.content.strip()):
-                existing_comments = properties.get('comments', [])
-                existing_comments.append({
+                json_comment = {
                     'title': comment.title,
                     'content': comment.content,
                     'term': comment.term.id,
@@ -221,31 +236,48 @@ def course_json(course_arg):
                     'workload': comment.workload,
                     'grade': comment.grade,
                     'timestamp': comment.timestamp,
-                })
-                properties['comments'] = existing_comments
-        # Store the new ratings
-        properties['sum_rating'] = sum_rating
-        properties['sum_workload'] = sum_workload
-        properties['sum_grade'] = sum_grade
-        properties['tags_count'] = tags_count
-        all_ratings[prof] = properties
+                }
+                cur_prof_nonempty_comments.append(json_comment)
+                all_profs_nonempty_comments.append(json_comment)
+
+        # Store ratings of the current professor
+        all_statistics[cur_prof] = {
+            'sum_rating': cur_prof_sum_rating,
+            'sum_workload': cur_prof_sum_workload,
+            'sum_grade': cur_prof_sum_grade,
+            'tags_count': cur_prof_tags_count,
+            'count_all_comments': cur_prof_count_all_comments,
+            'nonempty_comments': cur_prof_nonempty_comments,
+        }
 
     # Return JSON
     ret = []
-    for prof, properties in all_ratings.items():
-        length = len(properties.get('comments', []))
+    # Return statistics of all professors
+    all_profs_tags = [tag.text for tag in sorted(all_profs_tags_count, key=all_profs_tags_count.get, reverse=True)][:10]
+    ret.append({
+        'name': 'All Instructors',
+        'avatar': '',
+        'rating': -1 if all_profs_count_all_comments == 0 else all_profs_sum_rating / all_profs_count_all_comments,
+        'workload': -1 if all_profs_count_all_comments == 0 else all_profs_sum_workload / all_profs_count_all_comments,
+        'grade': -1 if all_profs_count_all_comments == 0 else all_profs_sum_grade / all_profs_count_all_comments,
+        'tags': all_profs_tags,
+        'comments': all_profs_nonempty_comments,
+    })
+    # Return statistics of each professor
+    for cur_prof, cur_prof_statistics in all_statistics.items():
         # Sort and find the most frequent tags
-        tags_count = properties.get('tags_count', {})
-        tags = [tag.text for tag in sorted(tags_count, key=tags_count.get, reverse=True)][:10]
+        cur_prof_tags_count = cur_prof_statistics['tags_count']
+        cur_prof_tags = [tag.text for tag in sorted(cur_prof_tags_count, key=cur_prof_tags_count.get, reverse=True)][:10]
+        cur_prof_count_all_comments = cur_prof_statistics['count_all_comments']
 
         ret.append({
-            'name': prof.name,
-            'avatar': prof.avatar,
-            'rating': 0 if length == 0 else properties.get('sum_rating', 0) / length,
-            'workload': 0 if length == 0 else properties.get('sum_workload', 0) / length,
-            'grade': 0.0 if length == 0 else properties.get('sum_grade', 0.0) / length,
-            'tags': tags,
-            'comments': properties.get('comments', [])
+            'name': cur_prof.name,
+            'avatar': cur_prof.avatar,
+            'rating': -1 if cur_prof_count_all_comments == 0 else cur_prof_statistics['sum_rating'] / cur_prof_count_all_comments,
+            'workload': -1 if cur_prof_count_all_comments == 0 else cur_prof_statistics['sum_workload'] / cur_prof_count_all_comments,
+            'grade': -1 if cur_prof_count_all_comments == 0 else cur_prof_statistics['sum_grade'] / cur_prof_count_all_comments,
+            'tags': cur_prof_tags,
+            'comments': cur_prof_statistics['nonempty_comments'],
         })
     return jsonify(ret)
 
