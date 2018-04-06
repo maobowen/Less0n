@@ -17,17 +17,31 @@ function changeProf(index, all_profs) {
     $('#rating_progress_bar').removeClass();
     $('#rating_progress_bar').addClass('progress_bar');
     $('#rating_progress_bar').addClass(rating_to_color(current_prof['rating']));
-    $('#rating_numerical').text(current_prof['rating']);
+    if (current_prof['rating'] == -1) {
+        $('#rating_numerical').text('N/A');
+    } else {
+        $('#rating_numerical').text(current_prof['rating']);
+    }
+
     $('#grade_progress_bar').css('width', current_prof['grade'] / 4.33 * 100 + '%');
     $('#grade_progress_bar').removeClass();
     $('#grade_progress_bar').addClass('progress_bar');
     $('#grade_progress_bar').addClass(gpa_to_color(current_prof['grade']))
-    $('#grade_numerical').text(current_prof['grade']);
+    if (current_prof['grade'] == -1) {
+        $('#grade_numerical').text('N/A');
+    } else {
+        $('#grade_numerical').text(current_prof['grade']);
+    }
+
     $('#workload_progress_bar').css('width', current_prof['workload'] / 5 * 100 + '%');
     $('#workload_progress_bar').removeClass();
     $('#workload_progress_bar').addClass('progress_bar');
     $('#workload_progress_bar').addClass(workload_to_color(current_prof['workload']));
-    $('#workload_numerical').text(current_prof['workload']);
+    if (current_prof['workload'] == -1) {
+        $('#workload_numerical').text('N/A');
+    } else {
+        $('#workload_numerical').text(current_prof['workload']);
+    }
 
     // Load comments
     $('.container.card-columns').empty();
@@ -154,7 +168,7 @@ $('#pens li').on('click', function() {
 });
 
 // Alert notify
-$('#add-comment').on('click', function () {
+$('#add-comment').on('click', function() {
     $.notify({
         message: 'Please <a id="notif" href="">sign in</a> with your Lionmail before leaving a comment.'
     },{
