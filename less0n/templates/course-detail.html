@@ -165,8 +165,6 @@
                             <p>Instructor</p>
                             <select name="find-us" id="professor-selection" class="form-control">
                                 <option value="Choose" selected="true" disabled="disabled">Choose your instructor</option>
-                                <option value="Ewan T. Lowe">Ewan T. Lowe</option>
-                                <option value="Daniel Bauer">Daniel Bauer</option>
                             </select>
                         </div>
                         <button type="button" class="close close-icon" data-dismiss="modal" aria-label="Close">
@@ -327,6 +325,11 @@
                 success: function(data) {
                     all_profs = data;
                     changeProf(0, all_profs);
+
+                    // Pop-up prof selection list
+                    for (i = 1; i < all_profs.length; i++) {
+                        $('#professor-selection').append('<option value="'+all_profs[i]['name']+'">'+all_profs[i]['name']+'</option>');
+                    }
                 }
             });
 

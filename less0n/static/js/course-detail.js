@@ -1,5 +1,4 @@
 var cur = 0;
-var all_profs = null;
 var color_pool = ['success', 'primary', 'info', 'danger', 'warning'];
 
 function changeProf(index, all_profs) {
@@ -76,7 +75,11 @@ function changeProf(index, all_profs) {
     }
 
     // Default prof
-    $('#professor-selection').val(current_prof['name']);
+    if (current_prof['name'] == 'All Instructors') {
+        $('#professor-selection').val('Choose');
+    } else {
+        $('#professor-selection').val(current_prof['name']);
+    }
 }
 
 $('#left i').click(function() {
