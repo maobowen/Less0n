@@ -339,7 +339,7 @@
                 {%- else -%}
                     $("#commentModal").modal("hide");
                     $.notify({
-                        message: 'Please <a id="notif" href="">sign in</a> with your Lionmail before leaving a comment.'
+                        message: 'Please <a id="notif" href="{{ url_for('login') }}?redirect={{ request.path }}">sign in</a> with your Lionmail before leaving a comment.'
                     },{
                         element: 'body',
                         position: 'fixed',
@@ -383,7 +383,7 @@
                 {%- else -%}
                     $("#profModal").modal("hide");
                     $.notify({
-                        message: 'Please <a id="notif" href="">sign in</a> with your Lionmail before adding an instructor.'
+                        message: 'Please <a id="notif" href="{{ url_for('login') }}?redirect={{ request.path }}">sign in</a> with your Lionmail before adding an instructor.'
                     },{
                         element: 'body',
                         position: 'fixed',
