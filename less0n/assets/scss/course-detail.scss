@@ -20,6 +20,22 @@ body {
   background-color: white;
   font-family: $lato !important;
 
+  .good {
+    background-color: $good;
+  }
+
+  .neutral {
+    background-color: $neutral;
+  }
+
+  .bad {
+    background-color: $bad;
+  }
+
+  #notif:hover {
+    text-decoration: none;
+  }
+
   .jumbotron {
   	background-color: $yellow;
   	height: $jumbotron;
@@ -154,30 +170,28 @@ body {
           #rating_progress_bar {
             @include progress-bar(rating_progress_bar, 2s);
             width: $rating_width;
-            background: $neutral;
           }
 
           #grade_progress_bar {
             @include progress-bar(grade_progress_bar, 2s);
             width: $grade_width;
-            background: $good;
           }
 
           #workload_progress_bar {
             @include progress-bar(workload_progress_bar, 2s);
             width: $workload_width;
-            background: $bad;
           }
         }
       }
     }
   }
 
-  #add-comment {
+  #add-comment, #add-prof {
     float: left;
     width: 200px;
     position: relative;
     top: -130px;
+    margin-right: 10px;
   }
 
   #sortby {
@@ -187,6 +201,170 @@ body {
       top: -130px;
       left: 0;
       float: right;
+    }
+  }
+
+  .modal-content {
+    @include border-radius(11px);
+
+    .comment-bar{
+      color: whitesmoke;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url(../img/background-img.jpg);
+      padding: 10px 0;
+
+      .comment-classname {
+        font-size: 32px;
+        margin: 20px 0;
+        text-align: center;
+      }
+
+      #professor{
+        font-size: 20px;
+        font-weight: 300;
+        margin: 0 0 10px 20%;
+
+        p {
+          text-align: right;
+          padding-right: 20px;
+          width: 30%;
+        }
+
+        #professor-selection{
+          width: 30%;
+          float: left;
+          font-weight: 300;
+        }
+      }
+
+      .close-icon {
+        font-size: 25px;
+        font-weight: 300;
+        color: whitesmoke;
+        position: absolute;
+        top: 15px;
+        right: 20px;
+      }
+    }
+
+    .contact-form {
+      width: 75%;
+      margin: 0 auto;
+      font-size: 20px;
+      font-weight: 300;
+
+      .required {
+        color: $bad;
+      }
+
+      .row {
+        margin: 8px;
+      }
+
+      .col-md-4 {
+        text-align: right;
+      }
+
+      .sem {
+        padding: 0px;
+        margin: 0px;
+
+        .row {
+          margin: 0px;
+
+          .col-md-6:nth-child(1) {
+            padding-right: 5px;
+          }
+
+          .col-md-6:nth-child(2) {
+            padding-left: 5px;
+          }
+        }
+      }
+
+      .rating-stars {
+        ul {
+          padding: 0;
+          margin: 5px 0 0 0;
+          list-style-type: none;
+          -moz-user-select:none;
+          -webkit-user-select:none;
+          text-align: left;
+
+          li.star {
+            padding-right: 5px;
+            display:inline-block;
+
+            i.fa {
+              font-size: 25px;
+              color: lightgray;
+            }
+          }
+
+          li.star.hover i.fa {
+            color: $star;
+          }
+
+          li.star.selected i.fa {
+            color: $star;
+          }
+        }
+      }
+
+      .workload-pens {
+        ul {
+          padding: 0;
+          margin: 0;
+          list-style-type: none;
+          -moz-user-select:none;
+          -webkit-user-select:none;
+          text-align: left;
+
+          li.pen {
+            padding-right: 6px;
+            display:inline-block;
+
+            i.fa {
+              font-size: 25px;
+              color: lightgray;
+            }
+          }
+
+          li.pen.hover i.fa {
+            color: $workload;
+          }
+
+          li.pen.selected i.fa {
+            color: $workload;
+          }
+        }
+      }
+
+      input, select, textarea {
+        width: 100%;
+        padding: 7px;
+        font-weight: 300;
+        padding-left: 10px;
+        @include border-radius(3px);
+      }
+
+      textarea {
+        height: 80px;
+      }
+
+      *:focus {outline: none;}
+    }
+
+    .comment-footer{
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 300;
+
+      button {
+        width: 100px;
+        margin: 5px;
+      }
     }
   }
 
@@ -200,14 +378,17 @@ body {
 
     .good {
       border-left: 7px solid $good;
+      background-color: transparent;
     }
 
     .neutral {
       border-left: 7px solid $neutral;
+      background-color: transparent;
     }
 
     .bad {
       border-left: 7px solid $bad;
+      background-color: transparent;
     }
 
     .card {

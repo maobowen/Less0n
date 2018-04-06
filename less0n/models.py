@@ -37,6 +37,9 @@ class Membership(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.String(40), db.ForeignKey('users.id'), nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
+    __table_args__ = (
+        db.UniqueConstraint('user_id', 'role_id', name='_memberships_uc'),
+    )
 
     def __repr__(self):
         return '<Membership %r>' % self.id
@@ -45,7 +48,7 @@ class Membership(db.Model):
 class Department(db.Model):
     __tablename__ = 'departments'
     id = db.Column(db.String(6), primary_key=True, nullable=False)  # COMS
-    name = db.Column(db.String(100), nullable=False)  # Computer Science
+    name = db.Column(db.String(100), unique=True, nullable=False)  # Computer Science
     url = db.Column(db.String(200))  # Department website
     courses = db.relationship('Course', backref='department', lazy=True)
 
@@ -59,7 +62,7 @@ class Department(db.Model):
 class Subject(db.Model):
     __tablename__ = 'subjects'
     id = db.Column(db.String(6), primary_key=True, nullable=False)  # CSEE
-    name = db.Column(db.String(100), nullable=False)  # Computer Science and Electrical Engineering
+    name = db.Column(db.String(100), unique=True, nullable=False)  # Computer Science and Electrical Engineering
     courses = db.relationship('Course', backref='subject', lazy=True)
 
     def __init__(self, id=None, name=None):
@@ -108,6 +111,9 @@ class Teaching(db.Model):
     professor_uni = db.Column(db.String(8), db.ForeignKey('professors.uni'), nullable=False)  # Ewan Lowe
     professor = db.relation(Professor, backref='teachings', lazy=True)
     comments = db.relationship('Comment', backref='teaching', lazy=True)
+    __table_args__ = (
+        db.UniqueConstraint('course_id', 'professor_uni', name='_teachings_uc'),
+    )
 
 
 class Term(db.Model):

@@ -6,6 +6,52 @@
 {% endblock %}
 
 {% block body_header %}
+        <script>
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                {% for message in messages %}
+                    // Alert notify
+                    $.notify({
+                        message: '{{ message }}'
+                    },{
+                        element: 'body',
+                        position: 'fixed',
+                        type: "danger",
+                        allow_dismiss: true,
+                        placement: {
+                            from: "top",
+                            align: "center"
+                        },
+                        offset: 60,
+                        spacing: 10,
+                        z_index: 1031,
+                        delay: 3000,
+                        timer: 1000,
+                        url_target: '_blank',
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                        onShow: null,
+                        onShown: null,
+                        onClose: null,
+                        onClosed: null,
+                        icon_type: 'class',
+                        template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                            '<span data-notify="icon"></span> ' +
+                            '<span data-notify="title">{1}</span> ' +
+                            '<span data-notify="message">{2}</span>' +
+                            '<div class="progress" data-notify="progressbar">' +
+                                '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                            '</div>' +
+                            '<a href="{3}" target="{4}" data-notify="url"></a>' +
+                        '</div>'
+                    });
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+        </script>
+
         <header>
             <nav class="sticky">
                 <div class="row">
@@ -17,8 +63,8 @@
                     </ul>
                     <ul class="main-nav">
                         {%- if current_user.is_authenticated -%}
-                        <li><img src="{{current_user.avatar}}?sz=50" width="50" height="50" alt="{{current_user.name}}"> {{current_user.name}}</li>
-                        <li><a href="{{ url_for('logout') }}">Sign out</a></li>
+                        <li class="loginall"><img class="user-logo" src="{{current_user.avatar}}?sz=50" width="50" height="50" alt="{{current_user.name}}"> {{current_user.name}}</li>
+                        <li><a href="{{ url_for('logout') }}?redirect={{ request.path }}">Sign out</a></li>
                         {%- else -%}
                         <li><a href="{{ url_for('login') }}?redirect={{ request.path }}">Sign in with Lionmail</a></li>
                         {%- endif -%}
@@ -27,4 +73,9 @@
                 </div>
             </nav>
         </header>
+{% endblock %}
+
+{% block body_js %}
+        <script type="text/javascript" src="{{ url_for('static', filename='js/base2.js') }}"></script>
+        {% block body2_js %}{% endblock %}
 {% endblock %}

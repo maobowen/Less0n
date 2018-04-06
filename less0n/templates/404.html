@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block head_meta %}
+        <title>Less0n - Page Not Found</title>
+{% endblock %}
+
+{% block head_css %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/404.css') }}">
+{% endblock %}
+
+{% block body_main %}
+        <header id="main-page">
+            <p id="n-find">Oops, we couldn't find that page!</p>
+            <p id="not-found">404</p>
+            <div id="back-btn">
+                <a class="btn btn-full" href="#">Go Back</a>
+            </div>
+        </header>
+{% endblock %}
