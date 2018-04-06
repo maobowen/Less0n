@@ -26,6 +26,14 @@ body .statistics .stats_box #tag_list .tags a.danger {
 body {
   background-color: white;
   font-family: "Lato", "Arial", sans-serif !important; }
+  body .good {
+    background-color: #4FA584; }
+  body .neutral {
+    background-color: #FFD700; }
+  body .bad {
+    background-color: #EE3B3B; }
+  body #notif:hover {
+    text-decoration: none; }
   body .jumbotron {
     background-color: #FFEC8B;
     height: 450px; }
@@ -117,8 +125,7 @@ body {
           -o-animation-duration: 2s;
           animation-name: rating_progress_bar;
           animation-duration: 2s;
-          width: 50%;
-          background: #FFD700; }
+          width: 50%; }
         body .statistics .stats_box #bar_stats .progress #grade_progress_bar {
           -webkit-animation-name: grade_progress_bar;
           -webkit-animation-duration: 2s;
@@ -128,8 +135,7 @@ body {
           -o-animation-duration: 2s;
           animation-name: grade_progress_bar;
           animation-duration: 2s;
-          width: 70%;
-          background: #4FA584; }
+          width: 70%; }
         body .statistics .stats_box #bar_stats .progress #workload_progress_bar {
           -webkit-animation-name: workload_progress_bar;
           -webkit-animation-duration: 2s;
@@ -139,19 +145,127 @@ body {
           -o-animation-duration: 2s;
           animation-name: workload_progress_bar;
           animation-duration: 2s;
-          width: 80%;
-          background: #EE3B3B; }
-  body #add-comment {
+          width: 80%; }
+  body #add-comment, body #add-prof {
     float: left;
     width: 200px;
     position: relative;
-    top: -130px; }
+    top: -130px;
+    margin-right: 10px; }
   body #sortby form {
     width: 230px;
     position: relative;
     top: -130px;
     left: 0;
     float: right; }
+  body .modal-content {
+    -webkit-border-radius: 11px;
+    -moz-border-radius: 11px;
+    -ms-border-radius: 11px;
+    border-radius: 11px; }
+    body .modal-content .comment-bar {
+      color: whitesmoke;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url(../img/background-img.jpg);
+      padding: 10px 0; }
+      body .modal-content .comment-bar .comment-classname {
+        font-size: 32px;
+        margin: 20px 0;
+        text-align: center; }
+      body .modal-content .comment-bar #professor {
+        font-size: 20px;
+        font-weight: 300;
+        margin: 0 0 10px 20%; }
+        body .modal-content .comment-bar #professor p {
+          text-align: right;
+          padding-right: 20px;
+          width: 30%; }
+        body .modal-content .comment-bar #professor #professor-selection {
+          width: 30%;
+          float: left;
+          font-weight: 300; }
+      body .modal-content .comment-bar .close-icon {
+        font-size: 25px;
+        font-weight: 300;
+        color: whitesmoke;
+        position: absolute;
+        top: 15px;
+        right: 20px; }
+    body .modal-content .contact-form {
+      width: 75%;
+      margin: 0 auto;
+      font-size: 20px;
+      font-weight: 300; }
+      body .modal-content .contact-form .required {
+        color: #EE3B3B; }
+      body .modal-content .contact-form .row {
+        margin: 8px; }
+      body .modal-content .contact-form .col-md-4 {
+        text-align: right; }
+      body .modal-content .contact-form .sem {
+        padding: 0px;
+        margin: 0px; }
+        body .modal-content .contact-form .sem .row {
+          margin: 0px; }
+          body .modal-content .contact-form .sem .row .col-md-6:nth-child(1) {
+            padding-right: 5px; }
+          body .modal-content .contact-form .sem .row .col-md-6:nth-child(2) {
+            padding-left: 5px; }
+      body .modal-content .contact-form .rating-stars ul {
+        padding: 0;
+        margin: 5px 0 0 0;
+        list-style-type: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        text-align: left; }
+        body .modal-content .contact-form .rating-stars ul li.star {
+          padding-right: 5px;
+          display: inline-block; }
+          body .modal-content .contact-form .rating-stars ul li.star i.fa {
+            font-size: 25px;
+            color: lightgray; }
+        body .modal-content .contact-form .rating-stars ul li.star.hover i.fa {
+          color: #FFB90F; }
+        body .modal-content .contact-form .rating-stars ul li.star.selected i.fa {
+          color: #FFB90F; }
+      body .modal-content .contact-form .workload-pens ul {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        text-align: left; }
+        body .modal-content .contact-form .workload-pens ul li.pen {
+          padding-right: 6px;
+          display: inline-block; }
+          body .modal-content .contact-form .workload-pens ul li.pen i.fa {
+            font-size: 25px;
+            color: lightgray; }
+        body .modal-content .contact-form .workload-pens ul li.pen.hover i.fa {
+          color: #B0171F; }
+        body .modal-content .contact-form .workload-pens ul li.pen.selected i.fa {
+          color: #B0171F; }
+      body .modal-content .contact-form input, body .modal-content .contact-form select, body .modal-content .contact-form textarea {
+        width: 100%;
+        padding: 7px;
+        font-weight: 300;
+        padding-left: 10px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        -ms-border-radius: 3px;
+        border-radius: 3px; }
+      body .modal-content .contact-form textarea {
+        height: 80px; }
+      body .modal-content .contact-form *:focus {
+        outline: none; }
+    body .modal-content .comment-footer {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 300; }
+      body .modal-content .comment-footer button {
+        width: 100px;
+        margin: 5px; }
   body .card-columns {
     -webkit-column-count: 3;
     -moz-column-count: 3;
@@ -162,11 +276,14 @@ body {
     overflow: auto;
     clear: both; }
     body .card-columns .good {
-      border-left: 7px solid #4FA584; }
+      border-left: 7px solid #4FA584;
+      background-color: transparent; }
     body .card-columns .neutral {
-      border-left: 7px solid #FFD700; }
+      border-left: 7px solid #FFD700;
+      background-color: transparent; }
     body .card-columns .bad {
-      border-left: 7px solid #EE3B3B; }
+      border-left: 7px solid #EE3B3B;
+      background-color: transparent; }
     body .card-columns .card {
       margin: 10px 0;
       box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 5px 0 rgba(0, 0, 0, 0.1); }

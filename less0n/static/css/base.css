@@ -149,3 +149,20 @@ footer li a:visited {
 footer li a:hover {
     color: #DACEDE;
 }
+
+.user-logo{
+    margin-top: -5px;
+    margin-right: 15px;
+    height: 30px;
+    width: 30px;
+}
+
+
+.loginall{
+    margin-right: -10px;
+}
+
+.loginall1{
+    margin-right: -10px;
+    color: #ffffff;
+}

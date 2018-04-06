@@ -30,22 +30,25 @@
 
         <div class="container cardcol">
             <div class="row">
-            {% for course in courses %}
+            {% for course, statistics in courses.items() %}
                 <div class="col-md-6">
                     <div class="card">
-                        <!-- <div class="card-header"></div> -->
-                        <div class="card-body border-good">
+                        <div class="card-body">
                             <h3 class="card-title"><a href="{{ url_for('course', course_arg=course.id) }}">{{ course.subject_id }} {{ course.number }}</a></h3>
                             <h4 class="card-title"><a href="{{ url_for('course', course_arg=course.id) }}">{{ course.name }}</a></h4>
                             <p class="card-text">Subject: {{ course.subject.name }}</p>
-                            <div class="btn neutral">Rating: 4.5</div>
-                            <div class="btn good">Grade: 4</div>
-                            <div class="btn bad">Workload: 4</div>
-                            <div class="btn comment">Comments: 35</div>
+                            <div class="btn" data-stat-value="{{ statistics['rating'] }}">Rating: {{ '%0.2f' % statistics['rating'] if statistics['rating'] >= 0 else 'N/A' }}</div>
+                            <div class="btn" data-stat-value="{{ statistics['grade'] }}">Grade: {{ '%0.2f' % statistics['grade'] if statistics['grade'] >= 0 else 'N/A' }}</div>
+                            <div class="btn" data-stat-value="{{ statistics['workload'] }}">Workload: {{ '%0.2f' % statistics['workload'] if statistics['workload'] >= 0 else 'N/A' }}</div>
+                            <div class="btn comment">Comments: {{ statistics['comment'] }}</div>
                         </div>
                     </div>
                 </div>
             {% endfor %}
             </div>
         </div>
+{% endblock %}
+
+{% block body2_js %}
+        <script type="text/javascript" src="{{ url_for('static', filename='js/department-course.js') }}"></script>
 {% endblock %}
