@@ -319,6 +319,70 @@ def search():
     return render_template('search-result.html', **results)
 
 
+@app.route('/prof/<regex("[A-Za-z]{2,3}[0-9]{1,4}"):prof_arg>/')
+def prof(prof_arg):
+    prof = Professor.query.filter_by(uni=prof_arg.lower()).first()
+    if prof is None:
+        abort(404)
+
+    all_teachings = Teaching.query.filter_by(professor=prof).all()
+    statistics = {}  # Statistics of each course
+    # Statistics of all courses
+    all_courses_sum_rating = all_courses_sum_workload = all_courses_sum_grade = all_courses_count_all_comments = 0
+    all_courses_tags_count = {}
+    all_statistics = {}
+
+    # Statistics of all courses (i.e. all teachings)
+    for teaching in all_teachings:
+        c = teaching.course
+        cur_course_sum_rating = cur_course_sum_workload = cur_course_sum_grade = 0
+        cur_course_count_all_comments = cur_course_count_nonempty_comments = 0
+        statistics[c] = {}
+
+        all_comments = teaching.comments
+        for comment in all_comments:  # Iterate each comment
+            cur_course_count_all_comments += 1
+            cur_course_sum_rating += comment.rating
+            cur_course_sum_workload += comment.workload
+            cur_course_sum_grade += helpers.letter_grade_to_numeric(comment.grade)
+            if not (not comment.title.strip()) and not (not comment.content.strip()):
+                cur_course_count_nonempty_comments += 1
+
+            all_courses_count_all_comments += 1
+            all_courses_sum_rating += comment.rating
+            all_courses_sum_workload += comment.workload
+            all_courses_sum_grade += helpers.letter_grade_to_numeric(comment.grade)
+            # Count the frequency of all tags
+            for tag in comment.tags:
+                all_courses_tags_count[tag] = all_courses_tags_count.get(tag, 0) + 1
+
+        # Calculate ratings for the current course
+        if cur_course_count_all_comments == 0:  # If there is no comment, return N/A for rating, workload and grade
+            statistics[c]['rating'] = statistics[c]['workload'] = statistics[c]['grade'] = -1
+            statistics[c]['comment'] = 0
+        else:
+            statistics[c]['rating'] = cur_course_sum_rating / cur_course_count_all_comments
+            statistics[c]['workload'] = cur_course_sum_workload / cur_course_count_all_comments
+            statistics[c]['grade'] = cur_course_sum_grade / cur_course_count_all_comments
+            statistics[c]['comment'] = cur_course_count_nonempty_comments
+
+    # Calculate ratings for the professor
+    all_statistics['tags'] = [tag.text for tag in sorted(all_courses_tags_count, key=all_courses_tags_count.get, reverse=True)][:10]
+    if all_courses_count_all_comments == 0:  # If there is no comment, return N/A for rating, workload and grade
+        all_statistics['rating'] = all_statistics['workload'] = all_statistics['grade'] = -1
+    else:
+        all_statistics['rating'] = all_courses_sum_rating / all_courses_count_all_comments
+        all_statistics['workload'] = all_courses_sum_workload / all_courses_count_all_comments
+        all_statistics['grade'] = all_courses_sum_grade / all_courses_count_all_comments
+
+    context = {
+        'prof': prof,
+        'courses': statistics,
+        'prof_stats': all_statistics,
+    }
+    return render_template('faculty-page.html', **context)
+
+
 @app.errorhandler(500)
 def server_error(e):
     logging.exception('An error occurred during a request.')
