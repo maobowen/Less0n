@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block head_css %}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-tagsinput.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/course-detail.css') }}">
 {% endblock %}
@@ -314,8 +315,8 @@
 
 {% block body2_js %}
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.js"></script>
-        <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-tagsinput.min.js') }}"></script>
-        <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-tagsinput-angular.min.js') }}"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput-angular.min.js"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/course-detail.js') }}"></script>
         <script type="text/javascript">
             $.ajax({

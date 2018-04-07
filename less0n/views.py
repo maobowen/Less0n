@@ -280,48 +280,43 @@ def course_json(course_arg):
         })
     return jsonify(ret)
 
-@app.route('/search/<type>/<arg>/')
-def search_department(type, arg):
+
+@app.route('/search')
+def search():
     """
-    :param
-        type: (str) {dept, subj, course, prof}
-        arg: (str) department keyword like COMS, computer
     :return: rendered template
 
     Examples:
-        /search/prof/daniel/
+        /search?prof=daniel
     """
-    keywords = arg.split('\s+')
-    results = []
-
-    if type == 'dept':
-        for keyword in keywords:
-            for result in Department.query.filter((Department.id.like("%%" + keyword + "%")) |
-                                            (Department.name.like("%%" + keyword + "%"))).all():
-                results.append(result)
-        context = {type + 's': results}
-    elif type == 'subj':
-        for keyword in keywords:
-            for result in Subject.query.filter((Subject.id.like("%%" + keyword + "%")) |
-                                            (Subject.name.like("%%" + keyword + "%"))).all():
-                results.append(result)
-        context = {type + 's': results}
-    elif type == 'course':
-        for keyword in keywords:
-            for result in Course.query.filter((Course.id.like("%%" + keyword + "%")) |
-                                            (Course.name.like("%%" + keyword + "%"))).all():
-                results.append(result)
-        context = {type + 's': results}
-    else:
-        for keyword in keywords:
-            for result in Professor.query.filter((Professor.uni.like("%%" + keyword + "%")) |
-                                            (Professor.name.like("%%" + keyword + "%"))).all():
-                results.append(result)
-        context = {type + 's': results}
-
-    print(context)
-    return render_template('index.html') # for test
-
+    results = {'count': 0}
+    for type in {'dept', 'subj', 'course', 'prof'}:
+        query = request.args.get(type) or None
+        if query:
+            keywords = re.split(r'[\+\s,]+', query.strip())
+            results[type + 's'] = []
+            if type == 'dept':
+                for keyword in keywords:
+                    for result in Department.query.filter((Department.id.like("%%" + keyword + "%")) |
+                                                          (Department.name.like("%%" + keyword + "%"))).all():
+                        results[type + 's'].append(result)
+            if type == 'subj':
+                for keyword in keywords:
+                    for result in Subject.query.filter((Subject.id.like("%%" + keyword + "%")) |
+                                                       (Subject.name.like("%%" + keyword + "%"))).all():
+                        results[type + 's'].append(result)
+            if type == 'course':
+                for keyword in keywords:
+                    for result in Course.query.filter((Course.id.like("%%" + keyword + "%")) |
+                                                      (Course.name.like("%%" + keyword + "%"))).all():
+                        results[type + 's'].append(result)
+            if type == 'prof':
+                for keyword in keywords:
+                    for result in Professor.query.filter((Professor.uni.like("%%" + keyword + "%")) |
+                                                         (Professor.name.like("%%" + keyword + "%"))).all():
+                        results[type + 's'].append(result)
+            results['count'] += len(results[type + 's'])
+    return render_template('search-result.html', **results)
 
 
 @app.errorhandler(500)

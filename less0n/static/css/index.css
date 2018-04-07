@@ -188,7 +188,7 @@ select{
     *background: #58B14C;
 }
 
-.search-icon{
+.search-icon button{
     display: inline-block;
     height: 50px;
     width: 50px;
@@ -200,8 +200,11 @@ select{
     margin-top: 0px;
     vertical-align: middle;
     float: left;
+    border: none;
+    cursor: pointer;
 }
-.search-icon i{
+
+.search-icon button i{
     position: relative;
     top: -9px;
     font-size: 34px;
