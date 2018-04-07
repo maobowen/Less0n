@@ -20,6 +20,27 @@ body {
   background-color: white;
   font-family: $lato !important;
 
+  a {
+    color: black;
+  }
+
+  a:hover {
+    color: darkslateblue;
+    text-decoration: none;
+  }
+
+  .good {
+    background-color: $good;
+  }
+
+  .neutral {
+    background-color: $neutral;
+  }
+
+  .bad {
+    background-color: $bad;
+  }
+
   .jumbotron {
   	background-color: $blue;
   	height: $jumbotron;
@@ -118,19 +139,16 @@ body {
           #rating_progress_bar {
             @include progress-bar(rating_progress_bar, 2s);
             width: $rating_width;
-            background: $neutral;
           }
 
           #grade_progress_bar {
             @include progress-bar(grade_progress_bar, 2s);
             width: $grade_width;
-            background: $good;
           }
 
           #workload_progress_bar {
             @include progress-bar(workload_progress_bar, 2s);
             width: $workload_width;
-            background: $bad;
           }
         }
       }
@@ -145,8 +163,7 @@ body {
   	}
   }
 
-  .card-columns {
-    @include content-columns(2);
+  .cardcol {
     position: relative;
     top: -170px;
     max-height: 100vh;
@@ -162,6 +179,10 @@ body {
 
     .border-bad {
       border-top: 10px solid $border-bad;
+    }
+
+    .border-bg-secondary {
+      border-top: 8px solid $border-bg-secondary;
     }
 
     .card {
