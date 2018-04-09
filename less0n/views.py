@@ -2,7 +2,7 @@
 # - http://bitwiser.in/2015/09/09/add-google-login-in-flask.html
 # - https://stackoverflow.com/questions/34235590/how-do-you-restrict-google-login-oauth2-to-emails-from-a-specific-google-apps
 
-from less0n import app, helpers
+from less0n import app, helpers, db
 from less0n.models import *
 import json
 import logging
@@ -279,6 +279,53 @@ def course_json(course_arg):
             'comments': cur_prof_statistics['nonempty_comments'],
         })
     return jsonify(ret)
+
+
+@app.route('/course', methods=['POST'])
+def add_course():
+    """
+    Add course.
+    - Add a new course to Course entity
+    - Add a new teaching to Teaching entity
+
+    :return: json-str.
+        "OK" if add successfully. "Fail" + error info if subject / department / professor not exists.
+    """
+    # get parameters
+    course_name = request.form["course-name"]
+    course_number = request.form["course-number"]
+    professor_name = request.form["professor-name"]
+    department_name = request.form["department-name"]
+
+    # check parameters
+    for param in (course_name, course_number, professor_name, department_name):
+        if param == None or len(param) == 0:
+            return jsonify('Fail')
+
+    # extract parameters
+    subject_id = course_number[0: 4] # COMS4156 -> COMS
+    number = course_number[len(course_number) - 4: ]
+
+    # get objects
+    subject = Subject.query.filter(Subject.id.contains(subject_id)).first()
+    department = Department.query.filter(Department.name.contains(department_name)).first()
+    professor = Professor.query.filter(Professor.name.contains(professor_name)).first()
+
+    # check objects
+    for obj in (subject, department, professor):
+        if obj == None:
+            return jsonify('Fail')
+
+    # construct objects
+    course = Course(id=course_number, subject=subject, number=number, department=department, name=course_name)
+    teaching = Teaching(professor=professor, course=course)
+
+    # add to db
+    db.session.add(course)
+    db.session.add(teaching)
+    db.session.commit()
+    return jsonify('OK')
+
 
 
 @app.errorhandler(500)
