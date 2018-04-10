@@ -69,8 +69,10 @@
             <a href="{{ url_for('course', course_arg=course.id) }}">
                 <div class="card">
                     <div class="card-body">
+                        <div class="c-all">
                         <h5 class="card-title c-number">{{ course.subject.id }} {{ course.number }}</h5>
                         <p class="card-text c-name">{{ course.name }}</p>
+                            </div>
                         <p class="card-text c-subject">Subject: {{ course.subject.name }}</p>
                     </div>
                 </div>
