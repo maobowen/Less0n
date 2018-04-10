@@ -1,3 +1,8 @@
+.body-main{
+    height: 100vh;
+}
+
+
 .nav-child{
     margin-top: 60px;
     max-width: 1140px;
@@ -84,7 +89,7 @@
 }
 
 .nav-buttom{
-    margin-top: 20px;
+    margin-top: -115px;
 }
 
 .c-number{
@@ -144,4 +149,8 @@
 .card-body-p:hover{
     color: darkslateblue;
     cursor: pointer;
+}
+
+.page-item{
+    color: #55affc;
 }
