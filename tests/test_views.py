@@ -14,24 +14,25 @@ class MainTest(unittest.TestCase):
 
     def setUp(self):
         self.app = app.test_client()
+        database.drop_db() # drop previous db
         database.init_db()
 
     def tearDown(self):
         database.drop_db()
 
-    def test_index(self):
+    def testIndex(self):
         rv = self.app.get('/')
         data = rv.data.decode("utf-8")
         assert("Welcome to Less0n" in data)
 
-    def test_login(self):
+    def testLogin(self):
         rv = self.app.get('/login')
         assert(rv._status_code == 302)
         assert(Auth.AUTH_URI in rv.location)
 
     # Test /department/
 
-    def test_department(self):
+    def testDepartment(self):
         """
         Test if department() with GET return rendered department.html
         """
@@ -99,7 +100,7 @@ class MainTest(unittest.TestCase):
 
     # Test /dept/DEPT/
 
-    def test_department_course_with_valid_arg(self):
+    def test_departmentCourseWithValidArg(self):
         """
         Test if department_course() return department-course.html with valid department name
         Test cases:
@@ -114,7 +115,7 @@ class MainTest(unittest.TestCase):
         assert 'department-course' in data
         assert 'coms' in data
 
-    def test_department_course_with_unvalid_arg(self):
+    def testDepartmentCourseWithUnvalidArg(self):
         """
         Test if department_course() return department-course.html with unvalid department name
         Test cases:
@@ -130,7 +131,7 @@ class MainTest(unittest.TestCase):
 
     # Test /course/COURSE/
 
-    def test_course_with_valid_arg(self):
+    def testCourseWithValidArg(self):
         """
         Test if course() return course-detail.html with valid argument
         Test case:
@@ -145,7 +146,7 @@ class MainTest(unittest.TestCase):
         assert 'course-detail' in data
         assert 'coms3157' in data
 
-    def test_course_with_unvalid_arg(self):
+    def testCourseWithUnvalidArg(self):
         """
         Test if course() return course-detail.html with valid argument
         Test case:
@@ -165,7 +166,7 @@ class MainTest(unittest.TestCase):
 
     # Test /course/COURSE/json
 
-    def test_course_json_with_valid_arg(self):
+    def testCourseJsonWithValidArg(self):
         """
         Test if course() return course-detail.html with valid argument
         Test case:
@@ -177,7 +178,7 @@ class MainTest(unittest.TestCase):
         assert rv._status_code == 200
         assert rv.content_type == 'application/json'
 
-    def test_course_json_with_unvalid_arg(self):
+    def testCourseJsonWithUnvalidArg(self):
         """
         Test if course() return course-detail.html with valid argument
         Test case:
@@ -192,6 +193,62 @@ class MainTest(unittest.TestCase):
         rv = self.app.get('/course/ABCDEFG/json/')
         assert rv._status_code == 404
 
+    def testSearchWithValidArg(self):
+        """
+        Test if search() return search-result.html with valid arguments
+        Test case:
+        --------------------------------------------------
+        Input                             Expected Output
+        /search/?dept=COMS,ECON&subj=COMS,
+        CSEE&prof=daniel&course=COMS      coms, econ, electrical, daniel, asce in search-result.html
+        """
+        rv = self.app.get('/search/?dept=COMS,ECON&subj=COMS+CSEE&prof=daniel&course=ASCE')
+        assert rv._status_code == 200
+        assert rv.content_type == 'text/html; charset=utf-8'
+        data = rv.data.decode('utf-8').lower()  # convert data to lower case
+        assert 'coms' in data
+        assert 'econ' in data
+        assert 'electrical engineering' in data
+        # assert 'daniel' in data
+        assert 'asce' in data
+
+    def testSearchWithUnvalidArg(self):
+        """
+        Test if search() return search-result.html with valid arguments
+        Test case:
+        --------------------------------------------------
+        Input                             Expected Output
+        /search/?dept=zhongwen            empty in the dept/course/prof/subject part of search-result.html
+        """
+        rv = self.app.get('/search/?dept=zhongwen')
+        assert rv._status_code == 200
+        assert rv.content_type == 'text/html; charset=utf-8'
+        data = rv.data.decode('utf-8').lower()  # convert data to lower case
+
+        # verify if the content part is empty
+        assert re.search(r'<div class="row" id="department-card">(\n\s+)+</div>', data) != None
+        assert re.search(r'<div class="row" id="subject-card">(\n\s+)+</div>', data) != None
+        assert re.search(r'<div class="row" id="professor-card">(\n\s+)+</div>', data) != None
+        assert re.search(r'<div class="row" id="course-card">(\n\s+)+</div>', data) != None
+
+    def testSearchWithEmptyArg(self):
+        """
+        Test if search() return search-result.html with valid arguments
+        Test case:
+        --------------------------------------------------
+        Input                             Expected Output
+        /search/                          empty in the dept/course/prof/subject part of search-result.html
+        """
+        rv = self.app.get('/search/?dept=zhongwen')
+        assert rv._status_code == 200
+        assert rv.content_type == 'text/html; charset=utf-8'
+        data = rv.data.decode('utf-8').lower()  # convert data to lower case
+
+        # verify if the content part is empty
+        assert re.search(r'<div class="row" id="department-card">(\n\s+)+</div>', data) != None
+        assert re.search(r'<div class="row" id="subject-card">(\n\s+)+</div>', data) != None
+        assert re.search(r'<div class="row" id="professor-card">(\n\s+)+</div>', data) != None
+        assert re.search(r'<div class="row" id="course-card">(\n\s+)+</div>', data) != None
 
 if __name__ == '__main__':
     unittest.main()
