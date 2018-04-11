@@ -133,7 +133,7 @@ header {
 .search{
     display: inline-block;
     height: 50px;
-    width: 800px;
+    width: 880px;
     font-size: 130%;
     border: none;
     padding-left: 10px;
@@ -285,8 +285,9 @@ input[type=submit]:active {
 /*the container must be positioned relative:*/
 .custom-select {
     float: left;
-    width: 200px;
+    width: 120px;
     height: 50px;
+    /*border: none;*/
 }
 .custom-select select {
   display: none; /*hide original SELECT element:*/
@@ -294,10 +295,10 @@ input[type=submit]:active {
 .select-selected {
     background-color: #e67e22;
     height: 50px;
-    width: 200px;
+    width: 120px;
     margin-top: -7px;
     margin-left: -13px;
-
+    padding: 0px;
 }
 /*style the arrow inside the select element:*/
 .select-selected:after {
