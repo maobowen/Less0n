@@ -1,5 +1,17 @@
+html{
+    height: 100%;
+}
+body{
+    min-height:100%;
+    margin:0;
+    padding:0;
+    position:relative;
+}
+
+
 .body-main{
-    height: 100vh;
+    /*height: 100vh;*/
+    padding-bottom:150px;
 }
 
 
@@ -90,6 +102,8 @@
 
 .nav-buttom{
     margin-top: -115px;
+    /*margin-bottom: 200px;*/
+    padding-bottom: 20px;
 }
 
 .c-number{
