@@ -4,7 +4,15 @@ var color_pool = ['success', 'primary', 'info', 'danger', 'warning'];
 function changeProf(index, all_profs) {
     var current_prof = all_profs[index];
     $('#prof-pic').attr('src', current_prof['avatar']);
-    $('#faculty_choice h4').text(current_prof['name']);
+    $('#faculty_choice h4 a').text(current_prof['name']);
+    if (current_prof['uni']) {
+        $('#prof-pic').parent().attr('href', '/prof/' + current_prof['uni']);
+        $('#faculty_choice h4 a').attr('href', '/prof/' + current_prof['uni']);
+    }
+    else {
+        $('#prof-pic').parent().removeAttr('href');
+        $('#faculty_choice h4 a').removeAttr('href');
+    }
 
     $('#tag_list .tags').empty();
     for (var i = 0; i < current_prof['tags'].length; i++) {
