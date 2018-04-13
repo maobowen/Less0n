@@ -85,7 +85,7 @@ header {
 .search-back{
     position: absolute;
     text-align: center;
-    width: 1050px;
+    width: 1100px;
     top:50%;
     left:50%;
     -webkit-transform: translate(-50%,-50%);
@@ -285,7 +285,7 @@ input[type=submit]:active {
 /*the container must be positioned relative:*/
 .custom-select {
     float: left;
-    width: 120px;
+    width: 170px;
     height: 50px;
     /*border: none;*/
 }
@@ -295,7 +295,7 @@ input[type=submit]:active {
 .select-selected {
     background-color: #e67e22;
     height: 50px;
-    width: 120px;
+    width: 170px;
     margin-top: -7px;
     margin-left: -13px;
     padding: 0px;
