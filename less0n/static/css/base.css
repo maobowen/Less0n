@@ -125,9 +125,10 @@ footer {
     font-size: 80%;
     text-align: center;
     width: 100%;
-    position: absolute;
-    bottom: -150px;
+    /*position: absolute;*/
+    /*bottom: -150px;*/
     height: 150px;
+    position: relative;
     /*margin-top: 20px;*/
 }
 

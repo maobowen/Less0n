@@ -92,6 +92,7 @@ body{
 .card-body-p{
     float: left;
     margin: 25px 0px;
+    color: #000000;
 }
 
 .p-photo{
