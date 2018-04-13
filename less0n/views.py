@@ -110,7 +110,7 @@ def logout():
     return redirect(redirect_url)
 
 
-@app.route('/department', methods=["POST", "GET"])
+@app.route('/department', methods=["GET", "POST"])
 def department():
     """
     Render the template with all departments if it is the "GET" request.
@@ -283,42 +283,69 @@ def course_json(course_arg):
     return jsonify(ret)
 
 
-@app.route('/search')
+
+
+@app.route('/search/', methods=['GET'])
 def search():
     """
+    Search department, subject, professor and course
+    :param
+        request example
+            {'dept': 'COMS', 'subj': 'COMS', 'prof': 'daniel', course: 'COMS4156', }
     :return: rendered template
 
     Examples:
-        /search?prof=daniel
+        /search/?prof=daniel
     """
-    results = {'count': 0}
-    for type in {'dept', 'subj', 'course', 'prof'}:
-        query = request.args.get(type) or None
-        if query:
-            keywords = re.split(r'[\+\s,]+', query.strip())
-            results[type + 's'] = []
-            if type == 'dept':
-                for keyword in keywords:
-                    for result in Department.query.filter((Department.id.like("%%" + keyword + "%")) |
-                                                          (Department.name.like("%%" + keyword + "%"))).all():
-                        results[type + 's'].append(result)
-            if type == 'subj':
-                for keyword in keywords:
-                    for result in Subject.query.filter((Subject.id.like("%%" + keyword + "%")) |
-                                                       (Subject.name.like("%%" + keyword + "%"))).all():
-                        results[type + 's'].append(result)
-            if type == 'course':
-                for keyword in keywords:
-                    for result in Course.query.filter((Course.id.like("%%" + keyword + "%")) |
-                                                      (Course.name.like("%%" + keyword + "%"))).all():
-                        results[type + 's'].append(result)
-            if type == 'prof':
-                for keyword in keywords:
-                    for result in Professor.query.filter((Professor.uni.like("%%" + keyword + "%")) |
-                                                         (Professor.name.like("%%" + keyword + "%"))).all():
-                        results[type + 's'].append(result)
-            results['count'] += len(results[type + 's'])
-    return render_template('search-result.html', **results)
+    context = {}
+    context['count'] = 0
+
+    # get keywords
+    dept = request.args.get('dept')
+    subj = request.args.get('subj')
+    prof = request.args.get('prof')
+    course = request.args.get('course')
+
+    if dept != None:
+        depts = re.split(',\s*|\s+', dept)  # split keywords by , |\s
+        results = []
+        for dept in depts:
+            for result in Department.query.filter((Department.id.like("%%" + dept + "%")) |
+                                                  (Department.name.like("%%" + dept + "%"))).all():
+                results.append(result)
+        context['depts'] = results
+        context['count'] += len(results)
+
+    if subj != None:
+        subjs = re.split(',\s*|\s+', subj)
+        results = []
+        for subj in subjs:
+            for result in Subject.query.filter((Subject.id.like("%%" + subj + "%")) |
+                                               (Subject.name.like("%%" + subj + "%"))).all():
+                results.append(result)
+        context['subjs'] = results
+        context['count'] += len(results)
+
+    if prof != None:
+        profs = re.split(',\s*|\s+', prof)
+        results = []
+        for prof in profs:
+            for result in Professor.query.filter((Professor.uni.like("%%" + prof + "%")) |
+                                                 (Professor.name.like("%%" + prof + "%"))).all():
+                results.append(result)
+        context['profs'] = results
+        context['count'] += len(results)
+
+    if course != None:
+        courses = re.split(',\s*|\s+', course)
+        results = []
+        for course in courses:
+            for result in Course.query.filter((Course.id.like("%%" + course + "%")) |
+                                              (Course.name.like("%%" + course + "%"))).all():
+                results.append(result)
+        context['courses'] = results
+        context['count'] += len(results)
+    return render_template('search-result.html', **context)
 
 
 @app.route('/prof/<regex("[A-Za-z]{2,3}[0-9]{1,4}"):prof_arg>/')
