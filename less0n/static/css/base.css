@@ -19,6 +19,9 @@ header {
     overflow-x: hidden;
 }
 
+#mainbody {
+    min-height: 100vh;
+}
 
 /* ----------------------------------------------- */
 /* REUSABLE COMPONENTS */
