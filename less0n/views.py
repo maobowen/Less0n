@@ -255,6 +255,7 @@ def course_json(course_arg):
     all_profs_tags = [tag.text for tag in sorted(all_profs_tags_count, key=all_profs_tags_count.get, reverse=True)][:10]
     ret.append({
         'name': 'All Instructors',
+        'uni': None,
         'avatar': '',
         'rating': -1 if all_profs_count_all_comments == 0 else all_profs_sum_rating / all_profs_count_all_comments,
         'workload': -1 if all_profs_count_all_comments == 0 else all_profs_sum_workload / all_profs_count_all_comments,
@@ -271,6 +272,7 @@ def course_json(course_arg):
 
         ret.append({
             'name': cur_prof.name,
+            'uni': cur_prof.uni,
             'avatar': cur_prof.avatar,
             'rating': -1 if cur_prof_count_all_comments == 0 else cur_prof_statistics['sum_rating'] / cur_prof_count_all_comments,
             'workload': -1 if cur_prof_count_all_comments == 0 else cur_prof_statistics['sum_workload'] / cur_prof_count_all_comments,
