@@ -93,6 +93,15 @@ body {
       }
 
       #faculty_choice {
+        a {
+          color: white;
+        }
+
+        a:hover {
+          color: lightgoldenrodyellow;
+          text-decoration: none;
+        }
+
         img {
           @include border-radius(60px);
           width: 120px;
@@ -101,6 +110,10 @@ body {
           display: block;
           margin-left: auto;
           margin-right: auto;
+        }
+
+        img:hover {
+          border-color: lightgoldenrodyellow;
         }
 
         button {
