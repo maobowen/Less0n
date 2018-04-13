@@ -51,13 +51,15 @@
         <div class="row" id="professor-card">
             {% for prof in profs %}
             <div class="col-sm-4">
-                <div class="card">
-                    <img class="p-photo" src="{{ prof.avatar }}" alt="{{ prof.name }}" height="90" width="90">
-                    <div class="card-body-p">
-                        <h5 class="card-title p-name">{{ prof.name }}</h5>
-                        <p class="card-text p-department">{{ prof.department.name }}</p>
+                <a href="{{ url_for('prof', prof_arg=prof.uni) }}">
+                    <div class="card">
+                        <img class="p-photo" src="{{ prof.avatar }}" alt="{{ prof.name }}" height="90" width="90">
+                        <div class="card-body-p">
+                            <h5 class="card-title p-name">{{ prof.name }}</h5>
+                            <p class="card-text p-department">{{ prof.department.name }}</p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             {% endfor %}
         </div>
@@ -67,17 +69,17 @@
         <div class="row" id="course-card">
             {% for course in courses %}
             <div class="col-sm-4">
-            <a href="{{ url_for('course', course_arg=course.id) }}">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="c-all">
-                        <h5 class="card-title c-number">{{ course.subject.id }} {{ course.number }}</h5>
-                        <p class="card-text c-name">{{ course.name }}</p>
-                            </div>
-                        <p class="card-text c-subject">Subject: {{ course.subject.name }}</p>
+                <a href="{{ url_for('course', course_arg=course.id) }}">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="c-all">
+                            <h5 class="card-title c-number">{{ course.subject.id }} {{ course.number }}</h5>
+                            <p class="card-text c-name">{{ course.name }}</p>
+                                </div>
+                            <p class="card-text c-subject">Subject: {{ course.subject.name }}</p>
+                        </div>
                     </div>
-                </div>
-            </a>
+                </a>
             </div>
             {% endfor %}
         </div>
