@@ -20,20 +20,20 @@ if ($('#grade_num').text() != 'N/A') {
     $('#grade_progress_bar').css('width', grade / 4.33 * 100 + '%');
     $('#grade_progress_bar').addClass(gpa_to_color(grade));
 } else {
-    $('#rating_progress_bar').css('width', 0);
+    $('#grade_progress_bar').css('width', 0);
 }
 
 if ($('#workload_num').text() != 'N/A') {
     $('#workload_progress_bar').css('width', workload / 5 * 100 + '%');
     $('#workload_progress_bar').addClass(workload_to_color(workload));
 } else {
-    $('#rating_progress_bar').css('width', 0);
+    $('#workload_progress_bar').css('width', 0);
 }
 
 $(".card").each(function(index) {
-    var ratingdiv = $(".row .col-md-6:nth-child("+(index+1)+") div:nth-child(5)");
-    var gradediv = $(".row .col-md-6:nth-child("+(index+1)+") div:nth-child(6)");
-    var workloaddiv = $(".row .col-md-6:nth-child("+(index+1)+") div:nth-child(7)");
+    var ratingdiv = $(".cardcol .col-md-6:nth-child("+(index+1)+") div:nth-child(5)");
+    var gradediv = $(".cardcol .col-md-6:nth-child("+(index+1)+") div:nth-child(6)");
+    var workloaddiv = $(".cardcol .col-md-6:nth-child("+(index+1)+") div:nth-child(7)");
 
     var rating_num = ratingdiv.text().split(" ")[1];
     var grade_num = gradediv.text().split(" ")[1];
@@ -48,6 +48,6 @@ $(".card").each(function(index) {
     var workload = parseFloat(workload_num);
     workloaddiv.addClass(workload_to_color(workload));
 
-    var border_div = $(".row .col-md-6:nth-child("+(index+1)+") .card .card-body");
+    var border_div = $(".cardcol .col-md-6:nth-child("+(index+1)+") .card .card-body");
     border_div.addClass('border-'+rating_to_color(rating));
 });
