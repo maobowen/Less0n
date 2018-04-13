@@ -86,18 +86,20 @@
             <section class="search-area">
                 <div class="search-back">
                     <div class="custom-select">
-                      <select>
+                        <select>
                             <option value="0" selected>Course</option>
-                            <option value="1">Course</option>
-                            <option value="2">Department</option>
-                            <option value="3">Subject</option>
-                            <option value="4">Professor</option>
-                      </select>
+                            <option value="1" data-query-type="course">Course</option>
+                            <option value="2" data-query-type="dept">Department</option>
+                            <option value="3" data-query-type="subj">Subject</option>
+                            <option value="4" data-query-type="prof">Professor</option>
+                        </select>
                     </div>
-                    <input type="text" name="search" class="search" id="input-search" placeholder="Course Name/Professor" required>
-                    <div class="search-icon">
-                        <i class="fa fa-search"></i>
-                    </div>
+                    <form action="{{ url_for('search') }}" method="GET">
+                        <input type="text" name="course" class="search" id="input-search" placeholder="Course Name/Professor" required>
+                        <div class="search-icon">
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                        </div>
+                    </form>
                 </div>
 
             </section>

@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block head_css %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-tagsinput.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/course-detail.css') }}">
 {% endblock %}
 
@@ -101,13 +101,13 @@
                                 <button id="left"><i class="fa fa-chevron-circle-left"></i></button>
                             </div>
                             <div class="col-md-6">
-                                <img id="prof-pic" src="">
+                                <a><img id="prof-pic" src=""></a>
                             </div>
                             <div class="col-md-3">
                                 <button id="right"><i class="fa fa-chevron-circle-right"></i></button>
                             </div>
                         </div>
-                        <h4>Professor</h4>
+                        <h4><a>Professor</a></h4>
                     </div>
                 </div>
 
@@ -314,8 +314,8 @@
 
 {% block body2_js %}
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.js"></script>
-        <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-tagsinput.min.js') }}"></script>
-        <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-tagsinput-angular.min.js') }}"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput-angular.min.js"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/course-detail.js') }}"></script>
         <script type="text/javascript">
             $.ajax({

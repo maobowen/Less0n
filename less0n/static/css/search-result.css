@@ -32,6 +32,7 @@
     max-width: 1140px;
     margin: 0px auto;
     margin-top: 20px;
+    /*margin-bottom: 40px;*/
 }
 
 .card{
@@ -39,7 +40,7 @@
     display: inline-block;
     border-radius:5px;
     border-left: 2px solid #e67e22;
-    margin-bottom: 0px;
+    margin-bottom: 20px;
     -webkit-box-shadow: 0 3px 3px #efefef;
     box-shadow: 0 3px 3px #efefef;
     height: 120px;   

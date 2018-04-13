@@ -33,16 +33,17 @@ for (i = 0; i < x.length; i++) {
         var i, s, h;
         s = this.parentNode.parentNode.getElementsByTagName("select")[0];
         h = this.parentNode.previousSibling;
-        for (i = 0; i < s.length; i++) {
+        for (i = 1; i < s.length; i++) {
           if (s.options[i].innerHTML == this.innerHTML) {
             s.selectedIndex = i;
+            var query_type = $(s.options[i]).data("query-type");
             h.innerHTML = this.innerHTML;
-            if (h.innerHTML==="Courses"){
+            if (h.innerHTML==="Course"){
                 $("#input-search").attr('placeholder',"Course Number / Course Name");
             }else{
                 $("#input-search").attr('placeholder',h.innerHTML);
             }
-
+            $("#input-search").attr('name', query_type);
 
             break;
           }
