@@ -175,130 +175,130 @@
                         <div class="modal-body">
                         <div class="section-form">
                             <div>
-
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <label>Comment Title</label>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <input type="text" name="Title" placeholder="Title" class="form-control">
-                                        </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Comment Title</label>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <label for="semester" class="control-label">Semester <span class="required">*</span></label>
-                                        </div>
-                                        <div class="col-md-8 sem">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <select name="year" id="year" class="form-control" required>
-                                                        <option value="{{ now.year }}" selected>{{ now.year }}</option>
-                                                        {% for y in range(now.year - 1, now.year - 5, -1) %}
-                                                        <option value="{{ y }}">{{ y }}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <select name="semester" id="semester" class="form-control" required>
-                                                        <option value="fall" selected>Fall</option>
-                                                        <option value="spring">Spring</option>
-                                                        <option value="summer">Summer</option>
-                                                    </select>
-                                                </div>
+                                    <div class="col-md-8">
+                                        <input type="text" name="Title" placeholder="Title" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="semester" class="control-label">Semester <span class="required">*</span></label>
+                                    </div>
+                                    <div class="col-md-8 sem">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <select name="year" id="year" class="form-control" required>
+                                                    <option value="{{ now.year }}">{{ now.year }}</option>
+                                                    {% for y in range(now.year - 1, now.year - 5, -1) %}
+                                                    <option value="{{ y }}">{{ y }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <select name="semester" id="semester" class="form-control" required>
+                                                    <option value="fall">Fall</option>
+                                                    <option value="spring">Spring</option>
+                                                    <option value="summer">Summer</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <label for="grade">Grade <span class="required">*</span></label>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <select name="grade" id="grade" class="form-control" required>
-                                                <option value="A+" selected>A+</option>
-                                                <option value="A">A</option>
-                                                <option value="A-">A-</option>
-                                                <option value="B+">B+</option>
-                                                <option value="B">B</option>
-                                                <option value="B-">B-</option>
-                                                <option value="C+">C+</option>
-                                                <option value="C">C</option>
-                                                <option value="C-">C-</option>
-                                                <option value="D">D</option>
-                                                <option value="F">F</option>
-                                            </select>
-                                        </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="grade">Grade <span class="required">*</span></label>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <label for="rating">Rating <span class="required">*</span></label>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class='rating-stars text-center'>
-                                                <ul id='stars'>
-                                                    <li class='star' title='Poor' data-value='1'>
-                                                        <i class='fa fa-star'></i>
-                                                    </li>
-                                                    <li class='star' title='Fair' data-value='2'>
-                                                        <i class='fa fa-star'></i>
-                                                    </li>
-                                                    <li class='star' title='Good' data-value='3'>
-                                                        <i class='fa fa-star'></i>
-                                                    </li>
-                                                    <li class='star' title='Excellent' data-value='4'>
-                                                        <i class='fa fa-star'></i>
-                                                    </li>
-                                                    <li class='star' title='WOW!!!' data-value='5'>
-                                                        <i class='fa fa-star'></i>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <input type="hidden" name="rating" id="rating" required>
-                                        </div>
+                                    <div class="col-md-8">
+                                        <select name="grade" id="grade" class="form-control" required>
+                                            <option value="" selected="true" disabled="disabled">Choose your grade</option>
+                                            <option value="A+">A+</option>
+                                            <option value="A">A</option>
+                                            <option value="A-">A-</option>
+                                            <option value="B+">B+</option>
+                                            <option value="B">B</option>
+                                            <option value="B-">B-</option>
+                                            <option value="C+">C+</option>
+                                            <option value="C">C</option>
+                                            <option value="C-">C-</option>
+                                            <option value="D">D</option>
+                                            <option value="F">F</option>
+                                        </select>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <label for="workload">Workload <span class="required">*</span></label>
-                                        </div>
-                                        <div class="col-md-8 penswork">
-                                            <div class='workload-pens text-center'>
-                                                <ul id='pens'>
-                                                    <li class='pen' title='WOW!!' data-value='1'>
-                                                        <i class='fa fa-pencil'></i>
-                                                    </li>
-                                                    <li class='pen' title='Comfortable' data-value='2'>
-                                                        <i class='fa fa-pencil'></i>
-                                                    </li>
-                                                    <li class='pen' title='Fair' data-value='3'>
-                                                        <i class='fa fa-pencil'></i>
-                                                    </li>
-                                                    <li class='pen' title='Tired' data-value='4'>
-                                                        <i class='fa fa-pencil'></i>
-                                                    </li>
-                                                    <li class='pen' title='Heavy!!' data-value='5'>
-                                                        <i class='fa fa-pencil'></i>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <input type="hidden" name="workload" id="workload" required>
-                                        </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="rating">Rating <span class="required">*</span></label>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <label for="Tags">Tags</label>
+                                    <div class="col-md-8">
+                                        <div class='rating-stars text-center'>
+                                            <ul id='stars'>
+                                                <li class='star' title='Poor' data-value='1'>
+                                                    <i class='fa fa-star'></i>
+                                                </li>
+                                                <li class='star' title='Fair' data-value='2'>
+                                                    <i class='fa fa-star'></i>
+                                                </li>
+                                                <li class='star' title='Good' data-value='3'>
+                                                    <i class='fa fa-star'></i>
+                                                </li>
+                                                <li class='star' title='Excellent' data-value='4'>
+                                                    <i class='fa fa-star'></i>
+                                                </li>
+                                                <li class='star' title='WOW!!!' data-value='5'>
+                                                    <i class='fa fa-star'></i>
+                                                </li>
+                                            </ul>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input type="text" value="Interesting, Useful" data-role="tagsinput" id="tags" class="form-control">
-                                        </div>
+                                        <input type="hidden" name="rating" id="rating" required>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <label>Drop us a line</label>
-                                        </div>
-                                        <div class="col-md-8 span-2-of-3">
-                                            <textarea name="message" placeholder="Your message" class="form-control"></textarea>
-                                        </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="workload">Workload <span class="required">*</span></label>
                                     </div>
-
+                                    <div class="col-md-8 penswork">
+                                        <div class='workload-pens text-center'>
+                                            <ul id='pens'>
+                                                <li class='pen' title='WOW!!' data-value='1'>
+                                                    <i class='fa fa-pencil'></i>
+                                                </li>
+                                                <li class='pen' title='Comfortable' data-value='2'>
+                                                    <i class='fa fa-pencil'></i>
+                                                </li>
+                                                <li class='pen' title='Fair' data-value='3'>
+                                                    <i class='fa fa-pencil'></i>
+                                                </li>
+                                                <li class='pen' title='Tired' data-value='4'>
+                                                    <i class='fa fa-pencil'></i>
+                                                </li>
+                                                <li class='pen' title='Heavy!!' data-value='5'>
+                                                    <i class='fa fa-pencil'></i>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <input type="hidden" name="workload" id="workload" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="Tags">Tags</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" value="Interesting, Useful" data-role="tagsinput" id="tags" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Drop us a line</label>
+                                    </div>
+                                    <div class="col-md-8 span-2-of-3">
+                                        <textarea name="message" placeholder="Your message" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                                <p id="error"></p>
                             </div>
                         </div>
                     </div>

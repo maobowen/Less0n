@@ -417,6 +417,12 @@ body {
       }
     }
 
+    #error {
+      color: $bad;
+      text-align: center;
+      font-size: 15px;
+    }
+
     .comment-footer{
       text-align: center;
       margin-bottom: 20px;

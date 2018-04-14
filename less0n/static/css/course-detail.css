@@ -305,6 +305,10 @@ body {
         margin-right: 2px;
         color: white;
         background-color: #5BC0DE; }
+    body .modal-content #error {
+      color: #EE3B3B;
+      text-align: center;
+      font-size: 15px; }
     body .modal-content .comment-footer {
       text-align: center;
       margin-bottom: 20px;
