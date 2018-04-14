@@ -27,7 +27,7 @@
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="comment-bar">
-                        <div class="comment-classname">Add Instructor for COMS4156</div>
+                        <div class="comment-classname">Add an Instructor for {{ course.subject.id }} {{ course.number }}</div>
                         <button type="button" class="close close-icon" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -159,11 +159,12 @@
         <div class="modal fade bd-example-modal-lg" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
+                    <form method="post" action="/akdsfsdfad" class="contact-form">
                     <div class="comment-bar">
-                        <div class="comment-classname">Add Comment for COMS4156</div>
+                        <div class="comment-classname">Add a Comment for {{ course.subject.id }} {{ course.number }}</div>
                         <div id="professor" class="row">
                             <p>Instructor</p>
-                            <select name="find-us" id="professor-selection" class="form-control">
+                            <select name="prof" id="professor-selection" class="form-control">
                                 <option value="Choose" selected="true" disabled="disabled">Choose your instructor</option>
                             </select>
                         </div>
@@ -174,7 +175,7 @@
                     <div class="modal-body">
                         <div class="section-form">
                             <div>
-                                <form method="post" action="#" class="contact-form">
+
                                     <div class="row">
                                         <div class="col-md-4">
                                             <label>Comment Title</label>
@@ -190,15 +191,15 @@
                                         <div class="col-md-8 sem">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <select name="Year" id="year" class="form-control" required>
-                                                        <option value="2018" selected>2018</option>
-                                                        <option value="2017">2017</option>
-                                                        <option value="2016">2016</option>
-                                                        <option value="2015">2015</option>
+                                                    <select name="year" id="year" class="form-control" required>
+                                                        <option value="{{ now.year }}" selected>{{ now.year }}</option>
+                                                        {% for y in range(now.year - 1, now.year - 5, -1) %}
+                                                        <option value="{{ y }}">{{ y }}</option>
+                                                        {% endfor %}
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <select name="Semester" id="semester" class="form-control" required>
+                                                    <select name="semester" id="semester" class="form-control" required>
                                                         <option value="fall" selected>Fall</option>
                                                         <option value="spring">Spring</option>
                                                         <option value="summer">Summer</option>
@@ -209,10 +210,10 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <label for="Grade">Grade <span class="required">*</span></label>
+                                            <label for="grade">Grade <span class="required">*</span></label>
                                         </div>
                                         <div class="col-md-8">
-                                            <select name="Grade" id="grade" class="form-control" required>
+                                            <select name="grade" id="grade" class="form-control" required>
                                                 <option value="A+" selected>A+</option>
                                                 <option value="A">A</option>
                                                 <option value="A-">A-</option>
@@ -229,7 +230,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <label for="Rating">Rating <span class="required">*</span></label>
+                                            <label for="rating">Rating <span class="required">*</span></label>
                                         </div>
                                         <div class="col-md-8">
                                             <div class='rating-stars text-center'>
@@ -251,12 +252,12 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <input type="hidden" name="Rating" id="rating" required>
+                                            <input type="hidden" name="rating" id="rating" required>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <label for="Workload">Workload <span class="required">*</span></label>
+                                            <label for="workload">Workload <span class="required">*</span></label>
                                         </div>
                                         <div class="col-md-8 penswork">
                                             <div class='workload-pens text-center'>
@@ -278,7 +279,7 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <input type="hidden" name="Workload" id="workload" required>
+                                            <input type="hidden" name="workload" id="workload" required>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -297,7 +298,7 @@
                                             <textarea name="message" placeholder="Your message" class="form-control"></textarea>
                                         </div>
                                     </div>
-                                </form>
+
                             </div>
                         </div>
                     </div>
@@ -305,6 +306,7 @@
                         <button type="submit" class="btn btn-success">Submit</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -328,7 +330,7 @@
 
                     // Pop-up prof selection list
                     for (i = 1; i < all_profs.length; i++) {
-                        $('#professor-selection').append('<option value="'+all_profs[i]['name']+'">'+all_profs[i]['name']+'</option>');
+                        $('#professor-selection').append('<option value="'+all_profs[i]['uni']+'">'+all_profs[i]['name']+'</option>');
                     }
                 }
             });

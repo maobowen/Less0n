@@ -34,6 +34,11 @@ def get_google_auth(state=None, token=None):
     return oauth
 
 
+@app.context_processor
+def injection():
+    return {'now': datetime.utcnow()}
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
