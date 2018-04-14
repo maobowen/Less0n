@@ -23,6 +23,7 @@
             </div>
         </div>
 
+        <!-- Add instructor form -->
         <div class="modal fade bd-example-modal-lg" id="profModal" tabindex="-1" role="dialog" aria-labelledby="profModalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
@@ -156,16 +157,18 @@
             </div>
         </div>
 
+        <!-- Add comment form -->
         <div class="modal fade bd-example-modal-lg" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
-                    <form method="post" action="/akdsfsdfad" class="contact-form">
+                    <form method="post" action="{{ url_for('comment') }}?redirect={{ request.path }}" class="contact-form">
                         <div class="comment-bar">
                             <div class="comment-classname">Add a Comment for {{ course.subject.id }} {{ course.number }}</div>
+                            <input type="hidden" name="course" value="{{ course.id }}" required>
                             <div id="professor" class="row">
-                                <p>Instructor</p>
-                                <select name="prof" id="professor-selection" class="form-control">
-                                    <option value="Choose" selected="true" disabled="disabled">Choose your instructor</option>
+                                <p>Instructor <span class="required">*</span></p>
+                                <select name="prof" id="professor-selection" class="form-control" required>
+                                    <option value="" selected="true" disabled="disabled">Choose your instructor</option>
                                 </select>
                             </div>
                             <button type="button" class="close close-icon" data-dismiss="modal" aria-label="Close">
@@ -180,7 +183,7 @@
                                         <label>Comment Title</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" name="Title" placeholder="Title" class="form-control">
+                                        <input type="text" name="title" placeholder="Title" class="form-control">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -191,7 +194,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <select name="year" id="year" class="form-control" required>
-                                                    <option value="{{ now.year }}">{{ now.year }}</option>
+                                                    <option value="{{ now.year }}" selected>{{ now.year }}</option>
                                                     {% for y in range(now.year - 1, now.year - 5, -1) %}
                                                     <option value="{{ y }}">{{ y }}</option>
                                                     {% endfor %}
@@ -199,9 +202,9 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <select name="semester" id="semester" class="form-control" required>
-                                                    <option value="fall">Fall</option>
-                                                    <option value="spring">Spring</option>
-                                                    <option value="summer">Summer</option>
+                                                    <option value="Fall">Fall</option>
+                                                    <option value="Spring">Spring</option>
+                                                    <option value="Summer">Summer</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -287,7 +290,7 @@
                                         <label for="Tags">Tags</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" value="Interesting, Useful" data-role="tagsinput" id="tags" class="form-control">
+                                        <input type="text" name="tags" value="Interesting,Useful" data-role="tagsinput" id="tags" class="form-control">
                                     </div>
                                 </div>
                                 <div class="row">

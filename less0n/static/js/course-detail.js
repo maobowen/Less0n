@@ -84,7 +84,7 @@ function changeProf(index, all_profs) {
 
     // Default prof
     if (current_prof['name'] == 'All Instructors') {
-        $('#professor-selection').val('Choose');
+        $('#professor-selection').val('');
     } else {
         $('#professor-selection').val(current_prof['name']);
     }
