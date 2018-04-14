@@ -170,6 +170,9 @@ body {
     -moz-border-radius: 11px;
     -ms-border-radius: 11px;
     border-radius: 11px; }
+    body .modal-content .modal-body {
+      margin: 0 auto;
+      width: 80%; }
     body .modal-content .comment-bar {
       color: whitesmoke;
       border-top-left-radius: 10px;
@@ -200,7 +203,7 @@ body {
         top: 15px;
         right: 20px; }
     body .modal-content .contact-form {
-      width: 75%;
+      width: 100%;
       margin: 0 auto;
       font-size: 20px;
       font-weight: 300; }

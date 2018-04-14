@@ -160,19 +160,19 @@
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <form method="post" action="/akdsfsdfad" class="contact-form">
-                    <div class="comment-bar">
-                        <div class="comment-classname">Add a Comment for {{ course.subject.id }} {{ course.number }}</div>
-                        <div id="professor" class="row">
-                            <p>Instructor</p>
-                            <select name="prof" id="professor-selection" class="form-control">
-                                <option value="Choose" selected="true" disabled="disabled">Choose your instructor</option>
-                            </select>
+                        <div class="comment-bar">
+                            <div class="comment-classname">Add a Comment for {{ course.subject.id }} {{ course.number }}</div>
+                            <div id="professor" class="row">
+                                <p>Instructor</p>
+                                <select name="prof" id="professor-selection" class="form-control">
+                                    <option value="Choose" selected="true" disabled="disabled">Choose your instructor</option>
+                                </select>
+                            </div>
+                            <button type="button" class="close close-icon" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
-                        <button type="button" class="close close-icon" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
+                        <div class="modal-body">
                         <div class="section-form">
                             <div>
 
@@ -302,10 +302,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="comment-footer">
-                        <button type="submit" class="btn btn-success">Submit</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    </div>
+                        <div class="comment-footer">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        </div>
                     </form>
                 </div>
             </div>
