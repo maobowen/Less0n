@@ -481,6 +481,47 @@ def comment():
         return redirect(redirect_url)
 
 
+@app.route('/course/request', methods=['POST'])
+def add_course_to_request_db():
+    """
+    Add course request
+
+    Request form example:
+    {
+        'course_name': 'Computer Networks',
+        'course_number': 'CSEE4119',
+        'department_name': 'Computer Science',
+        'subject_name': 'Computer Science and Electrical Engineering'
+    }
+
+    :return: json-str.
+        "OK" if add successfully. "Fail" + error info if subject / department / professor not exists.
+    """
+    # check request
+    if 'course_name' not in request.form or "course_number" not in request.form or\
+            "department_name" not in request.form or 'subject_name' not in request.form:
+        return render_template('404.html'), 404
+
+    # get parameters
+    course_name = request.form["course_name"]
+    course_number = request.form["course_number"]
+    department_name = request.form["department_name"]
+    subject_name = request.form['subject_name']
+
+    # check parameters
+    for param in (course_name, course_number, subject_name, department_name):
+        if param == None or len(param) == 0:
+            return jsonify('Fail')
+
+    # add request to database
+    approved = 'False'
+    add_course_request = AddCourseRequest(course_id=course_number, department=department_name, subject=subject_name,
+                                          name=course_name, approved=approved)
+    db.session.add(add_course_request)
+    db.session.commit()
+    return jsonify('OK')
+
+
 @app.errorhandler(500)
 def server_error(e):
     logging.exception('An error occurred during a request.')

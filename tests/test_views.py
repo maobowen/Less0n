@@ -250,5 +250,87 @@ class MainTest(unittest.TestCase):
         assert re.search(r'<div class="row" id="professor-card">(\n\s+)+</div>', data) != None
         assert re.search(r'<div class="row" id="course-card">(\n\s+)+</div>', data) != None
 
+
+    def test_add_course_to_request_db_with_valid_arg(self):
+        """
+        Test if add_course_to_request_db() return
+
+        Test case:
+        --------------------------------------------------
+        Input                                              Expected Output
+        {'course_number':
+            'CSEE4119',
+         'department_name':
+            'Computer Science',
+         'course_name':
+            'Computer Networks',
+         'subject_name':
+            'Computer Science and Electrical Engineering'
+        }
+        """
+        test_cases = (
+            {
+                'course_number': 'CSEE4119',
+                'department_name': 'Computer Science',
+                'course_name': 'Computer Networks',
+                'subject_name': 'Computer Science and Electrical Engineering'
+            },
+        )
+
+        for test_case in test_cases:
+            rv = self.app.post('/course/request', data=dict(
+                course_number=test_case['course_number'],
+                department_name=test_case['department_name'],
+                course_name=test_case['course_name'],
+                subject_name=test_case['subject_name']
+            ))
+            assert rv.status == '200 OK'
+            assert 'ok' in rv.data.decode('utf-8').lower()
+            courses = AddCourseRequest.query.filter_by(course_id=test_case['course_number'],
+                                                       name=test_case['course_name'],
+                                                       department=test_case['department_name'],
+                                                       subject=test_case['subject_name']
+                                                       ).all()
+            assert courses is not None
+            assert len(courses) > 0
+
+            # delete records
+            for course in courses:
+                db.session.delete(course)
+            db.session.commit()
+
+
+    def test_add_course_to_request_db_with_unvalid_arg(self):
+        """
+        Test if add_course_to_request_db() return
+
+        Test case:
+        --------------------------------------------------
+        Input                                              Expected Output
+        {'department_name':
+            'Computer Science',
+         'course_name':
+            'Computer Networks',
+         'subject_name':
+            'Computer Science and Electrical Engineering'
+        }
+        """
+        test_cases = (
+            {
+                'department_name': 'Computer Science',
+                'course_name': 'Computer Networks',
+                'subject_name': 'Computer Science and Electrical Engineering'
+            },
+        )
+
+        for test_case in test_cases:
+            rv = self.app.post('/course/request', data=dict(
+                department_name=test_case['department_name'],
+                course_name=test_case['course_name'],
+                subject_name=test_case['subject_name']
+            ))
+            assert rv.status == '404 NOT FOUND'
+
+
 if __name__ == '__main__':
     unittest.main()
