@@ -1,0 +1,83 @@
+{% extends "base2.html" %}
+
+{% block head_meta %}
+        <title>Less0n - Admin</title>
+{% endblock %}
+
+{% block head_css %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block body_main %}
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <div class="course-title">
+                    <h3 class="display-4">Admin Console</h3>
+                    <h3 class="display-5">Admin Id#: yh2961</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="statistics container">
+            <div class="row">
+                <div class="stats_box tab col-md-2">
+                    <button class="tablinks" onclick="openCity(event, 'course_tab')" id="defaultOpen">Course Request (5)</button>
+                    <button class="tablinks" onclick="openCity(event, 'professor_tab')">Professor Request (12)</button>
+                </div>
+
+                <div class="stats_box col-md-10">
+                    <div id="course_tab" class="tabcontent">
+                        <h3>Course Request</h3>
+                        <table id="tabCourse" class="table">
+                            <tr>
+                                <th Name="Num" EditType="TextBox">Course Num</th>
+                                <th Name="ProductName" EditType="TextBox">Course Name</th>
+                                <th Name="Amount" EditType="TextBox">Department</th>
+                                <th Name="Price" EditType="TextBox">Subject</th>
+                                <th Name="SumMoney">Decision</th>
+                            </tr>
+                            <tr>
+                                <td>COMS4170</td>
+                                <td>AI</td>
+                                <td>COMS</td>
+                                <td>COMS</td>
+                                <td><button class="btn btn-success"><i class="fa fa-check"></i><button class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td>COMS4170</td>
+                                <td>AI</td>
+                                <td>COMS</td>
+                                <td>COMS</td>
+                                <td><button class="btn btn-success"><i class="fa fa-check"></i><button class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div id="professor_tab" class="tabcontent">
+                        <h3>Professor Request</h3>
+                        <table id="tabProf" class="table">
+                            <tr>
+                                <th Name="Num" EditType="TextBox">Teacher Name</th>
+                                <th Name="ProductName" EditType="TextBox">Teacher Department</th>
+                                <th Name="SumMoney">Decision</th>
+                            </tr>
+                            <tr>
+                                <td>Ewan Lowe</td>
+                                <td>COMS</td>
+                                <td><button class="btn btn-success"><i class="fa fa-check"></i><button class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td>Ewan Lowe</td>
+                                <td>COMS</td>
+                                <td><button class="btn btn-success"><i class="fa fa-check"></i><button class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% block body2_js %}
+    <script src="{{ url_for('static', filename='js/admin.js')}}"></script>
+{% endblock %}
