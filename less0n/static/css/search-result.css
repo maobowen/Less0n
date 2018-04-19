@@ -169,3 +169,10 @@ body{
 .page-item{
     color: #55affc;
 }
+/*.navbar-brand{*/
+    /*float: left;*/
+/*}*/
+.addCourse{
+    float:right;
+    color: #fefefe;
+}
