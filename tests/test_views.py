@@ -1,11 +1,12 @@
 import sys
 import os.path
 import unittest
+from unittest import mock
+import re
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 from less0n import app, database
 from less0n.models import *
 from config import Auth
-import re
 
 
 class MainTest(unittest.TestCase):
@@ -59,7 +60,7 @@ class MainTest(unittest.TestCase):
         assert 'department' in data
         # assert 'computer' in data
 
-    def testDepartmentSearchWithUnvalidInput(self):
+    def testDepartmentSearchWithInvalidInput(self):
         """
         Test if department() with POST return department.html with correct department name
 
@@ -115,7 +116,7 @@ class MainTest(unittest.TestCase):
         assert 'department-course' in data
         assert 'coms' in data
 
-    def testDepartmentCourseWithUnvalidArg(self):
+    def testDepartmentCourseWithInvalidArg(self):
         """
         Test if department_course() return department-course.html with unvalid department name
         Test cases:
@@ -146,7 +147,7 @@ class MainTest(unittest.TestCase):
         assert 'course-detail' in data
         assert 'coms3157' in data
 
-    def testCourseWithUnvalidArg(self):
+    def testCourseWithInvalidArg(self):
         """
         Test if course() return course-detail.html with valid argument
         Test case:
@@ -178,7 +179,7 @@ class MainTest(unittest.TestCase):
         assert rv._status_code == 200
         assert rv.content_type == 'application/json'
 
-    def testCourseJsonWithUnvalidArg(self):
+    def testCourseJsonWithInvalidArg(self):
         """
         Test if course() return course-detail.html with valid argument
         Test case:
@@ -212,7 +213,7 @@ class MainTest(unittest.TestCase):
         # assert 'daniel' in data
         assert 'asce' in data
 
-    def testSearchWithUnvalidArg(self):
+    def testSearchWithInvalidArg(self):
         """
         Test if search() return search-result.html with valid arguments
         Test case:
@@ -250,84 +251,66 @@ class MainTest(unittest.TestCase):
         assert re.search(r'<div class="row" id="professor-card">(\n\s+)+</div>', data) != None
         assert re.search(r'<div class="row" id="course-card">(\n\s+)+</div>', data) != None
 
-
-    def test_add_course_to_request_db_with_valid_arg(self):
+    @mock.patch('flask_login.utils._get_user')
+    def testAddProfToRequestDbWithValidArg(self, current_user):
         """
-        Test if add_course_to_request_db() return
-
+        Test if add_new_prof() return
         Test case:
         --------------------------------------------------
         Input                                              Expected Output
-        {'course_number':
-            'CSEE4119',
-         'department_name':
-            'Computer Science',
-         'course_name':
-            'Computer Networks',
-         'subject_name':
-            'Computer Science and Electrical Engineering'
+        {
+        'name': 'Clifford Stein',
+        'department': 'COMS',
+        'semester': 'Fall',
+        'year': '2016'
         }
         """
         test_cases = (
-            {
-                'course_number': 'CSEE4119',
-                'department_name': 'Computer Science',
-                'course_name': 'Computer Networks',
-                'subject_name': 'Computer Science and Electrical Engineering'
-            },
+            {'name': 'Clifford Stein', 'department': 'COMS', 'semester': 'Fall', 'year': '2016'},
         )
 
+        current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
         for test_case in test_cases:
-            rv = self.app.post('/course/request', data=dict(
-                course_number=test_case['course_number'],
-                department_name=test_case['department_name'],
-                course_name=test_case['course_name'],
-                subject_name=test_case['subject_name']
+            rv = self.app.post('/prof/new/', data=dict(
+                name=test_case['name'],
+                department=test_case['department'],
+                semester=test_case['semester'],
+                year=test_case['year'],
             ))
-            assert rv.status == '200 OK'
-            assert 'ok' in rv.data.decode('utf-8').lower()
-            courses = AddCourseRequest.query.filter_by(course_id=test_case['course_number'],
-                                                       name=test_case['course_name'],
-                                                       department=test_case['department_name'],
-                                                       subject=test_case['subject_name']
-                                                       ).all()
-            assert courses is not None
-            assert len(courses) > 0
+            assert rv._status_code == 302
+            assert rv.content_type == 'text/html; charset=utf-8'
+            profs = AddProfRequest.query.filter_by(name=test_case['name'],
+                                                   department_id=test_case['department'],
+                                                   term_id=test_case['semester'] + ' ' + test_case['year']).all()
+            assert profs is not None
+            assert len(profs) > 0
 
             # delete records
-            for course in courses:
-                db.session.delete(course)
+            for prof in profs:
+                db.session.delete(prof)
             db.session.commit()
 
-
-    def test_add_course_to_request_db_with_unvalid_arg(self):
+    @mock.patch('flask_login.utils._get_user')
+    def testAddProfToRequestDbWithInvalidArg(self, current_user):
         """
-        Test if add_course_to_request_db() return
-
+        Test if add_new_prof() return
         Test case:
         --------------------------------------------------
         Input                                              Expected Output
-        {'department_name':
-            'Computer Science',
-         'course_name':
-            'Computer Networks',
-         'subject_name':
-            'Computer Science and Electrical Engineering'
+        {
+        'name': 'Clifford Stein',
+        'department_id': 'COMS'
         }
         """
         test_cases = (
-            {
-                'department_name': 'Computer Science',
-                'course_name': 'Computer Networks',
-                'subject_name': 'Computer Science and Electrical Engineering'
-            },
+            {'name': 'Clifford Stein', 'department': 'COMS'},
         )
 
+        current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
         for test_case in test_cases:
-            rv = self.app.post('/course/request', data=dict(
-                department_name=test_case['department_name'],
-                course_name=test_case['course_name'],
-                subject_name=test_case['subject_name']
+            rv = self.app.post('/prof/new/', data=dict(
+                name=test_case['name'],
+                department=test_case['department'],
             ))
             assert rv.status == '404 NOT FOUND'
 
