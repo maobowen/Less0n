@@ -10,6 +10,8 @@ import re
 from collections import defaultdict
 from flask import url_for, redirect, render_template, session, request, flash, jsonify, abort
 from flask_login import login_required, login_user, logout_user, current_user
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.sql.expression import ClauseElement
 from requests_oauthlib import OAuth2Session
 from requests.exceptions import HTTPError
 from werkzeug.routing import BaseConverter
@@ -32,6 +34,23 @@ def get_google_auth(state=None, token=None):
         return OAuth2Session(Auth.CLIENT_ID, state=state, redirect_uri=app.config['GOOGLE_OAUTH_REDIRECT_URI'])
     oauth = OAuth2Session(Auth.CLIENT_ID, redirect_uri=app.config['GOOGLE_OAUTH_REDIRECT_URI'], scope=Auth.SCOPE)
     return oauth
+
+
+def get_or_create(model, defaults=None, **kwargs):
+    instance = db.session.query(model).filter_by(**kwargs).first()
+    if instance:
+        return instance, False
+    else:
+        params = dict((k, v) for k, v in kwargs.items() if not isinstance(v, ClauseElement))
+        params.update(defaults or {})
+        instance = model(**params)
+        db.session.add(instance)
+        return instance, True
+
+
+@app.context_processor
+def injection():
+    return {'now': datetime.utcnow()}
 
 
 @app.route('/')
@@ -81,14 +100,14 @@ def oauth2callback():
             email = user_data['email']
             uni, hd = email.split('@')
             if (hd != 'columbia.edu' and hd != 'barnard.edu') or not re.compile(r'([a-z]{2,3}\d{1,4})').match(uni):
-                flash('You cannot login using this email. Please use Lionmail instead.', 'error')
+                flash('You cannot login using this email. Please use Lionmail instead.', 'danger')
                 return redirect(session.get('oauth_redirect', url_for('index')))
 
             user = User.query.filter_by(email=email).first()
             if user is None:
                 user = User()
                 user.email = email
-            user.id = user_data['id']
+            user.id = uni
             user.name = user_data['name']
             print(token)
             user.tokens = json.dumps(token)
@@ -306,7 +325,7 @@ def search():
     prof = request.args.get('prof')
     course = request.args.get('course')
 
-    if dept != None:
+    if dept is not None:
         depts = re.split(',\s*|\s+', dept)  # split keywords by , |\s
         results = []
         for dept in depts:
@@ -316,7 +335,7 @@ def search():
         context['depts'] = results
         context['count'] += len(results)
 
-    if subj != None:
+    if subj is not None:
         subjs = re.split(',\s*|\s+', subj)
         results = []
         for subj in subjs:
@@ -326,7 +345,7 @@ def search():
         context['subjs'] = results
         context['count'] += len(results)
 
-    if prof != None:
+    if prof is not None:
         profs = re.split(',\s*|\s+', prof)
         results = []
         for prof in profs:
@@ -336,7 +355,7 @@ def search():
         context['profs'] = results
         context['count'] += len(results)
 
-    if course != None:
+    if course is not None:
         courses = re.split(',\s*|\s+', course)
         results = []
         for course in courses:
@@ -410,6 +429,56 @@ def prof(prof_arg):
         'prof_stats': all_statistics,
     }
     return render_template('faculty-page.html', **context)
+
+
+@app.route('/comment/', methods=["POST"])
+@login_required
+def comment():
+    if request.method == "POST":
+        redirect_url = request.args.get('redirect') or url_for('index')
+        # Retrieve teaching
+        prof_uni = request.form.get('prof', type=str)
+        course_id = request.form.get('course', type=str)
+        teaching = Teaching.query.filter_by(course_id=course_id.upper(), professor_uni=prof_uni.lower()).first()
+        if teaching is None:
+            abort(500)
+        # Retrieve request arguments
+        term_id = request.form.get('semester', type=str) + ' ' + request.form.get('year', type=str)
+        title = request.form.get('title', type=str)
+        content = request.form.get('message', type=str)
+        rating = request.form.get('rating', type=int)
+        workload = request.form.get('workload', type=int)
+        grade = request.form.get('grade', type=str)
+        tags_str = request.form.get('tags', type=str)
+        # Post check
+        if rating > 6 or rating < 1 \
+                or workload > 6 or workload < 1 \
+                or not re.compile('^[A-DF]$|^[A-C][\+-]$').match(grade):
+            flash('The values you have input are invalid. Please check and submit again.', 'danger')
+            return redirect(redirect_url)
+        tags_str_list = tags_str.split(',')
+        # Insert
+        try:
+            tags = []
+            for t in tags_str_list:
+                if t:  # Neither None nor empty string
+                    tag, _ = get_or_create(Tag, text=t.capitalize())
+                    tags.append(tag)
+            term, _ = get_or_create(Term, id=term_id)
+
+            # Check if existed
+            existed_comment = Comment.query.filter_by(user_id=current_user.id, teaching=teaching, term=term).first()
+            if existed_comment is not None:
+                flash('You have already published an evaluation before.', 'danger')
+            else:
+                comment = Comment(user_id=current_user.id, teaching=teaching, term=term,
+                                  title=title, content=content, rating=rating, workload=workload, grade=grade, tags=tags)
+                db.session.add(comment)
+                db.session.commit()
+                flash('The evaluation is published.', 'success')
+        except SQLAlchemyError:
+            flash('An error occurred when publishing the evaluation.', 'danger')
+        return redirect(redirect_url)
 
 
 @app.errorhandler(500)

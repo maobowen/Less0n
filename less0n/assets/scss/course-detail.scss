@@ -220,6 +220,11 @@ body {
   .modal-content {
     @include border-radius(11px);
 
+    .modal-body {
+      margin: 0 auto;
+      width: 80%;
+    }
+
     .comment-bar{
       color: whitesmoke;
       border-top-left-radius: 10px;
@@ -262,7 +267,7 @@ body {
     }
 
     .contact-form {
-      width: 75%;
+      width: 100%;
       margin: 0 auto;
       font-size: 20px;
       font-weight: 300;
@@ -410,6 +415,12 @@ body {
         color: white;
         background-color: #5BC0DE;
       }
+    }
+
+    #error {
+      color: $bad;
+      text-align: center;
+      font-size: 15px;
     }
 
     .comment-footer{

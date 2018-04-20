@@ -84,7 +84,7 @@ function changeProf(index, all_profs) {
 
     // Default prof
     if (current_prof['name'] == 'All Instructors') {
-        $('#professor-selection').val('Choose');
+        $('#professor-selection').val('');
     } else {
         $('#professor-selection').val(current_prof['name']);
     }
@@ -178,3 +178,14 @@ $('#pens li').on('click', function() {
     $('#workload').val(workloadValue);
 });
 
+$('.contact-form').submit(function(e){
+    if ($('#rating').val() == '') {
+        $('#error').text('Please input a rating scale.');
+        return false;
+    } else if ($('#workload').val() == '') {
+        $('#error').text('Please input a workload scale.');
+        return false;
+    } else {
+        return true;
+    }
+});
