@@ -481,6 +481,48 @@ def comment():
         return redirect(redirect_url)
 
 
+@app.route('/user/prof/request', methods=['GET'])
+def render_user_add_prof():
+    return render_template('index.html')
+
+
+@app.route('/user/prof/request', methods=['POST'])
+def add_prof_to_request_db():
+    """
+    Add course request
+    Request form example:
+    {
+        'name': 'Clifford Stein',
+        'department_id': 'COMS',
+        'term_id': 'Fall 2016'
+    }
+    :return: json-str.
+        "OK" if add successfully. "Fail" + error info if subject / department / professor not exists.
+    """
+    # check request
+    if 'name' not in request.form or "department_id" not in request.form or\
+            "term_id" not in request.form:
+        return render_template('404.html'), 404
+
+    # get parameters
+    name = request.form["name"]
+    department_id = request.form["department_id"]
+    term_id = request.form["term_id"]
+
+    # check parameters
+    for param in (name, department_id, term_id):
+        if param == None or len(param) == 0:
+            return jsonify('Fail')
+
+    # add request to database
+    approved = 'Pending'
+    add_prof_request = AddProfRequest(name=name, department_id=department_id,
+                                        term_id=term_id, approved=approved)
+    db.session.add(add_prof_request)
+    db.session.commit()
+    return jsonify('OK')
+
+
 @app.errorhandler(500)
 def server_error(e):
     logging.exception('An error occurred during a request.')

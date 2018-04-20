@@ -250,5 +250,70 @@ class MainTest(unittest.TestCase):
         assert re.search(r'<div class="row" id="professor-card">(\n\s+)+</div>', data) != None
         assert re.search(r'<div class="row" id="course-card">(\n\s+)+</div>', data) != None
 
+    def testAddProfToRequestDbWithValidArg(self):
+        """
+        Test if add_course_to_request_db() return
+        Test case:
+        --------------------------------------------------
+        Input                                              Expected Output
+        {
+        'name': 'Clifford Stein',
+        'department_id': 'COMS',
+        'term_id': 'Fall 2016'
+        }
+        """
+        test_cases = (
+            {
+                'name': 'Clifford Stein',
+                'department_id': 'COMS',
+                'term_id': 'Fall 2016'
+            },
+        )
+
+        for test_case in test_cases:
+            rv = self.app.post('/user/prof/request', data=dict(
+                name=test_case['name'],
+                department_id=test_case['department_id'],
+                term_id=test_case['term_id']
+            ))
+            assert rv.status == '200 OK'
+            assert 'ok' in rv.data.decode('utf-8').lower()
+            profs = AddProfRequest.query.filter_by(name=test_case['name'],
+                                                     department_id=test_case['department_id'],
+                                                     term_id=test_case['term_id']).all()
+            assert profs is not None
+            assert len(profs) > 0
+
+            # delete records
+            for prof in profs:
+                db.session.delete(prof)
+            db.session.commit()
+
+    def testAddProfToRequestDbWithUnvalidArg(self):
+        """
+        Test if add_course_to_request_db() return
+        Test case:
+        --------------------------------------------------
+        Input                                              Expected Output
+        {
+        'name': 'Clifford Stein',
+        'department_id': 'COMS'
+        }
+        """
+        test_cases = (
+            {
+                'name': 'Clifford Stein',
+                'department_id': 'COMS'
+            },
+        )
+
+        for test_case in test_cases:
+            rv = self.app.post('/user/prof/request', data=dict(
+                name=test_case['name'],
+                department_id=test_case['department_id']
+            ))
+            assert rv.status == '404 NOT FOUND'
+
+
 if __name__ == '__main__':
     unittest.main()

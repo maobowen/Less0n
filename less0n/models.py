@@ -149,3 +149,16 @@ class Tag(db.Model):
     __tablename__ = 'tags'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # 1
     text = db.Column(db.String(40), nullable=False)
+
+
+class AddProfRequest(db.Model):
+    __tablename__ = 'add_prof_requests'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # 1
+    user_id = db.Column(db.String(40)) # zj2226
+    name = db.Column(db.String(100), nullable=False)  # Fundamentals of Computer Systems
+    department_id = db.Column(db.String(6), db.ForeignKey('departments.id'), nullable=False)  # COMS
+    term_id = db.Column(db.String(12), db.ForeignKey('terms.id'), nullable=False)
+    approved = db.Column(db.String(7), nullable=False)  # False, True, Pending
+
+    def __repr__(self):
+        return '<Professor %r>' % self.name
