@@ -161,14 +161,17 @@ class ApprovalType(enum.Enum):
 class AddProfRequest(db.Model):
     __tablename__ = 'add_prof_requests'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # 1
-    user_id = db.Column(db.String(40)) # zj2226
-    name = db.Column(db.String(100), nullable=False)  # Fundamentals of Computer Systems
+    user_id = db.Column(db.String(40), db.ForeignKey('users.id'), nullable=False)  # zj2226
+    user = db.relation(User, backref='professor_requests', lazy=True)
+    name = db.Column(db.String(100), nullable=False)  # Ewan Lowe
     department_id = db.Column(db.String(6), db.ForeignKey('departments.id'), nullable=False)  # COMS
+    department = db.relationship('Department', backref='professor_requests', lazy=True)
     term_id = db.Column(db.String(12), db.ForeignKey('terms.id'), nullable=False)
-    approved = db.Column(db.String(7), nullable=False)  # False, True, Pending
+    term = db.relation(Term, lazy=True)
+    approved = db.Column(db.Enum(ApprovalType), nullable=False)
 
     def __repr__(self):
-        return '<Professor %r>' % self.name
+        return '<Professor Request %r>' % self.name
 
 
 class AddCourseRequest(db.Model):
@@ -188,4 +191,4 @@ class AddCourseRequest(db.Model):
     approved = db.Column(db.Enum(ApprovalType), nullable=False)
 
     def __repr__(self):
-        return '<Course Request %r>' % self.id
+        return '<Course Request %r>' % self.course_id

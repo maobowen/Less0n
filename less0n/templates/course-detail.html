@@ -27,22 +27,22 @@
         <div class="modal fade bd-example-modal-lg" id="profModal" tabindex="-1" role="dialog" aria-labelledby="profModalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
-                    <div class="comment-bar">
-                        <div class="comment-classname">Add an Instructor for {{ course.subject.id }} {{ course.number }}</div>
-                        <button type="button" class="close close-icon" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="section-form">
-                            <div>
-                                <form method="post" action="#" class="contact-form">
+                    <form method="post" action="{{ url_for('add_new_prof') }}?redirect={{ request.path }}" class="contact-form">
+                        <div class="comment-bar">
+                            <div class="comment-classname">Add an Instructor for {{ course.subject.id }} {{ course.number }}</div>
+                            <button type="button" class="close close-icon" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="section-form">
+                                <div>
                                     <div class="row">
                                         <div class="col-md-4">
                                             <label>Full Name <span class="required">*</span></label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input type="text" name="Fullname" placeholder="Instructor's Full Name" class="form-control" required>
+                                            <input type="text" name="name" placeholder="Instructor's Full Name" class="form-control" required>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -53,7 +53,7 @@
                                             <select name="dept" id="department" class="form-control" required>
                                                 <option value="Choose" selected="true" disabled="disabled">Choose the department</option>
                                                 {% for dept in depts %}
-                                                <option value="{{ dept.id }}">{{ dept.name }}</option>
+                                                <option value="{{ dept.id }}">{{ dept.id }} - {{ dept.name }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -82,14 +82,14 @@
                                             </div>
                                         </div>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="comment-footer">
-                        <button type="submit" class="btn btn-success">Submit</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    </div>
+                        <div class="comment-footer">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

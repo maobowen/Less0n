@@ -59,7 +59,7 @@ class MainTest(unittest.TestCase):
         assert 'department' in data
         # assert 'computer' in data
 
-    def testDepartmentSearchWithUnvalidInput(self):
+    def testDepartmentSearchWithInvalidInput(self):
         """
         Test if department() with POST return department.html with correct department name
 
@@ -115,7 +115,7 @@ class MainTest(unittest.TestCase):
         assert 'department-course' in data
         assert 'coms' in data
 
-    def testDepartmentCourseWithUnvalidArg(self):
+    def testDepartmentCourseWithInvalidArg(self):
         """
         Test if department_course() return department-course.html with unvalid department name
         Test cases:
@@ -146,7 +146,7 @@ class MainTest(unittest.TestCase):
         assert 'course-detail' in data
         assert 'coms3157' in data
 
-    def testCourseWithUnvalidArg(self):
+    def testCourseWithInvalidArg(self):
         """
         Test if course() return course-detail.html with valid argument
         Test case:
@@ -178,7 +178,7 @@ class MainTest(unittest.TestCase):
         assert rv._status_code == 200
         assert rv.content_type == 'application/json'
 
-    def testCourseJsonWithUnvalidArg(self):
+    def testCourseJsonWithInvalidArg(self):
         """
         Test if course() return course-detail.html with valid argument
         Test case:
@@ -212,7 +212,7 @@ class MainTest(unittest.TestCase):
         # assert 'daniel' in data
         assert 'asce' in data
 
-    def testSearchWithUnvalidArg(self):
+    def testSearchWithInvalidArg(self):
         """
         Test if search() return search-result.html with valid arguments
         Test case:
@@ -250,6 +250,7 @@ class MainTest(unittest.TestCase):
         assert re.search(r'<div class="row" id="professor-card">(\n\s+)+</div>', data) != None
         assert re.search(r'<div class="row" id="course-card">(\n\s+)+</div>', data) != None
 
+    '''
     def testAddProfToRequestDbWithValidArg(self):
         """
         Test if add_course_to_request_db() return
@@ -289,7 +290,7 @@ class MainTest(unittest.TestCase):
                 db.session.delete(prof)
             db.session.commit()
 
-    def testAddProfToRequestDbWithUnvalidArg(self):
+    def testAddProfToRequestDbWithInvalidArg(self):
         """
         Test if add_course_to_request_db() return
         Test case:
@@ -313,7 +314,7 @@ class MainTest(unittest.TestCase):
                 department_id=test_case['department_id']
             ))
             assert rv.status == '404 NOT FOUND'
-
+    '''
 
 if __name__ == '__main__':
     unittest.main()
