@@ -1,11 +1,12 @@
 import sys
 import os.path
 import unittest
+from unittest import mock
+import re
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 from less0n import app, database
 from less0n.models import *
 from config import Auth
-import re
 
 
 class MainTest(unittest.TestCase):
@@ -250,38 +251,37 @@ class MainTest(unittest.TestCase):
         assert re.search(r'<div class="row" id="professor-card">(\n\s+)+</div>', data) != None
         assert re.search(r'<div class="row" id="course-card">(\n\s+)+</div>', data) != None
 
-    '''
-    def testAddProfToRequestDbWithValidArg(self):
+    @mock.patch('flask_login.utils._get_user')
+    def testAddProfToRequestDbWithValidArg(self, current_user):
         """
-        Test if add_course_to_request_db() return
+        Test if add_new_prof() return
         Test case:
         --------------------------------------------------
         Input                                              Expected Output
         {
         'name': 'Clifford Stein',
-        'department_id': 'COMS',
-        'term_id': 'Fall 2016'
+        'department': 'COMS',
+        'semester': 'Fall',
+        'year': '2016'
         }
         """
         test_cases = (
-            {
-                'name': 'Clifford Stein',
-                'department_id': 'COMS',
-                'term_id': 'Fall 2016'
-            },
+            {'name': 'Clifford Stein', 'department': 'COMS', 'semester': 'Fall', 'year': '2016'},
         )
 
+        current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
         for test_case in test_cases:
-            rv = self.app.post('/user/prof/request', data=dict(
+            rv = self.app.post('/prof/new/', data=dict(
                 name=test_case['name'],
-                department_id=test_case['department_id'],
-                term_id=test_case['term_id']
+                department=test_case['department'],
+                semester=test_case['semester'],
+                year=test_case['year'],
             ))
-            assert rv.status == '200 OK'
-            assert 'ok' in rv.data.decode('utf-8').lower()
+            assert rv._status_code == 302
+            assert rv.content_type == 'text/html; charset=utf-8'
             profs = AddProfRequest.query.filter_by(name=test_case['name'],
-                                                     department_id=test_case['department_id'],
-                                                     term_id=test_case['term_id']).all()
+                                                   department_id=test_case['department'],
+                                                   term_id=test_case['semester'] + ' ' + test_case['year']).all()
             assert profs is not None
             assert len(profs) > 0
 
@@ -290,9 +290,10 @@ class MainTest(unittest.TestCase):
                 db.session.delete(prof)
             db.session.commit()
 
-    def testAddProfToRequestDbWithInvalidArg(self):
+    @mock.patch('flask_login.utils._get_user')
+    def testAddProfToRequestDbWithInvalidArg(self, current_user):
         """
-        Test if add_course_to_request_db() return
+        Test if add_new_prof() return
         Test case:
         --------------------------------------------------
         Input                                              Expected Output
@@ -302,19 +303,17 @@ class MainTest(unittest.TestCase):
         }
         """
         test_cases = (
-            {
-                'name': 'Clifford Stein',
-                'department_id': 'COMS'
-            },
+            {'name': 'Clifford Stein', 'department': 'COMS'},
         )
 
+        current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
         for test_case in test_cases:
-            rv = self.app.post('/user/prof/request', data=dict(
+            rv = self.app.post('/prof/new/', data=dict(
                 name=test_case['name'],
-                department_id=test_case['department_id']
+                department=test_case['department'],
             ))
             assert rv.status == '404 NOT FOUND'
-    '''
+
 
 if __name__ == '__main__':
     unittest.main()

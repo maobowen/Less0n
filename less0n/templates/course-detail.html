@@ -50,7 +50,7 @@
                                             <label for="department">Department <span class="required">*</span></label>
                                         </div>
                                         <div class="col-md-8">
-                                            <select name="dept" id="department" class="form-control" required>
+                                            <select name="department" id="department" class="form-control" required>
                                                 <option value="Choose" selected="true" disabled="disabled">Choose the department</option>
                                                 {% for dept in depts %}
                                                 <option value="{{ dept.id }}">{{ dept.id }} - {{ dept.name }}</option>

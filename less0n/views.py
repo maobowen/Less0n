@@ -533,7 +533,9 @@ def add_new_prof():
     # Add request to database
     try:
         term, _ = get_or_create(Term, id=term_id)
-        add_prof_request = AddProfRequest(name=name, department=department, term=term, approved=ApprovalType.PENDING)
+        add_prof_request = AddProfRequest(
+            name=name, department=department, term=term,
+            user_id=current_user.id, approved=ApprovalType.PENDING)
         db.session.add(add_prof_request)
         db.session.commit()
         flash('The adding instructor request is submitted.', 'success')
