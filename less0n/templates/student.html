@@ -1,7 +1,7 @@
 {% extends "base2.html" %}
 
 {% block head_meta %}
-        <title>Less0n - Student Page</title>
+        <title>Less0n - Student</title>
 {% endblock %}
 
 {% block head_css %}
@@ -11,80 +11,244 @@
 {% block body_main %}
         <div class="jumbotron jumbotron-fluid">
             <div class="container">
-                <div class="faculty-pic">
-                    <img src="{{ prof.avatar }}" alt="{{ prof.name }}">
-                </div>
-                <div class="faculty-info">
-                    <h1 class="display-4">{{ prof.name }}</h1>
-                    <p class="lead">Department: {{ prof.department.name }}</p>
-                    <p class="lead">Website: <a href="{{ prof.url }}" target="_blank">{{ prof.url }}</a></p>
+                <div class="course-title">
+                    <h3 class="display-4">Yilan's Homepage</h3>
+                    <h4 class="display-5">heyilan1995@gmail.com</h4>
                 </div>
             </div>
         </div>
 
-        <div class="statistics">
+        <div class="statistics container">
             <div class="row">
-                <div class="stats_box col-md-6">
-                    <div id="tag_list" class="stats_box_content">
-                        <div class="tags">
-                            {% for tag in prof_stats['tags'] %}
-                            <a>{{ tag }}</a>
-                            {% endfor %}
-                        </div>
-                    </div>
+                <div class="stats_box tab col-md-2">
+                    <button class="tablinks" onclick="switchTab(event, 'course_tab')" id="defaultOpen">Course Request (5)</button>
+                    <button class="tablinks" onclick="switchTab(event, 'professor_tab')">Instructor Request (12)</button>
                 </div>
 
-                <div class="stats_box col-md-6">
-                    <div id="bar_stats" class="stats_box_content">
-                        <div class="stat">Ratings: <span id="rating_num">{{ 'N/A' if prof_stats['rating'] < 0 else '%0.2f' % prof_stats['rating'] }}</span></div>
-                        <div class="progress">
-                            <div id="rating_progress_bar" class="progress_bar"></div>
-                        </div>
-                        <div class="stat">Grade: <span id="grade_num">{{ 'N/A' if prof_stats['grade'] < 0 else '%0.2f' % prof_stats['grade'] }}</span></div>
-                        <div class="progress">
-                            <div id="grade_progress_bar" class="progress_bar"></div>
-                        </div>
-                        <div class="stat">Workload: <span id="workload_num">{{ 'N/A' if prof_stats['workload'] < 0 else '%0.2f' % prof_stats['workload'] }}</span></div>
-                        <div class="progress">
-                            <div id="workload_progress_bar" class="progress_bar"></div>
-                        </div>
+                <div class="stats_box col-md-10">
+                    <div id="course_tab" class="tabcontent">
+                        <h3>Course Request</h3>
+                        <table id="tabCourse" class="table">
+                            <tr>
+                                <th>ID</th>
+                                <th>Course No.</th>
+                                <th>Course Name</th>
+                                <th>Department</th>
+                                <th>Subject</th>
+                                <th>Status</th>
+                            </tr>
+                            <tr>
+                                <td>#123</td>
+                                <td>COMS4170</td>
+                                <td>AI</td>
+                                <td>COMS</td>
+                                <td>COMS</td>
+                                <td><a class="success">Approved</a></td>
+                            </tr>
+                            <tr>
+                                <td>#124</td>
+                                <td>COMS4170</td>
+                                <td>AI</td>
+                                <td>COMS</td>
+                                <td>COMS</td>
+                                <td><a class="warning">Pending</a></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div id="professor_tab" class="tabcontent">
+                        <h3>Instructor Request</h3>
+                        <table id="tabProf" class="table">
+                            <tr>
+                                <th>ID</th>
+                                <th>Instructor</th>
+                                <th>Department</th>
+                                <th>Semester</th>
+                                <th>Status</th>
+                            </tr>
+                            <tr>
+                                <td>#23</td>
+                                <td>Ewan Lowe</td>
+                                <td>COMS</td>
+                                <td>2018 Fall</td>
+                                <td><a class="danger">Declined</a></td>
+                            </tr>
+                            <tr>
+                                <td>#24</td>
+                                <td>Ewan Lowe</td>
+                                <td>COMS</td>
+                                <td>2018 Fall</td>
+                                <td><a class="success">Approved</a></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="sortby" class="container">
-            <form>
-                <select class="form-control">
-                    <option>Sort by Popularity</option>
-                    <option>Sort by Name</option>
-                    <option>Sort by Rating</option>
-                </select>
-            </form>
-        </div>
+        <!-- Add comment form -->
+{#        <div class="modal fade bd-example-modal-lg" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalTitle" aria-hidden="true">#}
+{#            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">#}
+{#                <div class="modal-content">#}
+{#                    <form method="post" action="{{ url_for('comment') }}?redirect={{ request.path }}" class="contact-form">#}
+{#                        <div class="comment-bar">#}
+{#                            <div class="comment-classname">Add a Comment for {{ course.subject.id }} {{ course.number }}</div>#}
+{#                            <input type="hidden" name="course" value="{{ course.id }}" required>#}
+{#                            <div id="professor" class="row">#}
+{#                                <p>Instructor <span class="required">*</span></p>#}
+{#                                <select name="prof" id="professor-selection" class="form-control" required>#}
+{#                                    <option value="" selected="true" disabled="disabled">Choose your instructor</option>#}
+{#                                </select>#}
+{#                            </div>#}
+{#                            <button type="button" class="close close-icon" data-dismiss="modal" aria-label="Close">#}
+{#                                <span aria-hidden="true">&times;</span>#}
+{#                            </button>#}
+{#                        </div>#}
+{#                        <div class="modal-body">#}
+{#                        <div class="section-form">#}
+{#                            <div>#}
+{#                                <div class="row">#}
+{#                                    <div class="col-md-4">#}
+{#                                        <label>Comment Title</label>#}
+{#                                    </div>#}
+{#                                    <div class="col-md-8">#}
+{#                                        <input type="text" name="title" placeholder="Title" class="form-control">#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="row">#}
+{#                                    <div class="col-md-4">#}
+{#                                        <label for="semester" class="control-label">Semester <span class="required">*</span></label>#}
+{#                                    </div>#}
+{#                                    <div class="col-md-8 sem">#}
+{#                                        <div class="row">#}
+{#                                            <div class="col-md-6">#}
+{#                                                <select name="year" id="year" class="form-control" required>#}
+{#                                                    <option value="{{ now.year }}" selected>{{ now.year }}</option>#}
+{#                                                    {% for y in range(now.year - 1, now.year - 5, -1) %}#}
+{#                                                    <option value="{{ y }}">{{ y }}</option>#}
+{#                                                    {% endfor %}#}
+{#                                                </select>#}
+{#                                            </div>#}
+{#                                            <div class="col-md-6">#}
+{#                                                <select name="semester" id="semester" class="form-control" required>#}
+{#                                                    <option value="Fall">Fall</option>#}
+{#                                                    <option value="Spring">Spring</option>#}
+{#                                                    <option value="Summer">Summer</option>#}
+{#                                                </select>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="row">#}
+{#                                    <div class="col-md-4">#}
+{#                                        <label for="grade">Grade <span class="required">*</span></label>#}
+{#                                    </div>#}
+{#                                    <div class="col-md-8">#}
+{#                                        <select name="grade" id="grade" class="form-control" required>#}
+{#                                            <option value="" selected="true" disabled="disabled">Choose your grade</option>#}
+{#                                            <option value="A+">A+</option>#}
+{#                                            <option value="A">A</option>#}
+{#                                            <option value="A-">A-</option>#}
+{#                                            <option value="B+">B+</option>#}
+{#                                            <option value="B">B</option>#}
+{#                                            <option value="B-">B-</option>#}
+{#                                            <option value="C+">C+</option>#}
+{#                                            <option value="C">C</option>#}
+{#                                            <option value="C-">C-</option>#}
+{#                                            <option value="D">D</option>#}
+{#                                            <option value="F">F</option>#}
+{#                                        </select>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="row">#}
+{#                                    <div class="col-md-4">#}
+{#                                        <label for="rating">Rating <span class="required">*</span></label>#}
+{#                                    </div>#}
+{#                                    <div class="col-md-8">#}
+{#                                        <div class='rating-stars text-center'>#}
+{#                                            <ul id='stars'>#}
+{#                                                <li class='star' title='Poor' data-value='1'>#}
+{#                                                    <i class='fa fa-star'></i>#}
+{#                                                </li>#}
+{#                                                <li class='star' title='Fair' data-value='2'>#}
+{#                                                    <i class='fa fa-star'></i>#}
+{#                                                </li>#}
+{#                                                <li class='star' title='Good' data-value='3'>#}
+{#                                                    <i class='fa fa-star'></i>#}
+{#                                                </li>#}
+{#                                                <li class='star' title='Excellent' data-value='4'>#}
+{#                                                    <i class='fa fa-star'></i>#}
+{#                                                </li>#}
+{#                                                <li class='star' title='WOW!!!' data-value='5'>#}
+{#                                                    <i class='fa fa-star'></i>#}
+{#                                                </li>#}
+{#                                            </ul>#}
+{#                                        </div>#}
+{#                                        <input type="hidden" name="rating" id="rating" required>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="row">#}
+{#                                    <div class="col-md-4">#}
+{#                                        <label for="workload">Workload <span class="required">*</span></label>#}
+{#                                    </div>#}
+{#                                    <div class="col-md-8 penswork">#}
+{#                                        <div class='workload-pens text-center'>#}
+{#                                            <ul id='pens'>#}
+{#                                                <li class='pen' title='WOW!!' data-value='1'>#}
+{#                                                    <i class='fa fa-pencil'></i>#}
+{#                                                </li>#}
+{#                                                <li class='pen' title='Comfortable' data-value='2'>#}
+{#                                                    <i class='fa fa-pencil'></i>#}
+{#                                                </li>#}
+{#                                                <li class='pen' title='Fair' data-value='3'>#}
+{#                                                    <i class='fa fa-pencil'></i>#}
+{#                                                </li>#}
+{#                                                <li class='pen' title='Tired' data-value='4'>#}
+{#                                                    <i class='fa fa-pencil'></i>#}
+{#                                                </li>#}
+{#                                                <li class='pen' title='Heavy!!' data-value='5'>#}
+{#                                                    <i class='fa fa-pencil'></i>#}
+{#                                                </li>#}
+{#                                            </ul>#}
+{#                                        </div>#}
+{#                                        <input type="hidden" name="workload" id="workload" required>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="row">#}
+{#                                    <div class="col-md-4">#}
+{#                                        <label for="Tags">Tags</label>#}
+{#                                    </div>#}
+{#                                    <div class="col-md-8">#}
+{#                                        <input type="text" name="tags" value="Interesting,Useful" data-role="tagsinput" id="tags" class="form-control">#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="row">#}
+{#                                    <div class="col-md-4">#}
+{#                                        <label>Drop us a line</label>#}
+{#                                    </div>#}
+{#                                    <div class="col-md-8 span-2-of-3">#}
+{#                                        <textarea name="message" placeholder="Your message" class="form-control"></textarea>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <p id="error"></p>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                        <div class="comment-footer">#}
+{#                            <button type="submit" class="btn btn-success">Submit</button>#}
+{#                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>#}
+{#                        </div>#}
+{#                    </form>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
 
-        <div class="container cardcol">
-            <div class="row">
-            {% for course, statistics in courses.items() %}
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title"><a href="{{ url_for('course', course_arg=course.id) }}">{{ course.subject_id }} {{ course.number }}</a></h3>
-                            <h4 class="card-title"><a href="{{ url_for('course', course_arg=course.id) }}">{{ course.name }}</a></h4>
-                            <p class="card-text"><a href="{{ url_for('department_course', dept_arg=course.department.id) }}">Department: {{ course.department.name }}</a></p>
-                            <p class="card-text">Subject: {{ course.subject.name }}</p>
-                            <div class="btn">Rating: {{ 'N/A' if statistics['rating'] < 0 else '%0.2f' % statistics['rating'] }}</div>
-                            <div class="btn">Grade: {{ 'N/A' if statistics['grade'] < 0 else '%0.2f' % statistics['grade'] }}</div>
-                            <div class="btn">Workload: {{ 'N/A' if statistics['workload'] < 0 else '%0.2f' % statistics['workload'] }}</div>
-                            <div class="btn comment">Comments: {{ statistics['comment'] }}</div>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-            </div>
+        <div class="container card-columns">
+            <h2>Yilan's Comments</h2>
+
         </div>
 {% endblock %}
 
 {% block body2_js %}
-        <script type="text/javascript" src="{{ url_for('static', filename='js/faculty-page.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/student.js')}}"></script>
 {% endblock %}
