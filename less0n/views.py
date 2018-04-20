@@ -303,6 +303,7 @@ def course_json(course_arg):
 
 
 @app.route('/course/new', methods=['GET', 'POST'])
+@login_required
 def add_new_course():
     """
     Add course request
@@ -318,32 +319,55 @@ def add_new_course():
     :return: json-str.
         "OK" if add successfully. "Fail" + error info if subject / department / professor not exists.
     """
+    redirect_url = request.args.get('redirect') or url_for('index')
     if request.method == "GET":
-        return render_template('add-course.html')
+        depts = Department.query.all()
+        subjs = Subject.query.all()
+        context = {
+            'depts': depts,
+            'subjs': subjs,
+            'redirect_url': redirect_url,
+        }
+        return render_template('add-course.html', **context)
+
     elif request.method == "POST":
-        # check request
-        if 'course_name' not in request.form or "course_number" not in request.form or\
-                "department_name" not in request.form or 'subject_name' not in request.form:
-            return render_template('404.html'), 404
+        # Pre check
+        form_arguments = {'course-name', 'course-number', 'department', 'subject', 'semester', 'year'}
+        for arg in form_arguments:
+            if arg not in request.form:
+                abort(404)
 
-        # get parameters
-        course_name = request.form["course_name"]
-        course_number = request.form["course_number"]
-        department_name = request.form["department_name"]
-        subject_name = request.form['subject_name']
+        # Retrieve request arguments
+        course_name = request.form.get('course-name', type=str)
+        course_number = request.form.get('course-number', type=str)
+        department_id = request.form.get('department', type=str)
+        subject_id = request.form.get('subject', type=str)
+        course_id = subject_id + course_number
+        term_id = request.form.get('semester', type=str) + ' ' + request.form.get('year', type=str)
 
-        # check parameters
-        for param in (course_name, course_number, subject_name, department_name):
-            if param == None or len(param) == 0:
-                return jsonify('Fail')
+        # Post check
+        if not course_name or not course_number or not department_id or not subject_id or not course_id or not term_id:
+            abort(404)
+        department = Department.query.filter_by(id=department_id).first()
+        subject = Subject.query.filter_by(id=subject_id).first()
+        for param in (course_name, course_number, department, subject, term_id):
+            if param is None or (type(param) is str and len(param) == 0):
+                flash('The values you have input are invalid. Please check and submit again.', 'danger')
+                return redirect(redirect_url)
 
-        # add request to database
-        approved = 'False'
-        add_course_request = CourseRequest(course_id=course_number, department=department_name, subject=subject_name,
-                                           name=course_name, approved=approved)
-        db.session.add(add_course_request)
-        db.session.commit()
-        return jsonify('OK')
+        # Add request to database
+        try:
+            term, _ = get_or_create(Term, id=term_id)
+            add_course_request = AddCourseRequest(
+                course_id=course_id, course_name=course_name, course_number=course_number,
+                department=department, subject=subject, term=term,
+                user_id=current_user.id, approved=ApprovalType.PENDING)
+            db.session.add(add_course_request)
+            db.session.commit()
+            flash('The adding course request is submitted.', 'success')
+        except SQLAlchemyError:
+            flash('An error occurred when submitting an adding course request.', 'danger')
+        return redirect(redirect_url)
 
 
 @app.route('/search/', methods=['GET'])
