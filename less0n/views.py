@@ -302,50 +302,48 @@ def course_json(course_arg):
     return jsonify(ret)
 
 
-@app.route('/course', methods=['POST'])
-def add_course():
+@app.route('/course/new', methods=['GET', 'POST'])
+def add_new_course():
     """
-    Add course.
-    - Add a new course to Course entity
-    - Add a new teaching to Teaching entity
+    Add course request
+
+    Request form example:
+    {
+        'course_name': 'Computer Networks',
+        'course_number': 'CSEE4119',
+        'department_name': 'Computer Science',
+        'subject_name': 'Computer Science and Electrical Engineering'
+    }
 
     :return: json-str.
         "OK" if add successfully. "Fail" + error info if subject / department / professor not exists.
     """
-    # get parameters
-    course_name = request.form["course-name"]
-    course_number = request.form["course-number"]
-    professor_name = request.form["professor-name"]
-    department_name = request.form["department-name"]
+    if request.method == "GET":
+        return render_template('add-course.html')
+    elif request.method == "POST":
+        # check request
+        if 'course_name' not in request.form or "course_number" not in request.form or\
+                "department_name" not in request.form or 'subject_name' not in request.form:
+            return render_template('404.html'), 404
 
-    # check parameters
-    for param in (course_name, course_number, professor_name, department_name):
-        if param == None or len(param) == 0:
-            return jsonify('Fail')
+        # get parameters
+        course_name = request.form["course_name"]
+        course_number = request.form["course_number"]
+        department_name = request.form["department_name"]
+        subject_name = request.form['subject_name']
 
-    # extract parameters
-    subject_id = course_number[0: 4] # COMS4156 -> COMS
-    number = course_number[len(course_number) - 4: ]
+        # check parameters
+        for param in (course_name, course_number, subject_name, department_name):
+            if param == None or len(param) == 0:
+                return jsonify('Fail')
 
-    # get objects
-    subject = Subject.query.filter(Subject.id.contains(subject_id)).first()
-    department = Department.query.filter(Department.name.contains(department_name)).first()
-    professor = Professor.query.filter(Professor.name.contains(professor_name)).first()
-
-    # check objects
-    for obj in (subject, department, professor):
-        if obj == None:
-            return jsonify('Fail')
-
-    # construct objects
-    course = Course(id=course_number, subject=subject, number=number, department=department, name=course_name)
-    teaching = Teaching(professor=professor, course=course)
-
-    # add to db
-    db.session.add(course)
-    db.session.add(teaching)
-    db.session.commit()
-    return jsonify('OK')
+        # add request to database
+        approved = 'False'
+        add_course_request = CourseRequest(course_id=course_number, department=department_name, subject=subject_name,
+                                           name=course_name, approved=approved)
+        db.session.add(add_course_request)
+        db.session.commit()
+        return jsonify('OK')
 
 
 @app.route('/search/', methods=['GET'])
@@ -523,7 +521,53 @@ def comment():
         except SQLAlchemyError:
             flash('An error occurred when publishing the evaluation.', 'danger')
         return redirect(redirect_url)
->>>>>>> master
+
+
+# Routes for admins
+@app.route('/admin/course', methods=['POST'])
+def approve_new_course():
+    """
+    Admin approves a course.
+    - Add a new course to Course entity
+    - Add a new teaching to Teaching entity
+
+    :return: json-str.
+        "OK" if add successfully. "Fail" + error info if subject / department / professor not exists.
+    """
+    # get parameters
+    course_name = request.form["course-name"]
+    course_number = request.form["course-number"]
+    professor_name = request.form["professor-name"]
+    department_name = request.form["department-name"]
+
+    # check parameters
+    for param in (course_name, course_number, professor_name, department_name):
+        if param == None or len(param) == 0:
+            return jsonify('Fail')
+
+    # extract parameters
+    subject_id = course_number[0: 4] # COMS4156 -> COMS
+    number = course_number[len(course_number) - 4: ]
+
+    # get objects
+    subject = Subject.query.filter(Subject.id.contains(subject_id)).first()
+    department = Department.query.filter(Department.name.contains(department_name)).first()
+    professor = Professor.query.filter(Professor.name.contains(professor_name)).first()
+
+    # check objects
+    for obj in (subject, department, professor):
+        if obj == None:
+            return jsonify('Fail')
+
+    # construct objects
+    course = Course(id=course_number, subject=subject, number=number, department=department, name=course_name)
+    teaching = Teaching(professor=professor, course=course)
+
+    # add to db
+    db.session.add(course)
+    db.session.add(teaching)
+    db.session.commit()
+    return jsonify('OK')
 
 
 @app.errorhandler(500)

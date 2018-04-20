@@ -149,3 +149,17 @@ class Tag(db.Model):
     __tablename__ = 'tags'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # 1
     text = db.Column(db.String(40), nullable=False)
+
+
+class CourseRequest(db.Model):
+    __tablename__ = 'course_requests'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # 1
+    user_id = db.Column(db.String(40))  # zj2226
+    course_id = db.Column(db.String(12), nullable=False)  # CSEE3827
+    name = db.Column(db.String(100), nullable=False)  # Fundamentals of Computer Systems
+    department = db.Column(db.String(100), nullable=False)  # Computer Science
+    subject = db.Column(db.String(100), nullable=False)  # Computer Science and Electrical Engineering
+    approved = db.Column(db.String(7))  # False, True, Pending
+
+    def __repr__(self):
+        return '<Course %r>' % self.course_id
