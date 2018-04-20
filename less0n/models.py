@@ -37,7 +37,9 @@ class Membership(db.Model):
     __tablename__ = 'memberships'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.String(40), db.ForeignKey('users.id'), nullable=False)
+    user = db.relation(User, backref='users', lazy=True)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
+    role = db.relation(Role, backref='roles', lazy=True)
     __table_args__ = (
         db.UniqueConstraint('user_id', 'role_id', name='_memberships_uc'),
     )

@@ -36,6 +36,11 @@ def get_google_auth(state=None, token=None):
     return oauth
 
 
+def has_membership(user_id, role):
+    membership = Membership.query.filter_by(user_id=user_id, role=role).first()
+    return membership is not None
+
+
 def get_or_create(model, defaults=None, **kwargs):
     instance = db.session.query(model).filter_by(**kwargs).first()
     if instance:
@@ -103,6 +108,7 @@ def oauth2callback():
                 flash('You cannot login using this email. Please use Lionmail instead.', 'danger')
                 return redirect(session.get('oauth_redirect', url_for('index')))
 
+            # Register user
             user = User.query.filter_by(email=email).first()
             if user is None:
                 user = User()
@@ -114,6 +120,13 @@ def oauth2callback():
             user.avatar = user_data['picture']
             db.session.add(user)
             db.session.commit()
+
+            # Register membership
+            role_student = Role.query.filter_by(name='student').first()
+            role_instructor = Role.query.filter_by(name='instructor').first()
+            if not has_membership(user.id, role_instructor):
+                db.session.add(Membership(user=user, role=role_student))
+                db.session.commit()
 
             login_user(user)
             return redirect(session.get('oauth_redirect', url_for('index')))

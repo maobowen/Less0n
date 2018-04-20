@@ -12,18 +12,33 @@ def init_db():
 
     # User
     users = {
+        'bm2734': User(id='bm2734', avatar='', email='bm2734@columbia.edu', name='Bowen Mao', tokens=''),
+        'yg2529': User(id='yg2529', avatar='', email='yg2529@columbia.edu', name='Yiming Guo', tokens=''),
+        'yh2961': User(id='yh2961', avatar='', email='yh2961@columbia.edu', name='Yilan He', tokens=''),
         'zj2226': User(id='zj2226', avatar='', email='zj2226@columbia.edu', name='Zhijian Jiang', tokens=''),
     }
     for _, user in users.items():
         db.session.add(user)
     db.session.commit()
 
-
     # Roles
     role_student = Role(name='student')
     db.session.add(role_student)
     role_instructor = Role(name='instructor')
     db.session.add(role_instructor)
+    role_admin = Role(name='admin')
+    db.session.add(role_admin)
+    db.session.commit()
+
+    # Membership
+    memberships = {
+        1: Membership(id=1, user=users['bm2734'], role=role_admin),
+        2: Membership(id=2, user=users['yg2529'], role=role_admin),
+        3: Membership(id=3, user=users['yh2961'], role=role_admin),
+        4: Membership(id=4, user=users['zj2226'], role=role_admin),
+    }
+    for _, membership in memberships.items():
+        db.session.add(membership)
     db.session.commit()
 
     # Departments
