@@ -195,10 +195,12 @@ def department_course(dept_arg):
 @app.route('/course/<regex("[A-Za-z]{4}[A-Za-z0-9]{4,5}"):course_arg>/')
 def course(course_arg):
     c = Course.query.filter_by(id=course_arg.upper()).first()
+    depts = Department.query.all()
     if c is None:
         return redirect(url_for('department'))
     context = {
         'course': c,
+        'depts': depts,
     }
     return render_template('course-detail.html', **context)
 
@@ -302,7 +304,7 @@ def course_json(course_arg):
     return jsonify(ret)
 
 
-@app.route('/course/new', methods=['GET', 'POST'])
+@app.route('/course/new/', methods=['GET', 'POST'])
 @login_required
 def add_new_course():
     """
@@ -346,12 +348,10 @@ def add_new_course():
         term_id = request.form.get('semester', type=str) + ' ' + request.form.get('year', type=str)
 
         # Post check
-        if not course_name or not course_number or not department_id or not subject_id or not course_id or not term_id:
-            abort(404)
         department = Department.query.filter_by(id=department_id).first()
         subject = Subject.query.filter_by(id=subject_id).first()
-        for param in (course_name, course_number, department, subject, term_id):
-            if param is None or (type(param) is str and len(param) == 0):
+        for param in (course_id, course_name, course_number, department, subject, term_id):  # None or empty
+            if not param:
                 flash('The values you have input are invalid. Please check and submit again.', 'danger')
                 return redirect(redirect_url)
 
@@ -495,6 +495,53 @@ def prof(prof_arg):
         'prof_stats': all_statistics,
     }
     return render_template('faculty-page.html', **context)
+
+
+@app.route('/prof/new/', methods=['POST'])
+def add_new_prof():
+    """
+    Add professor request
+    Request form example:
+    {
+        'name': 'Clifford Stein',
+        'department_id': 'COMS',
+        'term_id': 'Fall 2016'
+    }
+    :return: json-str.
+        "OK" if add successfully. "Fail" + error info if subject / department / professor not exists.
+    """
+    redirect_url = request.args.get('redirect') or url_for('index')
+
+    # Pre check
+    form_arguments = {'name', 'department', 'semester', 'year'}
+    for arg in form_arguments:
+        if arg not in request.form:
+            abort(404)
+
+    # Retrieve request arguments
+    name = request.form.get('name', type=str)
+    department_id = request.form.get('department', type=str)
+    term_id = request.form.get('semester', type=str) + ' ' + request.form.get('year', type=str)
+
+    # Post check
+    department = Department.query.filter_by(id=department_id).first()
+    for param in (name, department, term_id):  # None or empty
+        if not param:
+            flash('The values you have input are invalid. Please check and submit again.', 'danger')
+            return redirect(redirect_url)
+
+    # Add request to database
+    try:
+        term, _ = get_or_create(Term, id=term_id)
+        add_prof_request = AddProfRequest(
+            name=name, department=department, term=term,
+            user_id=current_user.id, approved=ApprovalType.PENDING)
+        db.session.add(add_prof_request)
+        db.session.commit()
+        flash('The adding instructor request is submitted.', 'success')
+    except SQLAlchemyError:
+        flash('An error occurred when submitting an adding instructor request.', 'danger')
+    return redirect(redirect_url)
 
 
 @app.route('/comment/', methods=["POST"])
