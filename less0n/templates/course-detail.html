@@ -27,7 +27,7 @@
         <div class="modal fade bd-example-modal-lg" id="profModal" tabindex="-1" role="dialog" aria-labelledby="profModalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
-                    <form method="post" action="{{ url_for('add_new_prof') }}?redirect={{ request.path }}" class="contact-form">
+                    <form method="post" action="{{ url_for('add_new_prof') }}?redirect={{ request.path }}" class="prof-form modal-form">
                         <div class="comment-bar">
                             <div class="comment-classname">Add an Instructor for {{ course.subject.id }} {{ course.number }}</div>
                             <button type="button" class="close close-icon" data-dismiss="modal" aria-label="Close">
@@ -162,7 +162,7 @@
         <div class="modal fade bd-example-modal-lg" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
-                    <form method="post" action="{{ url_for('comment') }}?redirect={{ request.path }}" class="contact-form">
+                    <form method="post" action="{{ url_for('comment') }}?redirect={{ request.path }}" class="comment-form modal-form">
                         <div class="comment-bar">
                             <div class="comment-classname">Add a Comment for {{ course.subject.id }} {{ course.number }}</div>
                             <input type="hidden" name="course" value="{{ course.id }}" required>

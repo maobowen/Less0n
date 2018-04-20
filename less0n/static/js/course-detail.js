@@ -178,7 +178,7 @@ $('#pens li').on('click', function() {
     $('#workload').val(workloadValue);
 });
 
-$('.contact-form').submit(function(e){
+$('.comment-form').submit(function(e){
     if ($('#rating').val() == '') {
         $('#error').text('Please input a rating scale.');
         return false;
