@@ -2,7 +2,7 @@
 # - http://bitwiser.in/2015/09/09/add-google-login-in-flask.html
 # - https://stackoverflow.com/questions/34235590/how-do-you-restrict-google-login-oauth2-to-emails-from-a-specific-google-apps
 
-from less0n import app, helpers
+from less0n import app, helpers, db
 from less0n.models import *
 import json
 import logging
@@ -304,6 +304,74 @@ def course_json(course_arg):
     return jsonify(ret)
 
 
+@app.route('/course/new', methods=['GET', 'POST'])
+@login_required
+def add_new_course():
+    """
+    Add course request
+
+    Request form example:
+    {
+        'course_name': 'Computer Networks',
+        'course_number': 'CSEE4119',
+        'department_name': 'Computer Science',
+        'subject_name': 'Computer Science and Electrical Engineering'
+    }
+
+    :return: json-str.
+        "OK" if add successfully. "Fail" + error info if subject / department / professor not exists.
+    """
+    redirect_url = request.args.get('redirect') or url_for('index')
+    if request.method == "GET":
+        depts = Department.query.all()
+        subjs = Subject.query.all()
+        context = {
+            'depts': depts,
+            'subjs': subjs,
+            'redirect_url': redirect_url,
+        }
+        return render_template('add-course.html', **context)
+
+    elif request.method == "POST":
+        # Pre check
+        form_arguments = {'course-name', 'course-number', 'department', 'subject', 'semester', 'year'}
+        for arg in form_arguments:
+            if arg not in request.form:
+                abort(404)
+
+        # Retrieve request arguments
+        course_name = request.form.get('course-name', type=str)
+        course_number = request.form.get('course-number', type=str)
+        department_id = request.form.get('department', type=str)
+        subject_id = request.form.get('subject', type=str)
+        course_id = subject_id + course_number
+        term_id = request.form.get('semester', type=str) + ' ' + request.form.get('year', type=str)
+
+        # Post check
+        if not course_name or not course_number or not department_id or not subject_id or not course_id or not term_id:
+            abort(404)
+        department = Department.query.filter_by(id=department_id).first()
+        subject = Subject.query.filter_by(id=subject_id).first()
+        for param in (course_name, course_number, department, subject, term_id):
+            if param is None or (type(param) is str and len(param) == 0):
+                flash('The values you have input are invalid. Please check and submit again.', 'danger')
+                return redirect(redirect_url)
+
+        # Add request to database
+        try:
+            term, _ = get_or_create(Term, id=term_id)
+            add_course_request = AddCourseRequest(
+                course_id=course_id, course_name=course_name, course_number=course_number,
+                department=department, subject=subject, term=term,
+                user_id=current_user.id, approved=ApprovalType.PENDING)
+            db.session.add(add_course_request)
+            db.session.commit()
+            flash('The adding course request is submitted.', 'success')
+        except SQLAlchemyError:
+            flash('An error occurred when submitting an adding course request.', 'danger')
+        return redirect(redirect_url)
+
+
 @app.route('/search/', methods=['GET'])
 def search():
     """
@@ -519,6 +587,53 @@ def add_prof_to_request_db():
     add_prof_request = AddProfRequest(name=name, department_id=department_id,
                                         term_id=term_id, approved=approved)
     db.session.add(add_prof_request)
+    db.session.commit()
+    return jsonify('OK')
+
+
+# Routes for admins
+@app.route('/admin/course', methods=['POST'])
+def approve_new_course():
+    """
+    Admin approves a course.
+    - Add a new course to Course entity
+    - Add a new teaching to Teaching entity
+
+    :return: json-str.
+        "OK" if add successfully. "Fail" + error info if subject / department / professor not exists.
+    """
+    # get parameters
+    course_name = request.form["course-name"]
+    course_number = request.form["course-number"]
+    professor_name = request.form["professor-name"]
+    department_name = request.form["department-name"]
+
+    # check parameters
+    for param in (course_name, course_number, professor_name, department_name):
+        if param == None or len(param) == 0:
+            return jsonify('Fail')
+
+    # extract parameters
+    subject_id = course_number[0: 4] # COMS4156 -> COMS
+    number = course_number[len(course_number) - 4: ]
+
+    # get objects
+    subject = Subject.query.filter(Subject.id.contains(subject_id)).first()
+    department = Department.query.filter(Department.name.contains(department_name)).first()
+    professor = Professor.query.filter(Professor.name.contains(professor_name)).first()
+
+    # check objects
+    for obj in (subject, department, professor):
+        if obj == None:
+            return jsonify('Fail')
+
+    # construct objects
+    course = Course(id=course_number, subject=subject, number=number, department=department, name=course_name)
+    teaching = Teaching(professor=professor, course=course)
+
+    # add to db
+    db.session.add(course)
+    db.session.add(teaching)
     db.session.commit()
     return jsonify('OK')
 

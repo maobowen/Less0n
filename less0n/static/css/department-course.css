@@ -16,6 +16,8 @@ body {
       body .jumbotron .container .dept-info {
         float: left;
         margin-top: 10px; }
+        body .jumbotron .container .dept-info h1 {
+          font-weight: lighter; }
         body .jumbotron .container .dept-info a {
           color: white; }
         body .jumbotron .container .dept-info a:hover {
