@@ -9,10 +9,11 @@
 {% endblock %}
 
 {% block body_main %}
+        <div class="body-main">
         <nav class="navbar navbar-expand-lg navbar-light bg-light nav-child">
-          <a class="navbar-brand" href="#">Search Result</a>
-          <a>About <i>1</i> results</a>
-         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <a class="navbar-brand" href="#">Search Result</a>
+            <a><i>{{ count }}</i> result{{ 's' if count > 1 }} found</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
 
                 </ul>
@@ -21,134 +22,85 @@
                 </form>
             </div>
         </nav>
+
+        {% if depts is not none %}
         <div class="row" id="department-card">
-          <div class="col-sm-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title d-name">Accounting Division</h5>
-                <p class="card-text"></p>
-                <a href="#" class="btn btn-primary btn-card">See all <i>25</i> courses</a>
-              </div>
+            {% for dept in depts %}
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title d-name">{{ dept.name }}</h5>
+                        <p class="card-text"></p>
+                        <a href="{{ url_for('department_course', dept_arg=dept.id) }}" class="btn btn-primary btn-card">See all <i>{{ dept.courses|length }}</i> courses</a>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title d-name">Africana Studies (Barnard College)</h5>
-                <p class="card-text"></p>
-                <a href="#" class="btn btn-primary btn-card">See all <i>20</i> courses</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title d-name">Anesthesiology Department</h5>
-                <p class="card-text"></p>
-                <a href="#" class="btn btn-primary btn-card">See all <i>5</i> courses</a>
-              </div>
-            </div>
-          </div>
+            {% endfor %}
         </div>
+        {% endif %}
+
+        {% if subjs is not none %}
         <div class="row" id="subject-card">
-          <div class="col-sm-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title  s-name">Accounting Division</h5>
-                <p class="card-text"></p>
-                <a href="#" class="btn btn-primary btn-card">See all <i>25</i> courses</a>
-              </div>
+            {% for subj in subjs %}
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title  s-name">{{ subj.name }}</h5>
+                        <p class="card-text"></p>
+                        <a href="#" class="btn btn-primary btn-card">See all <i>{{ subj.courses|length }}</i> courses</a>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title s-name">Africana Studiesnnnn (Barnard College)</h5>
-                <p class="card-text"></p>
-                <a href="#" class="btn btn-primary btn-card">See all <i>20</i> courses</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title s-name">Anesthesiology Department</h5>
-                <p class="card-text"></p>
-                <a href="#" class="btn btn-primary btn-card">See all <i>5</i> courses</a>
-              </div>
-            </div>
-          </div>
+            {% endfor %}
         </div>
+        {% endif %}
+
+        {% if profs is not none %}
         <div class="row" id="professor-card">
-          <div class="col-sm-4">
-            <div class="card">
-                <img class="p-photo" src="../static/img/el.jpg" alt="Smiley face" height="90" width="90">
-              <div class="card-body-p">
-                <h5 class="card-title p-name">Prof. Ewan Lowe</h5>
-                <p class="card-text p-department">Computer Science</p>
-              </div>
+            {% for prof in profs %}
+            <div class="col-sm-4">
+                <a href="{{ url_for('prof', prof_arg=prof.uni) }}">
+                    <div class="card">
+                        <img class="p-photo" src="{{ prof.avatar }}" alt="{{ prof.name }}" height="90" width="90">
+                        <div class="card-body-p">
+                            <h5 class="card-title p-name">{{ prof.name }}</h5>
+                            <p class="card-text p-department">{{ prof.department.name }}</p>
+                        </div>
+                    </div>
+                </a>
             </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="card">
-              <img class="p-photo" src="../static/img/el.jpg" alt="Smiley face" height="90" width="90">
-              <div class="card-body-p">
-                <h5 class="card-title p-name">Prof. Ewan Lowe</h5>
-                <p class="card-text p-department">Computer Science</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="card">
-              <img class="p-photo" src="../static/img/el.jpg" alt="Smiley face" height="90" width="90">
-              <div class="card-body-p">
-                <h5 class="card-title p-name">Prof. Ewan Lowe</h5>
-                <p class="card-text p-department">Computer Science</p>
-              </div>
-            </div>
-          </div>
+            {% endfor %}
         </div>
+        {% endif %}
+
+        {% if courses is not none %}
         <div class="row" id="course-card">
-          <div class="col-sm-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title c-number">COMS 3261</h5>
-                <p class="card-text c-name">Coputer Science Teory</p>
-                <p class="card-text c-subject">Subject: Computer Science</p>
-              </div>
+            {% for course in courses %}
+            <div class="col-sm-4">
+                <a href="{{ url_for('course', course_arg=course.id) }}">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="c-all">
+                            <h5 class="card-title c-number">{{ course.subject.id }} {{ course.number }}</h5>
+                            <p class="card-text c-name">{{ course.name }}</p>
+                                </div>
+                            <p class="card-text c-subject">Subject: {{ course.subject.name }}</p>
+                        </div>
+                    </div>
+                </a>
             </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title c-number">COMS 3157</h5>
-                <p class="card-text c-name">Advanced Programming</p>
-                <p class="card-text c-subject">Subject: Computer Science</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title c-number">COMS 3157</h5>
-                <p class="card-text c-name">Programming Languages and Translators</p>
-                <p class="card-text c-subject">Subject: Computer Science</p>
-              </div>
-            </div>
-          </div>
+            {% endfor %}
         </div>
-        
+        {% endif %}
+        </div>
         <nav class="nav-buttom" aria-label="Page navigation example">
-          <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-              <a class="page-link" href="#" tabindex="-1">Previous</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-              <a class="page-link" href="#">Next</a>
-            </li>
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">Next</a></li>
           </ul>
         </nav>
+
 {% endblock %}

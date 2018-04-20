@@ -10,6 +10,8 @@ import re
 from collections import defaultdict
 from flask import url_for, redirect, render_template, session, request, flash, jsonify, abort
 from flask_login import login_required, login_user, logout_user, current_user
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.sql.expression import ClauseElement
 from requests_oauthlib import OAuth2Session
 from requests.exceptions import HTTPError
 from werkzeug.routing import BaseConverter
@@ -32,6 +34,23 @@ def get_google_auth(state=None, token=None):
         return OAuth2Session(Auth.CLIENT_ID, state=state, redirect_uri=app.config['GOOGLE_OAUTH_REDIRECT_URI'])
     oauth = OAuth2Session(Auth.CLIENT_ID, redirect_uri=app.config['GOOGLE_OAUTH_REDIRECT_URI'], scope=Auth.SCOPE)
     return oauth
+
+
+def get_or_create(model, defaults=None, **kwargs):
+    instance = db.session.query(model).filter_by(**kwargs).first()
+    if instance:
+        return instance, False
+    else:
+        params = dict((k, v) for k, v in kwargs.items() if not isinstance(v, ClauseElement))
+        params.update(defaults or {})
+        instance = model(**params)
+        db.session.add(instance)
+        return instance, True
+
+
+@app.context_processor
+def injection():
+    return {'now': datetime.utcnow()}
 
 
 @app.route('/')
@@ -81,14 +100,14 @@ def oauth2callback():
             email = user_data['email']
             uni, hd = email.split('@')
             if (hd != 'columbia.edu' and hd != 'barnard.edu') or not re.compile(r'([a-z]{2,3}\d{1,4})').match(uni):
-                flash('You cannot login using this email. Please use Lionmail instead.', 'error')
+                flash('You cannot login using this email. Please use Lionmail instead.', 'danger')
                 return redirect(session.get('oauth_redirect', url_for('index')))
 
             user = User.query.filter_by(email=email).first()
             if user is None:
                 user = User()
                 user.email = email
-            user.id = user_data['id']
+            user.id = uni
             user.name = user_data['name']
             print(token)
             user.tokens = json.dumps(token)
@@ -110,7 +129,7 @@ def logout():
     return redirect(redirect_url)
 
 
-@app.route('/department', methods=["POST", "GET"])
+@app.route('/department', methods=["GET", "POST"])
 def department():
     """
     Render the template with all departments if it is the "GET" request.
@@ -255,6 +274,7 @@ def course_json(course_arg):
     all_profs_tags = [tag.text for tag in sorted(all_profs_tags_count, key=all_profs_tags_count.get, reverse=True)][:10]
     ret.append({
         'name': 'All Instructors',
+        'uni': None,
         'avatar': '',
         'rating': -1 if all_profs_count_all_comments == 0 else all_profs_sum_rating / all_profs_count_all_comments,
         'workload': -1 if all_profs_count_all_comments == 0 else all_profs_sum_workload / all_profs_count_all_comments,
@@ -271,6 +291,7 @@ def course_json(course_arg):
 
         ret.append({
             'name': cur_prof.name,
+            'uni': cur_prof.uni,
             'avatar': cur_prof.avatar,
             'rating': -1 if cur_prof_count_all_comments == 0 else cur_prof_statistics['sum_rating'] / cur_prof_count_all_comments,
             'workload': -1 if cur_prof_count_all_comments == 0 else cur_prof_statistics['sum_workload'] / cur_prof_count_all_comments,
@@ -326,6 +347,183 @@ def add_course():
     db.session.commit()
     return jsonify('OK')
 
+
+@app.route('/search/', methods=['GET'])
+def search():
+    """
+    Search department, subject, professor and course
+    :param
+        request example
+            {'dept': 'COMS', 'subj': 'COMS', 'prof': 'daniel', course: 'COMS4156', }
+    :return: rendered template
+
+    Examples:
+        /search/?prof=daniel
+    """
+    context = {}
+    context['count'] = 0
+
+    # get keywords
+    dept = request.args.get('dept')
+    subj = request.args.get('subj')
+    prof = request.args.get('prof')
+    course = request.args.get('course')
+
+    if dept is not None:
+        depts = re.split(',\s*|\s+', dept)  # split keywords by , |\s
+        results = []
+        for dept in depts:
+            for result in Department.query.filter((Department.id.like("%%" + dept + "%")) |
+                                                  (Department.name.like("%%" + dept + "%"))).all():
+                results.append(result)
+        context['depts'] = results
+        context['count'] += len(results)
+
+    if subj is not None:
+        subjs = re.split(',\s*|\s+', subj)
+        results = []
+        for subj in subjs:
+            for result in Subject.query.filter((Subject.id.like("%%" + subj + "%")) |
+                                               (Subject.name.like("%%" + subj + "%"))).all():
+                results.append(result)
+        context['subjs'] = results
+        context['count'] += len(results)
+
+    if prof is not None:
+        profs = re.split(',\s*|\s+', prof)
+        results = []
+        for prof in profs:
+            for result in Professor.query.filter((Professor.uni.like("%%" + prof + "%")) |
+                                                 (Professor.name.like("%%" + prof + "%"))).all():
+                results.append(result)
+        context['profs'] = results
+        context['count'] += len(results)
+
+    if course is not None:
+        courses = re.split(',\s*|\s+', course)
+        results = []
+        for course in courses:
+            for result in Course.query.filter((Course.id.like("%%" + course + "%")) |
+                                              (Course.name.like("%%" + course + "%"))).all():
+                results.append(result)
+        context['courses'] = results
+        context['count'] += len(results)
+    return render_template('search-result.html', **context)
+
+
+@app.route('/prof/<regex("[A-Za-z]{2,3}[0-9]{1,4}"):prof_arg>/')
+def prof(prof_arg):
+    prof = Professor.query.filter_by(uni=prof_arg.lower()).first()
+    if prof is None:
+        abort(404)
+
+    all_teachings = Teaching.query.filter_by(professor=prof).all()
+    statistics = {}  # Statistics of each course
+    # Statistics of all courses
+    all_courses_sum_rating = all_courses_sum_workload = all_courses_sum_grade = all_courses_count_all_comments = 0
+    all_courses_tags_count = {}
+    all_statistics = {}
+
+    # Statistics of all courses (i.e. all teachings)
+    for teaching in all_teachings:
+        c = teaching.course
+        cur_course_sum_rating = cur_course_sum_workload = cur_course_sum_grade = 0
+        cur_course_count_all_comments = cur_course_count_nonempty_comments = 0
+        statistics[c] = {}
+
+        all_comments = teaching.comments
+        for comment in all_comments:  # Iterate each comment
+            cur_course_count_all_comments += 1
+            cur_course_sum_rating += comment.rating
+            cur_course_sum_workload += comment.workload
+            cur_course_sum_grade += helpers.letter_grade_to_numeric(comment.grade)
+            if not (not comment.title.strip()) and not (not comment.content.strip()):
+                cur_course_count_nonempty_comments += 1
+
+            all_courses_count_all_comments += 1
+            all_courses_sum_rating += comment.rating
+            all_courses_sum_workload += comment.workload
+            all_courses_sum_grade += helpers.letter_grade_to_numeric(comment.grade)
+            # Count the frequency of all tags
+            for tag in comment.tags:
+                all_courses_tags_count[tag] = all_courses_tags_count.get(tag, 0) + 1
+
+        # Calculate ratings for the current course
+        if cur_course_count_all_comments == 0:  # If there is no comment, return N/A for rating, workload and grade
+            statistics[c]['rating'] = statistics[c]['workload'] = statistics[c]['grade'] = -1
+            statistics[c]['comment'] = 0
+        else:
+            statistics[c]['rating'] = cur_course_sum_rating / cur_course_count_all_comments
+            statistics[c]['workload'] = cur_course_sum_workload / cur_course_count_all_comments
+            statistics[c]['grade'] = cur_course_sum_grade / cur_course_count_all_comments
+            statistics[c]['comment'] = cur_course_count_nonempty_comments
+
+    # Calculate ratings for the professor
+    all_statistics['tags'] = [tag.text for tag in sorted(all_courses_tags_count, key=all_courses_tags_count.get, reverse=True)][:10]
+    if all_courses_count_all_comments == 0:  # If there is no comment, return N/A for rating, workload and grade
+        all_statistics['rating'] = all_statistics['workload'] = all_statistics['grade'] = -1
+    else:
+        all_statistics['rating'] = all_courses_sum_rating / all_courses_count_all_comments
+        all_statistics['workload'] = all_courses_sum_workload / all_courses_count_all_comments
+        all_statistics['grade'] = all_courses_sum_grade / all_courses_count_all_comments
+
+    context = {
+        'prof': prof,
+        'courses': statistics,
+        'prof_stats': all_statistics,
+    }
+    return render_template('faculty-page.html', **context)
+
+
+@app.route('/comment/', methods=["POST"])
+@login_required
+def comment():
+    if request.method == "POST":
+        redirect_url = request.args.get('redirect') or url_for('index')
+        # Retrieve teaching
+        prof_uni = request.form.get('prof', type=str)
+        course_id = request.form.get('course', type=str)
+        teaching = Teaching.query.filter_by(course_id=course_id.upper(), professor_uni=prof_uni.lower()).first()
+        if teaching is None:
+            abort(500)
+        # Retrieve request arguments
+        term_id = request.form.get('semester', type=str) + ' ' + request.form.get('year', type=str)
+        title = request.form.get('title', type=str)
+        content = request.form.get('message', type=str)
+        rating = request.form.get('rating', type=int)
+        workload = request.form.get('workload', type=int)
+        grade = request.form.get('grade', type=str)
+        tags_str = request.form.get('tags', type=str)
+        # Post check
+        if rating > 6 or rating < 1 \
+                or workload > 6 or workload < 1 \
+                or not re.compile('^[A-DF]$|^[A-C][\+-]$').match(grade):
+            flash('The values you have input are invalid. Please check and submit again.', 'danger')
+            return redirect(redirect_url)
+        tags_str_list = tags_str.split(',')
+        # Insert
+        try:
+            tags = []
+            for t in tags_str_list:
+                if t:  # Neither None nor empty string
+                    tag, _ = get_or_create(Tag, text=t.capitalize())
+                    tags.append(tag)
+            term, _ = get_or_create(Term, id=term_id)
+
+            # Check if existed
+            existed_comment = Comment.query.filter_by(user_id=current_user.id, teaching=teaching, term=term).first()
+            if existed_comment is not None:
+                flash('You have already published an evaluation before.', 'danger')
+            else:
+                comment = Comment(user_id=current_user.id, teaching=teaching, term=term,
+                                  title=title, content=content, rating=rating, workload=workload, grade=grade, tags=tags)
+                db.session.add(comment)
+                db.session.commit()
+                flash('The evaluation is published.', 'success')
+        except SQLAlchemyError:
+            flash('An error occurred when publishing the evaluation.', 'danger')
+        return redirect(redirect_url)
+>>>>>>> master
 
 
 @app.errorhandler(500)

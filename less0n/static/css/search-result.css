@@ -1,3 +1,20 @@
+html{
+    height: 100%;
+}
+body{
+    /*min-height:100%;*/
+    margin:0;
+    padding:0;
+    position:relative;
+}
+
+
+.body-main{
+    /*min-height: 100vh;*/
+    /*padding-bottom:150px;*/
+}
+
+
 .nav-child{
     margin-top: 60px;
     max-width: 1140px;
@@ -32,6 +49,7 @@
     max-width: 1140px;
     margin: 0px auto;
     margin-top: 20px;
+    /*margin-bottom: 40px;*/
 }
 
 .card{
@@ -39,11 +57,13 @@
     display: inline-block;
     border-radius:5px;
     border-left: 2px solid #e67e22;
-    margin-bottom: 0px;
+    margin-bottom: 20px;
     -webkit-box-shadow: 0 3px 3px #efefef;
     box-shadow: 0 3px 3px #efefef;
     height: 120px;   
 }
+
+
 
 .selected{
     color: #e67e22 !important;
@@ -60,6 +80,10 @@
    font-weight: 300; 
 }
 
+.btn:hover{
+    background-color: #3d7eb5
+}
+
 .btn-card{
     background-color: #55affc;
     border: none;
@@ -68,6 +92,7 @@
 .card-body-p{
     float: left;
     margin: 25px 0px;
+    color: #000000;
 }
 
 .p-photo{
@@ -77,7 +102,9 @@
 }
 
 .nav-buttom{
-    margin-top: 20px;
+    /*margin-top: -115px;*/
+    /*margin-bottom: 200px;*/
+    padding-bottom: 20px;
 }
 
 .c-number{
@@ -85,6 +112,7 @@
     font-size: 20px;
     margin: 0;
     overflow: hidden;
+    color: #000000;
 }
 .c-name{
     font-size: 20px;
@@ -94,7 +122,17 @@
     overflow:hidden;
     text-overflow: ellipsis;
     white-space:nowrap;
+    color: #000000;
 }
+
+/*.c-number:hover, .c-name:hover{*/
+    /*color: darkslateblue;*/
+/*}*/
+
+.c-all:hover * {
+    color: darkslateblue;
+}
+
 .c-subject{
     color: #d1d1d1;
     width: 300px;
@@ -121,4 +159,13 @@
     overflow:hidden;
     text-overflow: ellipsis;
     white-space:nowrap;
+}
+
+.card-body-p:hover{
+    color: darkslateblue;
+    cursor: pointer;
+}
+
+.page-item{
+    color: #55affc;
 }

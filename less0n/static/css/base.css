@@ -19,6 +19,9 @@ header {
     overflow-x: hidden;
 }
 
+#mainbody {
+    min-height: 100vh;
+}
 
 /* ----------------------------------------------- */
 /* REUSABLE COMPONENTS */
@@ -124,6 +127,12 @@ footer {
     padding: 50px;
     font-size: 80%;
     text-align: center;
+    width: 100%;
+    /*position: absolute;*/
+    /*bottom: -150px;*/
+    height: 150px;
+    position: relative;
+    /*margin-top: 20px;*/
 }
 
 footer p, footer li {
