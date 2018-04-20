@@ -10,21 +10,55 @@
 .card{
 /*    text-align: center;*/
     
-    margin: 100px auto;
+    margin: 15vh auto;
+    border-radius: 10px;
 }
 
-#top-addcourse{
-    height: 30px;
+.title {
     background-color: #e67e22;
+    color: white;
+    padding: 30px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
+
+.card-title {
+    margin-top: 0 !important;
+}
+
+.card-body {
+    margin-top: 30px;
+}
+
 .section-form{
-    margin-top: 0px;
+    margin: 0 10%;
 }
 input,select,textarea{
     font-weight: 300;
     padding-left: 10px;
     width: 100%;
     margin-bottom: 10px;
+}
+
+/*.sem {*/
+    /*padding: 0px;*/
+    /*margin: 0px;*/
+/*}*/
+
+.sem .row {
+    margin: 0px;
+}
+
+.sem .row .col-md-6:nth-child(1) {
+    margin: 0px;
+    padding: 0px;
+    padding-right: 5px;
+}
+
+.sem .row .col-md-6:nth-child(2) {
+    margin: 0px;
+    padding: 0px;
+    padding-left: 5px;
 }
 
 label{
@@ -44,10 +78,22 @@ label{
 }
 
 .button-addcourse{
+    margin-top: 0;
     padding-top: 0;
     text-align: center;
 }
 
 .btn-addcourse{
     margin: 0 100px;
+}
+
+
+
+button {
+    margin: 20px 10px;
+    width: 100px;
+}
+
+.required {
+    color: #EE3B3B;
 }
