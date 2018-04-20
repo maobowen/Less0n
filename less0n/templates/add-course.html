@@ -9,80 +9,98 @@
 {% endblock %}
 
 {% block body_main %}
-        <header id="bg">
-            <div class="card" style="width: 50rem;">
-              <div id="top-addcourse"></div>
-              <div class="card-body">
+    <header id="bg">
+        <div class="card" style="width: 50rem;">
+            <div class="title">
                 <h5 class="card-title">Add Course</h5>
-              </div>
-              <div class="card-body">
-                  <div class="section-form">
+            </div>
+            <div class="card-body">
+                <div class="section-form">
                     <div>
                         <form method="post" action="/course" class="contact-form">
                             <div class="row">
                                 <div class="col-sm-4">
-                                    <label for="course-name">Course Name</label>
+                                    <label for="course-name">Course Name <span class="required">*</span></label>
                                 </div>
                                 <div class="col-sm-8">
-                                    <input type="text" name="course-name" id="course-name" placeholder="Course name" required>
+                                    <input type="text" name="course-name" id="course-name" placeholder="University Writing" class="form-control" required>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-4">
-                                    <label for="course-number">Name</label>
+                                    <label for="course-number">Course Number <span class="required">*</span></label>
                                 </div>
                                 <div class="col">
-                                    <input type="text" name="course-number" id="course-number" placeholder="Course Number" required>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="text" id="course-number-1" name="course-number-1" placeholder="ENGL" class="form-control" disabled required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" id="course-number-2" name="course-number-2" placeholder="1010" class="form-control" required>
+                                        </div>
+                                    </div>
                                 </div>
-
                             </div>
                             <div class="row">
-                                <div class="col-sm-4">
-                                    <label for="professor-name">Professor Name</label>
+                                <div class="col-md-4">
+                                    <label for="department">Department <span class="required">*</span></label>
                                 </div>
-                                <div class="col-sm-8">
-                                    <input type="text" name="professor-name" id="professor-name" placeholder="Professor Name(autofill)" required>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <label for="department-name">Department Name</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <input type="text" name="department-name" id="department-name" placeholder="Department Name(autofill)" required>
-                                </div>
-
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <label for="semester">Semester</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <select name="semester" id="semester">
-                                        <option value="Fall 2016" selected>Fall 2016</option>
-                                        <option value="Spring 2017">Spring 2017</option>
-                                        <option value="Summer 2017">Summer 2017</option>
-                                        <option value="Fall 2017">Fall 2017</option>
-                                        <option value="Spring 2018">Spring 2018</option>
+                                <div class="col-md-8">
+                                    <select name="department" id="department" class="form-control" required>
+                                        <option value="Choose" selected="true" disabled="disabled">Choose the department</option>
+                                        <option value="Computer Science">Computer Science</option>
+                                        <option value="Electronic Engineering">Electronic Engineering</option>
                                     </select>
                                 </div>
                             </div>
-
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="subject">Subject <span class="required">*</span></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <select name="subject" id="subject" class="form-control" required>
+                                        <option value="Choose" selected="true" disabled="disabled">Choose the subject</option>
+                                        <option value="COMS">COMS</option>
+                                        <option value="ENGL">English</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="semester" class="control-label">Semester <span class="required">*</span></label>
+                                </div>
+                                <div class="col-md-8 sem">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <select name="profyear" id="profyear" class="form-control" required>
+                                                <option value="2018" selected>2018</option>
+                                                <option value="2017">2017</option>
+                                                <option value="2016">2016</option>
+                                                <option value="2015">2015</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <select name="profsemester" id="profsemester" class="form-control" required>
+                                                <option value="fall" selected>Fall</option>
+                                                <option value="spring">Spring</option>
+                                                <option value="summer">Summer</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </form>
-
                     </div>
                 </div>
-                
-                
-                
-              </div>
-              <div class="card-body button-addcourse">
-                <button type="button" class="btn btn-secondary btn-addcourse">Cancel</button>
-                <button type="button" class="btn btn-primary btn-addcourse">Submit</button>
-              </div>
             </div>
-        </header>
+            <div class="card-body button-addcourse">
+                <button type="submit" class="btn btn-success">Submit</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+{% block body2_js %}
+        <script type="text/javascript" src="{{ url_for('static', filename='js/add-course.js') }}"></script>
 {% endblock %}
