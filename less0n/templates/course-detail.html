@@ -42,40 +42,41 @@
                                             <label>Full Name <span class="required">*</span></label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input type="text" name="Fullname" placeholder="Instructor Full Name" class="form-control" required>
+                                            <input type="text" name="Fullname" placeholder="Instructor's Full Name" class="form-control" required>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <label for="Department">Department <span class="required">*</span></label>
+                                            <label for="department">Department <span class="required">*</span></label>
                                         </div>
                                         <div class="col-md-8">
-                                            <select name="Department" id="department" class="form-control" required>
+                                            <select name="dept" id="department" class="form-control" required>
                                                 <option value="Choose" selected="true" disabled="disabled">Choose the department</option>
-                                                <option value="Computer Science">Computer Science</option>
-                                                <option value="Electronic Engineering">Electronic Engineering</option>
+                                                {% for dept in depts %}
+                                                <option value="{{ dept.id }}">{{ dept.name }}</option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <label for="semester" class="control-label">Semester <span class="required">*</span></label>
+                                            <label for="profsemester" class="control-label">Semester <span class="required">*</span></label>
                                         </div>
                                         <div class="col-md-8 sem">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <select name="Profyear" id="profyear" class="form-control" required>
-                                                        <option value="2018" selected>2018</option>
-                                                        <option value="2017">2017</option>
-                                                        <option value="2016">2016</option>
-                                                        <option value="2015">2015</option>
+                                                    <select name="year" id="profyear" class="form-control" required>
+                                                        <option value="{{ now.year }}" selected>{{ now.year }}</option>
+                                                        {% for y in range(now.year - 1, now.year - 5, -1) %}
+                                                        <option value="{{ y }}">{{ y }}</option>
+                                                        {% endfor %}
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <select name="Profsemester" id="profsemester" class="form-control" required>
-                                                        <option value="fall" selected>Fall</option>
-                                                        <option value="spring">Spring</option>
-                                                        <option value="summer">Summer</option>
+                                                    <select name="semester" id="profsemester" class="form-control" required>
+                                                        <option value="Fall" selected>Fall</option>
+                                                        <option value="Spring">Spring</option>
+                                                        <option value="Summer">Summer</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -287,7 +288,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label for="Tags">Tags</label>
+                                        <label for="tags">Tags</label>
                                     </div>
                                     <div class="col-md-8">
                                         <input type="text" name="tags" value="Interesting,Useful" data-role="tagsinput" id="tags" class="form-control">

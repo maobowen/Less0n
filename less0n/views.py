@@ -195,10 +195,12 @@ def department_course(dept_arg):
 @app.route('/course/<regex("[A-Za-z]{4}[A-Za-z0-9]{4,5}"):course_arg>/')
 def course(course_arg):
     c = Course.query.filter_by(id=course_arg.upper()).first()
+    depts = Department.query.all()
     if c is None:
         return redirect(url_for('department'))
     context = {
         'course': c,
+        'depts': depts,
     }
     return render_template('course-detail.html', **context)
 
@@ -300,8 +302,6 @@ def course_json(course_arg):
             'comments': cur_prof_statistics['nonempty_comments'],
         })
     return jsonify(ret)
-
-
 
 
 @app.route('/search/', methods=['GET'])
