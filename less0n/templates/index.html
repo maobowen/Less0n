@@ -27,8 +27,14 @@
                     </ul>
                     <ul class="main-nav">
                         {%- if current_user.is_authenticated -%}
-                        <li class="loginall1"><img class="user-logo" src="{{current_user.avatar}}?sz=50" width="50" height="50" alt="{{current_user.name}}"> {{current_user.name}}</li>
-                        <li><a href="{{ url_for('logout') }}">Sign out</a></li>
+                            <div class="dropdown">
+                                <button class="dropbtn"><li class="loginall1"><img class="user-logo" src="{{current_user.avatar}}?sz=50" width="50" height="50" alt="{{current_user.name}}"> {{current_user.name}}</li></button>
+                                <div class="dropdown-content">
+                                    <a href="#">Sign Out</a>
+                                    </div>
+                            </div>
+{#                            <li class="loginall1"><img class="user-logo" src="{{current_user.avatar}}?sz=50" width="50" height="50" alt="{{current_user.name}}"> {{current_user.name}}</li>#}
+{#                        <li><a href="{{ url_for('logout') }}">Sign out</a></li>#}
                         {%- else -%}
                         <li><a href="{{ url_for('login') }}?redirect={{ request.path }}">Sign in with Lionmail</a></li>
                         {%- endif -%}
