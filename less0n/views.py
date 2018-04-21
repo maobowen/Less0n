@@ -694,7 +694,7 @@ def approve_new_prof():
     url = request.form['url']
     approved = request.form['approved']
 
-    approved_types = {'Approved': ApprovalType.PENDING, 'Pending': ApprovalType.PENDING,
+    approved_types = {'Approved': ApprovalType.APPROVED, 'Pending': ApprovalType.PENDING,
                      'Declined': ApprovalType.DECLINED}
 
     # check parameters
@@ -734,6 +734,19 @@ def approve_new_prof():
     db.session.commit()
 
     return jsonify('OK')
+
+
+@app.route('/admin/prof/<regex("(approved|declined|pending)"):req_type>', methods=['GET'])
+def get_new_prof_request(req_type):
+    """
+    :param req_type: enum (approved|declined|pending)
+    :return:
+    """
+    approved_types = {'approved': ApprovalType.APPROVED, 'pending': ApprovalType.PENDING,
+                      'declined': ApprovalType.DECLINED}
+
+    new_prof_requests = AddProfRequest.query.filter_by(approved=approved_types[req_type]).all()
+    return 'request type is ' +req_type
 
 
 @app.errorhandler(500)
