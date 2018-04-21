@@ -266,7 +266,7 @@ class MainTest(unittest.TestCase):
         }
         """
         test_cases = (
-            {'name': 'Clifford Stein', 'department': 'COMS', 'semester': 'Fall', 'year': '2016'},
+            {'name': 'Clifford Stein', 'department': 'COMS', 'course': 'COMS4701', 'semester': 'Fall', 'year': '2016'},
         )
 
         current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
@@ -274,13 +274,14 @@ class MainTest(unittest.TestCase):
             rv = self.app.post('/prof/new/', data=dict(
                 name=test_case['name'],
                 department=test_case['department'],
+                course=test_case['course'],
                 semester=test_case['semester'],
                 year=test_case['year'],
             ))
             assert rv._status_code == 302
             assert rv.content_type == 'text/html; charset=utf-8'
             profs = AddProfRequest.query.filter_by(name=test_case['name'],
-                                                   department_id=test_case['department'],
+                                                   department_id=test_case['department'], course_id=test_case['course'],
                                                    term_id=test_case['semester'] + ' ' + test_case['year']).all()
             assert profs is not None
             assert len(profs) > 0

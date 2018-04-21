@@ -12,8 +12,8 @@
         <div class="jumbotron jumbotron-fluid">
             <div class="container">
                 <div class="course-title">
-                    <h3 class="display-4">Admin Console</h3>
-                    <h3 class="display-5">Admin Id#: yh2961</h3>
+                    <h3 class="display-4">Console</h3>
+                    <h3 class="display-5">{{ current_user.name }} ({{ current_user.id }})</h3>
                 </div>
             </div>
         </div>
@@ -21,82 +21,66 @@
         <div class="statistics container">
             <div class="row">
                 <div class="stats_box tab col-md-2">
-                    <button class="tablinks" onclick="openCity(event, 'course_tab')" id="defaultOpen">Course Request (5)</button>
-                    <button class="tablinks" onclick="openCity(event, 'professor_tab')">Instructor Request (12)</button>
+                    <button class="tablinks" onclick="openCity(event, 'course_tab')" id="defaultOpen">Course Requests ({{ course_requests|length }})</button>
+                    <button class="tablinks" onclick="openCity(event, 'professor_tab')">Instructor Requests ({{ prof_requests|length }})</button>
                 </div>
 
                 <div class="stats_box col-md-10">
                     <div id="course_tab" class="tabcontent">
-                        <h3>Course Request</h3>
+                        <h3>Course Requests</h3>
                         <table id="tabCourse" class="table">
                             <tr>
                                 <th>ID</th>
+                                <th EditType="TextBox">Course ID</th>
                                 <th EditType="TextBox">Course No.</th>
                                 <th EditType="TextBox">Course Name</th>
                                 <th EditType="TextBox">Department</th>
                                 <th EditType="TextBox">Subject</th>
-                                <th>Decision</th>
+                                <th>Semester</th>
+                                <th>Approve</th>
                             </tr>
-                            <tr>
-                                <td>#123</td>
-                                <td>COMS4170</td>
-                                <td>AI</td>
-                                <td>COMS</td>
-                                <td>COMS</td>
+                            {% for course_request in course_requests %}
+                            <tr data-request="course-request-{{ course_request.id }}">
+                                <td>{{ course_request.id }}</td>
+                                <td>{{ course_request.course_id}}</td>
+                                <td>{{ course_request.course_number }}</td>
+                                <td>{{ course_request.course_name }}</td>
+                                <td>{{ course_request.department.id }}</td>
+                                <td>{{ course_request.subject.id}}</td>
+                                <td>{{ course_request.term.id }}</td>
                                 <td><button class="btn btn-success approve"><i class="fa fa-check"></i></button><button class="btn btn-danger decline"><i class="fa fa-trash"></i></button></td>
                             </tr>
-                            <tr>
-                                <td>#124</td>
-                                <td>COMS4170</td>
-                                <td>AI</td>
-                                <td>COMS</td>
-                                <td>COMS</td>
-                                <td><button class="btn btn-success approve"><i class="fa fa-check"></i></button><button class="btn btn-danger decline"><i class="fa fa-trash"></i></button></td>
-                            </tr>
-                            <tr>
-                                <td>#124</td>
-                                <td>COMS4170</td>
-                                <td>AI</td>
-                                <td>COMS</td>
-                                <td>COMS</td>
-                                <td><button class="btn btn-success approve"><i class="fa fa-check"></i></button><button class="btn btn-danger decline"><i class="fa fa-trash"></i></button></td>
-                            </tr>
+                            {% endfor %}
                         </table>
                     </div>
 
                     <div id="professor_tab" class="tabcontent">
-                        <h3>Instructor Request</h3>
+                        <h3>Instructor Requests</h3>
                         <table id="tabProf" class="table">
                             <tr>
                                 <th>ID</th>
-                                <th EditType="TextBox">Instructor</th>
+                                <th EditType="TextBox">Name</th>
                                 <th EditType="TextBox">UNI</th>
-                                <th EditType="TextBox">Dept</th>
+                                <th EditType="TextBox">Department</th>
+                                <th EditType="TextBox">Course</th>
                                 <th>Semester</th>
                                 <th EditType="TextBox">Avatar</th>
-                                <th EditType="TextBox">URL</th>
-                                <th>Decision</th>
+                                <th EditType="TextBox">Website</th>
+                                <th>Approve</th>
                             </tr>
-                            <tr>
-                                <td>#23</td>
-                                <td>Ewan Lowe</td>
-                                <td>etl2115</td>
-                                <td>COMS</td>
-                                <td>2018 Fall</td>
-                                <td>http://avatar.com</td>
-                                <td>http://url.com</td>
+                            {% for prof_request in prof_requests %}
+                            <tr data-request="prof-request-{{ prof_request.id }}">
+                                <td>{{ prof_request.id }}</td>
+                                <td>{{ prof_request.name }}</td>
+                                <td></td>
+                                <td>{{ prof_request.department.id }}</td>
+                                <td>{{ prof_request.course.id }}</td>
+                                <td>{{ prof_request.term.id }}</td>
+                                <td></td>
+                                <td></td>
                                 <td><button class="btn btn-success approve"><i class="fa fa-check"></i></button><button class="btn btn-danger decline"><i class="fa fa-trash"></i></button></td>
                             </tr>
-                            <tr>
-                                <td>#24</td>
-                                <td>Ewan Lowe</td>
-                                <td>etl2115</td>
-                                <td>COMS</td>
-                                <td>2018 Fall</td>
-                                <td>http://avatar.com</td>
-                                <td>http://url.com</td>
-                                <td><button class="btn btn-success approve"><i class="fa fa-check"></i></button><button class="btn btn-danger decline"><i class="fa fa-trash"></i></button></td>
-                            </tr>
+                            {% endfor %}
                         </table>
                     </div>
                 </div>

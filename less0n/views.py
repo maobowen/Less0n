@@ -124,7 +124,7 @@ def oauth2callback():
             # Register membership
             role_student = Role.query.filter_by(name='student').first()
             role_instructor = Role.query.filter_by(name='instructor').first()
-            if not has_membership(user.id, role_instructor):
+            if not has_membership(user.id, role_instructor) and not has_membership(user.id, role_student):
                 db.session.add(Membership(user=user, role=role_student))
                 db.session.commit()
 
@@ -526,7 +526,7 @@ def add_new_prof():
     redirect_url = request.args.get('redirect') or url_for('index')
 
     # Pre check
-    form_arguments = {'name', 'department', 'semester', 'year'}
+    form_arguments = {'name', 'department', 'course', 'semester', 'year'}
     for arg in form_arguments:
         if arg not in request.form:
             abort(404)
@@ -534,11 +534,13 @@ def add_new_prof():
     # Retrieve request arguments
     name = request.form.get('name', type=str)
     department_id = request.form.get('department', type=str)
+    course_id = request.form.get('course', type=str)
     term_id = request.form.get('semester', type=str) + ' ' + request.form.get('year', type=str)
 
     # Post check
     department = Department.query.filter_by(id=department_id).first()
-    for param in (name, department, term_id):  # None or empty
+    course = Course.query.filter_by(id=course_id).first()
+    for param in (name, department, course, term_id):  # None or empty
         if not param:
             flash('The values you have input are invalid. Please check and submit again.', 'danger')
             return redirect(redirect_url)
@@ -547,7 +549,7 @@ def add_new_prof():
     try:
         term, _ = get_or_create(Term, id=term_id)
         add_prof_request = AddProfRequest(
-            name=name, department=department, term=term,
+            name=name, department=department, course=course, term=term,
             user_id=current_user.id, approved=ApprovalType.PENDING)
         db.session.add(add_prof_request)
         db.session.commit()
@@ -605,6 +607,23 @@ def comment():
         except SQLAlchemyError:
             flash('An error occurred when publishing the evaluation.', 'danger')
         return redirect(redirect_url)
+
+
+@app.route('/admin/', methods=['GET'])
+@login_required
+def admin():
+    role_admin = Role.query.filter_by(name='admin').first()
+    if has_membership(current_user.id, role_admin):
+        course_requests = AddCourseRequest.query.filter_by(approved=ApprovalType.PENDING).all()
+        prof_requests = AddProfRequest.query.filter_by(approved=ApprovalType.PENDING).all()
+        context = {
+            'course_requests': course_requests,
+            'prof_requests': prof_requests,
+        }
+        return render_template('admin.html', **context)
+    else:
+        flash('You do not have the permission to view this page.', 'danger')
+        return redirect(url_for('index'), code=401)
 
 
 # Routes for admins

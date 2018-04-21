@@ -8,7 +8,7 @@ $("#course_tab .approve").click(function(){
         course_name: $("#course_tab tr:nth-child(" + (index + 1) + " td:nth-child(3))").text(),
         department: $("#course_tab tr:nth-child(" + (index + 1) + " td:nth-child(4))").text(),
         subject: $("#course_tab tr:nth-child(" + (index + 1) + " td:nth-child(5))").text(),
-        decision: "True",
+        decision: true
     });
 });
 
@@ -21,7 +21,21 @@ $("#course_tab .decline").click(function(){
         course_name: $("#course_tab tr:nth-child(" + (index + 1) + " td:nth-child(3))").text(),
         department: $("#course_tab tr:nth-child(" + (index + 1) + " td:nth-child(4))").text(),
         subject: $("#course_tab tr:nth-child(" + (index + 1) + " td:nth-child(5))").text(),
-        decision: "False",
+        decision: false
+    });
+});
+
+$("#professor_tab .approve").click(function(){
+    var index = $("#professor_tab .approve").index(this);
+    $.post("/url/",
+    {
+        request_id: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(1))").text(),
+        name: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(2))").text(),
+        uni: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(3))").text(),
+        department: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(4))").text(),
+        avatar: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(5))").text(),
+        url: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(6))").text(),
+        decision: true
     });
 });
 
@@ -35,21 +49,7 @@ $("#professor_tab .decline").click(function(){
         department: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(4))").text(),
         avatar: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(5))").text(),
         url: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(6))").text(),
-        decision: "True",
-    });
-});
-
-$("#professor_tab .decline").click(function(){
-    var index = $("#professor_tab .decline").index(this);
-    $.post("/url/",
-    {
-        request_id: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(1))").text(),
-        name: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(2))").text(),
-        uni: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(3))").text(),
-        department: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(4))").text(),
-        avatar: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(5))").text(),
-        url: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(6))").text(),
-        decision: "False",
+        decision: false
     });
 });
 

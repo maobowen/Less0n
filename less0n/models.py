@@ -37,9 +37,9 @@ class Membership(db.Model):
     __tablename__ = 'memberships'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.String(40), db.ForeignKey('users.id'), nullable=False)
-    user = db.relation(User, backref='users', lazy=True)
+    user = db.relation(User, backref='memberships', lazy=True)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
-    role = db.relation(Role, backref='roles', lazy=True)
+    role = db.relation(Role, backref='memberships', lazy=True)
     __table_args__ = (
         db.UniqueConstraint('user_id', 'role_id', name='_memberships_uc'),
     )
@@ -168,6 +168,8 @@ class AddProfRequest(db.Model):
     name = db.Column(db.String(100), nullable=False)  # Ewan Lowe
     department_id = db.Column(db.String(6), db.ForeignKey('departments.id'), nullable=False)  # COMS
     department = db.relationship('Department', backref='professor_requests', lazy=True)
+    course_id = db.Column(db.String(12), db.ForeignKey('courses.id'), nullable=False)  # CSEE3827
+    course = db.relation(Course, lazy=True)
     term_id = db.Column(db.String(12), db.ForeignKey('terms.id'), nullable=False)
     term = db.relation(Term, lazy=True)
     approved = db.Column(db.Enum(ApprovalType), nullable=False)

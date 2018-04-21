@@ -241,6 +241,42 @@ def init_db():
         db.session.add(comment)
     db.session.commit()
 
+    # Adding instructor requests
+    add_prof_requests = {
+        1: AddProfRequest(id=1, user=users['bm2734'], name='James McInerney', department=depts['COMS'],
+                          course=courses['COMS4771'], term=terms['Fall 2017'], approved=ApprovalType.PENDING),
+        2: AddProfRequest(id=2, user=users['bm2734'], name='Alfred V. Aho', department=depts['COMS'],
+                          course=courses['COMS3261'], term=terms['Fall 2016'], approved=ApprovalType.PENDING),
+        3: AddProfRequest(id=3, user=users['bm2734'], name='Xi Chen', department=depts['COMS'],
+                          course=courses['COMS3261'], term=terms['Fall 2016'], approved=ApprovalType.PENDING),
+    }
+    for _, add_prof_request in add_prof_requests.items():
+        db.session.add(add_prof_request)
+    db.session.commit()
+
+    # Adding course requests
+    add_course_requests = {
+        1: AddCourseRequest(id=1, user=users['bm2734'], course_id='COMS3137', course_number='3137',
+                            course_name='Honors Data Structures and Algorithms',
+                            department=depts['COMS'], subject=subjs['COMS'],
+                            term=terms['Fall 2017'], approved=ApprovalType.PENDING),
+        2: AddCourseRequest(id=2, user=users['bm2734'], course_id='COMS4172', course_number='4172',
+                            course_name='3D User Interfaces and Augmented Reality',
+                            department=depts['COMS'], subject=subjs['COMS'],
+                            term=terms['Spring 2018'], approved=ApprovalType.PENDING),
+        3: AddCourseRequest(id=3, user=users['bm2734'], course_id='COMS4170', course_number='4170',
+                            course_name='User Interface Design',
+                            department=depts['COMS'], subject=subjs['COMS'],
+                            term=terms['Spring 2018'], approved=ApprovalType.PENDING),
+        4: AddCourseRequest(id=4, user=users['bm2734'], course_id='MATH3020', course_number='3020',
+                            course_name='Number Theory and Cryptography',
+                            department=depts['MATH'], subject=subjs['MATH'],
+                            term=terms['Spring 2018'], approved=ApprovalType.PENDING),
+    }
+    for _, add_course_request in add_course_requests.items():
+        db.session.add(add_course_request)
+    db.session.commit()
+
     print('Done!')
 
 
