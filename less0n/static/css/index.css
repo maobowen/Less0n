@@ -349,13 +349,13 @@ input[type=submit]:active {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
-
 .dropbtn {
     background-color: transparent;
     color: white;
     padding-right: 10px;
     /*font-size: 16px;*/
     border: none;
+    margin-bottom: 5px;
 
 }
 
@@ -369,7 +369,7 @@ input[type=submit]:active {
     position: absolute;
     background-color: transparent;
     /*min-width: 0px;*/
-    width: 200px;
+    width: 300px;
     /*box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);*/
     z-index: 1;
     align-content: right;
@@ -378,8 +378,8 @@ input[type=submit]:active {
 
 .dropdown-content a {
     color: #FFFFFF;
-    padding: 15px 16px;
-    margin-left: 80px;
+    padding: 16px 16px;
+    margin-left: 50px;
     text-decoration: none;
     display: block;
     /*box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);*/
