@@ -639,6 +639,8 @@ def approve_new_course():
     :return: json-str.
         "OK" if add successfully. "Fail" + error info if subject / department / professor not exists.
     """
+    redirect_url = request.args.get('redirect') or url_for('index')
+
     # get parameters
     course_name = request.form["course-name"]
     course_number = request.form["course-number"]
@@ -648,7 +650,7 @@ def approve_new_course():
     # check parameters
     for param in (course_name, course_number, professor_name, department_name):
         if param == None or len(param) == 0:
-            return jsonify('Fail')
+            return redirect(redirect_url, code='404')
 
     # extract parameters
     subject_id = course_number[0: 4] # COMS4156 -> COMS
@@ -662,7 +664,7 @@ def approve_new_course():
     # check objects
     for obj in (subject, department, professor):
         if obj == None:
-            return jsonify('Fail')
+            return redirect(redirect_url, code='404')
 
     # construct objects
     course = Course(id=course_number, subject=subject, number=number, department=department, name=course_name)
@@ -678,75 +680,78 @@ def approve_new_course():
 @app.route('/admin/prof', methods=['POST'])
 def approve_new_prof():
     """
-    Admin approves a course.
-    - Add a new course to Course entity
-    - Add a new teaching to Teaching entity
+    Admin approves a prof.
+
+    Example:
+    {
+        "id": 1,
+        "uni": "ab1234",
+        "prof_name: "Alpha Beta",
+        "department_id": "COMS",
+        "term_id": "Fall 2017",
+        "course_id": "COMS4115",
+        "avatar": "",
+        "url": "",
+        "approved": "Declined"
+    }
 
     :return: json-str.
         "OK" if add successfully. "Fail" + error info if subject / department / professor not exists.
     """
+    redirect_url = request.args.get('redirect') or url_for('index')
+
     # get parameters
+    id = request.form['id']
     uni = request.form['uni']
     prof_name = request.form["name"]
     department_id = request.form["department_id"]
     term_id = request.form["term_id"]
     avatar = request.form['avatar']
     url = request.form['url']
+    course_id = request.form['course_id']
     approved = request.form['approved']
 
     approved_types = {'Approved': ApprovalType.APPROVED, 'Pending': ApprovalType.PENDING,
                      'Declined': ApprovalType.DECLINED}
 
     # check parameters
-    for param in (uni, prof_name, department_id, term_id, approved):
+    for param in (id, uni, prof_name, department_id, term_id, course_id, approved):
         if param == None or len(param) == 0:
-            return jsonify('Fail')
-
+            return redirect(redirect_url, code='404')
 
     # check if this professor exists
-    if len(Professor.query.filter_by(uni=uni).all()) != 0:
-        return jsonify('Fail')
-
     if approved == 'Declined':
         pass
+
     elif approved == 'Approved':
         # get objects
         department = Department.query.filter_by(id=department_id).first()
         term = Term.query.filter_by(id=term_id).first()
+        course = Course.query.filter_by(id=course_id).first()
 
         # check objects
-        for obj in (department, term):
-            if obj == None:
-                return jsonify('Fail')
+        for obj in (department, term, course):
+            if obj is None:
+                return redirect(redirect_url, code='404')
 
-        # construct objects
-        prof = Professor(uni=uni, name=prof_name, department=department,
+        # update professor if not exist
+        professor = Professor(uni=uni, name=prof_name, department=department,
                          avatar=avatar, url=url)
+        if Professor.query.filter_by(uni=uni).first() is not None:
+            # construct objects
+            db.session.add(professor)
 
-        # add to db
-        db.session.add(prof)
-        # db.session.commit()
+        # update teaching if not exist
+        teaching = Teaching(course=course, professor=professor)
+        if len(Teaching.query.filter_by(course_id=course_id, professor_uni=uni).all()) == 0:
+            db.session.add(teaching)
 
     # update the approved column
-    new_prof_requests = AddProfRequest.query.filter_by(name=prof_name, department_id=department_id, term_id=term_id).all()
-    for new_prof_request in new_prof_requests:
-        new_prof_request.approved = approved_types[approved]
+    new_prof_request = AddProfRequest.query.filter_by(id=id).first()
+    new_prof_request.approved = approved_types[approved]
     db.session.commit()
 
     return jsonify('OK')
-
-
-@app.route('/admin/prof/<regex("(approved|declined|pending)"):req_type>', methods=['GET'])
-def get_new_prof_request(req_type):
-    """
-    :param req_type: enum (approved|declined|pending)
-    :return:
-    """
-    approved_types = {'approved': ApprovalType.APPROVED, 'pending': ApprovalType.PENDING,
-                      'declined': ApprovalType.DECLINED}
-
-    new_prof_requests = AddProfRequest.query.filter_by(approved=approved_types[req_type]).all()
-    return 'request type is ' +req_type
 
 
 @app.errorhandler(500)

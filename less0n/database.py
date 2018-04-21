@@ -243,6 +243,8 @@ def init_db():
 
     # Adding instructor requests
     add_prof_requests = [
+        AddProfRequest(user=users['zj2226'], name='Alpha Beta', department=depts['COMS'],
+                       course=courses['COMS4115'], term=terms['Fall 2017'], approved=ApprovalType.PENDING),
         AddProfRequest(user=users['bm2734'], name='James McInerney', department=depts['COMS'],
                        course=courses['COMS4771'], term=terms['Fall 2017'], approved=ApprovalType.PENDING),
         AddProfRequest(user=users['bm2734'], name='Alfred V. Aho', department=depts['COMS'],

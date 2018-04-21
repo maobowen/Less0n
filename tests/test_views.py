@@ -315,14 +315,14 @@ class MainTest(unittest.TestCase):
             ))
             assert rv.status == '404 NOT FOUND'
 
-
     def testApproveNewProfWithValidArg(self):
         """
         Test if approve_new_prof() return
         Test case:
         --------------------------------------------------
         Input                                              Expected Output
-        {
+        {                                                   200 OK
+        'id': 1
         'uni': 'ab1234',
         'name': 'Alpha Beta',
         'department_id': 'COMS',
@@ -334,6 +334,7 @@ class MainTest(unittest.TestCase):
         """
         test_cases = (
             {
+                'id': 1,
                 'user_id': 'zj2226',
                 'uni': 'ab1234',
                 'name': 'Alpha Beta',
@@ -341,31 +342,118 @@ class MainTest(unittest.TestCase):
                 'term_id': 'Fall 2017',
                 'avatar': '',
                 'url': '',
-                'approved': 'Approved'
+                'approved': 'Approved',
+                'course_id': 'COMS4115'
             },
+            {
+                'id': 1,
+                'user_id': 'zj2226',
+                'uni': 'ab1234',
+                'name': 'Alpha Beta',
+                'department_id': 'COMS',
+                'term_id': 'Fall 2017',
+                'avatar': '',
+                'url': '',
+                'approved': 'Declined',
+                'course_id': 'COMS4115'
+            }
         )
 
         # current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
         for test_case in test_cases:
             rv = self.app.post('/admin/prof', data=dict(
+                id=test_case['id'],
                 uni=test_case['uni'],
                 name=test_case['name'],
                 department_id=test_case['department_id'],
                 term_id=test_case['term_id'],
                 avatar=test_case['avatar'],
                 url=test_case['url'],
+                course_id=test_case['course_id'],
                 approved=test_case['approved']
             ))
             assert rv._status_code == 200
-            # assert rv.content_type == 'text/html; charset=utf-8'
-            profs = Professor.query.filter_by(uni=test_case['uni']).all()
-            assert profs is not None
-            assert len(profs) > 0
 
-            # delete records
-            for prof in profs:
-                db.session.delete(prof)
-            db.session.commit()
+            if test_case['approved'] == 'Approved':
+                profs = Professor.query.filter_by(uni=test_case['uni']).all()
+                assert profs is not None
+                assert len(profs) > 0
+
+                teachings = Teaching.query.filter_by(course_id=test_case['course_id'],
+                                                     professor_uni=test_case['uni']).all()
+
+                assert teachings is not None
+                assert len(teachings) > 0
+
+                # check request
+                add_prof_request = AddProfRequest.query.filter_by(id=test_case['id']).first()
+                assert add_prof_request is not None
+                assert add_prof_request.approved == ApprovalType.APPROVED
+
+                # delete records
+                for prof in profs:
+                    db.session.delete(prof)
+
+                for teaching in teachings:
+                    db.session.delete(teaching)
+
+                db.session.commit()
+
+            elif test_case['approved'] == 'Declined':
+                # check request
+                add_prof_request = AddProfRequest.query.filter_by(id=test_case['id']).first()
+                assert add_prof_request is not None
+                assert add_prof_request.approved == ApprovalType.DECLINED
+
+    def testApproveNewProfWithUnvalidArg(self):
+        """
+        Test if approve_new_prof() return
+        Test case:
+        --------------------------------------------------
+        Input                                              Expected Output
+        """
+        test_cases = (
+            {
+                'id': 1,
+                'user_id': 'zj2226',
+                'uni': 'ab1234',
+                'name': 'Alpha Beta',
+                'department_id': 'AAAA',
+                'term_id': 'Fall 2017',
+                'avatar': '',
+                'url': '',
+                'approved': 'Approved',
+                'course_id': 'COMS4115'
+            },
+            {
+                'id': 1,
+                'user_id': 'zj2226',
+                'uni': 'ab1234',
+                'name': 'Alpha Beta',
+                'department_id': 'COMS',
+                'term_id': '',
+                'avatar': '',
+                'url': '',
+                'approved': 'Approved',
+                'course_id': 'COMS4115'
+            }
+        )
+
+        # current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
+        for test_case in test_cases:
+            rv = self.app.post('/admin/prof', data=dict(
+                id=test_case['id'],
+                uni=test_case['uni'],
+                name=test_case['name'],
+                department_id=test_case['department_id'],
+                term_id=test_case['term_id'],
+                avatar=test_case['avatar'],
+                url=test_case['url'],
+                course_id=test_case['course_id'],
+                approved=test_case['approved']
+            ))
+            assert rv._status_code == 404
+            # assert rv.content_type == 'text/html; charset=utf-8'
 
 
 if __name__ == '__main__':
