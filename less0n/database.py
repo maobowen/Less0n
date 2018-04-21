@@ -241,16 +241,6 @@ def init_db():
         db.session.add(comment)
     db.session.commit()
 
-    # Add prof request
-
-    add_prof_requests = {
-        1: AddProfRequest(id=1, user=users['zj2226'], name='Alpha Beta', department=depts['COMS'],
-                          term=terms['Fall 2017'], approved=ApprovalType.PENDING),
-    }
-    for _, add_prof_request in add_prof_requests.items():
-        db.session.add(add_prof_request)
-    db.session.commit()
-
     print('Done!')
 
 
