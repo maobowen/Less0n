@@ -614,18 +614,76 @@ def comment():
 @app.route('/admin/', methods=['GET'])
 @login_required
 def admin():
+    """Return the admin page, or redirect to index page if not authorized."""
     role_admin = Role.query.filter_by(name='admin').first()
-    if has_membership(current_user.id, role_admin):
-        course_requests = AddCourseRequest.query.filter_by(approved=ApprovalType.PENDING).all()
-        prof_requests = AddProfRequest.query.filter_by(approved=ApprovalType.PENDING).all()
-        context = {
-            'course_requests': course_requests,
-            'prof_requests': prof_requests,
-        }
-        return render_template('admin.html', **context)
+    if current_user.is_authenticated and has_membership(current_user.id, role_admin):
+        return render_template('admin.html')
     else:
         flash('You do not have the permission to view this page.', 'danger')
         return redirect(url_for('index'), code=401)
+
+
+@app.route('/admin/course', methods=['GET'])
+@login_required
+def admin_list_course_request():
+    """Return a JSON containing adding course requests, or raise 401 if not authorized."""
+    role_admin = Role.query.filter_by(name='admin').first()
+    if current_user.is_authenticated and has_membership(current_user.id, role_admin):
+        list_approved = request.args.get('approved', type=int) or 0
+        list_pending = request.args.get('pending', type=int) or 0
+        list_declined = request.args.get('declined', type=int) or 0
+        course_requests = []
+        if list_approved:
+            course_requests.extend(AddCourseRequest.query.filter_by(approved=ApprovalType.APPROVED).all())
+        if list_pending:
+            course_requests.extend(AddCourseRequest.query.filter_by(approved=ApprovalType.PENDING).all())
+        if list_declined:
+            course_requests.extend(AddCourseRequest.query.filter_by(approved=ApprovalType.DECLINED).all())
+        ret = []
+        for course_request in course_requests:
+            ret.append({
+                'id': course_request.id,
+                'subject_id': course_request.subject.id,
+                'course_number': course_request.course_number,
+                'course_name': course_request.course_name,
+                'department_id': course_request.department.id,
+                'term_id': course_request.term.id,
+                'approved': course_request.approved.value,
+            })
+        return jsonify(ret)
+    else:
+        abort(401)
+
+
+@app.route('/admin/prof', methods=['GET'])
+@login_required
+def admin_list_prof_request():
+    """Return a JSON containing adding instructor requests, or raise 401 if not authorized."""
+    role_admin = Role.query.filter_by(name='admin').first()
+    if current_user.is_authenticated and has_membership(current_user.id, role_admin):
+        list_approved = request.args.get('approved', type=int) or 0
+        list_pending = request.args.get('pending', type=int) or 0
+        list_declined = request.args.get('declined', type=int) or 0
+        prof_requests = []
+        if list_approved:
+            prof_requests.extend(AddProfRequest.query.filter_by(approved=ApprovalType.APPROVED).all())
+        if list_pending:
+            prof_requests.extend(AddProfRequest.query.filter_by(approved=ApprovalType.PENDING).all())
+        if list_declined:
+            prof_requests.extend(AddProfRequest.query.filter_by(approved=ApprovalType.DECLINED).all())
+        ret = []
+        for prof_request in prof_requests:
+            ret.append({
+                'id': prof_request.id,
+                'name': prof_request.name,
+                'department_id': prof_request.department.id,
+                'course_id': prof_request.course.id,
+                'term_id': prof_request.term.id,
+                'approved': prof_request.approved.value,
+            })
+        return jsonify(ret)
+    else:
+        abort(401)
 
 
 # Routes for admins
