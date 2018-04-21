@@ -675,6 +675,67 @@ def approve_new_course():
     return jsonify('OK')
 
 
+@app.route('/admin/prof', methods=['POST'])
+def approve_new_prof():
+    """
+    Admin approves a course.
+    - Add a new course to Course entity
+    - Add a new teaching to Teaching entity
+
+    :return: json-str.
+        "OK" if add successfully. "Fail" + error info if subject / department / professor not exists.
+    """
+    # get parameters
+    uni = request.form['uni']
+    prof_name = request.form["name"]
+    department_id = request.form["department_id"]
+    term_id = request.form["term_id"]
+    avatar = request.form['avatar']
+    url = request.form['url']
+    approved = request.form['approved']
+
+    approved_types = {'Approved': ApprovalType.PENDING, 'Pending': ApprovalType.PENDING,
+                     'Declined': ApprovalType.DECLINED}
+
+    # check parameters
+    for param in (uni, prof_name, department_id, term_id, approved):
+        if param == None or len(param) == 0:
+            return jsonify('Fail')
+
+
+    # check if this professor exists
+    if len(Professor.query.filter_by(uni=uni).all()) != 0:
+        return jsonify('Fail')
+
+    if approved == 'Declined':
+        pass
+    elif approved == 'Approved':
+        # get objects
+        department = Department.query.filter_by(id=department_id).first()
+        term = Term.query.filter_by(id=term_id).first()
+
+        # check objects
+        for obj in (department, term):
+            if obj == None:
+                return jsonify('Fail')
+
+        # construct objects
+        prof = Professor(uni=uni, name=prof_name, department=department,
+                         avatar=avatar, url=url)
+
+        # add to db
+        db.session.add(prof)
+        # db.session.commit()
+
+    # update the approved column
+    new_prof_requests = AddProfRequest.query.filter_by(name=prof_name, department_id=department_id, term_id=term_id).all()
+    for new_prof_request in new_prof_requests:
+        new_prof_request.approved = approved_types[approved]
+    db.session.commit()
+
+    return jsonify('OK')
+
+
 @app.errorhandler(500)
 def server_error(e):
     logging.exception('An error occurred during a request.')
