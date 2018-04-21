@@ -314,6 +314,56 @@ class MainTest(unittest.TestCase):
             ))
             assert rv.status == '404 NOT FOUND'
 
+    def testApproveNewProfWithValidArg(self):
+        """
+        Test if approve_new_prof() return
+        Test case:
+        --------------------------------------------------
+        Input                                              Expected Output
+        {
+        'uni': 'ab1234',
+        'name': 'Alpha Beta',
+        'department_id': 'COMS',
+        'term_id': 'Fall 2017',
+        'avatar': '',
+        'url': '',
+        'approved': 'Approved'
+        }
+        """
+        test_cases = (
+            {
+                'user_id': 'zj2226',
+                'uni': 'ab1234',
+                'name': 'Alpha Beta',
+                'department_id': 'COMS',
+                'term_id': 'Fall 2017',
+                'avatar': '',
+                'url': '',
+                'approved': 'Approved'
+            },
+        )
+
+        # current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
+        for test_case in test_cases:
+            rv = self.app.post('/admin/prof', data=dict(
+                uni=test_case['uni'],
+                name=test_case['name'],
+                department_id=test_case['department_id'],
+                term_id=test_case['term_id'],
+                avatar=test_case['avatar'],
+                url=test_case['url'],
+                approved=test_case['approved']
+            ))
+            assert rv._status_code == 200
+            # assert rv.content_type == 'text/html; charset=utf-8'
+            profs = Professor.query.filter_by(uni=test_case['uni']).all()
+            assert profs is not None
+            assert len(profs) > 0
+
+            # delete records
+            for prof in profs:
+                db.session.delete(prof)
+            db.session.commit()
 
 if __name__ == '__main__':
     unittest.main()
