@@ -554,9 +554,10 @@ def add_new_prof():
         db.session.add(add_prof_request)
         db.session.commit()
         flash('The adding instructor request is submitted.', 'success')
+        return redirect(redirect_url)
     except SQLAlchemyError:
         flash('An error occurred when submitting an adding instructor request.', 'danger')
-    return redirect(redirect_url)
+        return redirect(redirect_url, code=500)
 
 
 @app.route('/comment/', methods=["POST"])
@@ -604,9 +605,10 @@ def comment():
                 db.session.add(comment)
                 db.session.commit()
                 flash('The evaluation is published.', 'success')
+            return redirect(redirect_url)
         except SQLAlchemyError:
             flash('An error occurred when publishing the evaluation.', 'danger')
-        return redirect(redirect_url)
+            return redirect(redirect_url, code=500)
 
 
 @app.route('/admin/', methods=['GET'])
