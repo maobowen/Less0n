@@ -317,7 +317,7 @@ class MainTest(unittest.TestCase):
 
     def testApproveNewProfWithValidArg(self):
         """
-        Test if approve_new_prof() return
+        Test if admin_approve_prof_request() return
         Test case:
         --------------------------------------------------
         Input                                              Expected Output
@@ -405,7 +405,7 @@ class MainTest(unittest.TestCase):
 
     # def testApproveNewProfWithUnvalidArg(self):
     #     """
-    #     Test if approve_new_prof() return
+    #     Test if admin_approve_prof_request() return
     #     Test case:
     #     --------------------------------------------------
     #     Input                                              Expected Output

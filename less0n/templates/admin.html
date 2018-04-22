@@ -63,11 +63,17 @@
 {% endblock %}
 
 {% block body2_js %}
+        <script type="text/javascript">
+            const GET_PENDING_CRS_REQ = "{{ url_for('admin_list_course_request') }}?pending=1";
+            const GET_PENDING_PROF_REQ = "{{ url_for('admin_list_prof_request') }}?pending=1";
+            const POST_CRS_REQ = "{{ url_for('admin_approve_course_request') }}";
+            const POST_PROF_REQ = "{{ url_for('admin_approve_prof_request') }}";
+        </script>
         <script src="{{ url_for('static', filename='js/admin.js')}}"></script>
         <script type="text/javascript">
             $.ajax({
                 type: 'GET',
-                url: '/admin/course?pending=1',
+                url: GET_PENDING_CRS_REQ,
                 dataType: 'json',
                 success: function(data) {
                     var cur_course = 0;
@@ -146,7 +152,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: '/admin/prof?pending=1',
+                url: GET_PENDING_PROF_REQ,
                 dataType: 'json',
                 success: function(data) {
                     var cur_prof = 0;

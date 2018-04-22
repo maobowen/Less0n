@@ -686,9 +686,8 @@ def admin_list_prof_request():
         abort(401)
 
 
-# Routes for admins
 @app.route('/admin/course', methods=['POST'])
-def approve_new_course():
+def admin_approve_course_request():
     """
     Admin approves a course.
     - Add a new course to Course entity
@@ -736,7 +735,7 @@ def approve_new_course():
 
 
 @app.route('/admin/prof', methods=['POST'])
-def approve_new_prof():
+def admin_approve_prof_request():
     """
     Admin approves a prof.
 
