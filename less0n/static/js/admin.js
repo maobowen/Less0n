@@ -1,10 +1,15 @@
-var cur_course = 0;
-var cur_prof = 0;
+function checkEmpty(id) {
+    for (var i = 0; i < $("tr[data-request=" + id + "] td").length; i++) {
+        var text = $("tr[data-request=" + id + "] td:nth-child(" + (i + 1) + ")").text();
+        if (text == "") {
+            return i + 1;
+        }
+    }
+    return -1;
+}
 
 // ajax
 function renderCourseRequest(all_course_request) {
-    cur_course = all_course_request.length;
-    $('#cnum').text(cur_course);
     $.each(all_course_request, function(i, request) {
         $('#tabCourse').append(
             '<tr data-request="course-request-' + request['id'] + '">' +
@@ -21,8 +26,6 @@ function renderCourseRequest(all_course_request) {
 }
 
 function renderProfRequest(all_prof_request) {
-    cur_prof = all_prof_request.length;
-    $('#pnum').text(cur_prof);
     $.each(all_prof_request, function(i, request) {
         $('#tabProf').append(
             '<tr data-request="prof-request-' + request['id'] + '">' +
@@ -39,106 +42,6 @@ function renderProfRequest(all_prof_request) {
         );
     });
 }
-
-// add entry
-$(".add").click(function() {
-    if ($(this).parent().parent().attr('id') == "course_tab") {
-        cur_course++;
-        $('#tabCourse').append(
-            '<tr>' +
-                '<td>' + cur_course + '</td>' +
-                '<td><input type="text" value=""></td>' +
-                '<td><input type="text" value=""></td>' +
-                '<td><input type="text" value=""></td>' +
-                '<td><input type="text" value=""></td>' +
-                '<td><input type="text" value=""></td>' +
-                '<td><button class="btn btn-success submit">Submit</button></td>' +
-            '</tr>'
-        );
-
-        $("#tabCourse .submit").click(function() {
-            var index = $('#tabCourse tr').index($(this).parent().parent());
-            $.post("/url/",
-            {
-                subject: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(2) input").val(),
-                course_num: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(3) input").val(),
-                course_name: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(4) input").val(),
-                department: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(5) input").val(),
-                semester: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(6) input").val(),
-                decision: true
-            });
-        });
-    } else {
-        cur_prof++;
-        $('#tabProf').append(
-            '<tr>' +
-                '<td>' + cur_prof + '</td>' +
-                '<td><input type="text" value=""></td>' +
-                '<td><input type="text" value=""></td>' +
-                '<td><input type="text" value=""></td>' +
-                '<td><input type="text" value=""></td>' +
-                '<td><input type="text" value=""></td>' +
-                '<td><input type="text" value=""></td>' +
-                '<td><input type="text" value=""></td>' +
-                '<td><button class="btn btn-success submit">Submit</button></td>' +
-            '</tr>'
-        );
-
-        $("#tabProf .submit").click(function() {
-            var index = $('#tabProf tr').index($(this).parent().parent());
-            $.post("/url/",
-            {
-                name: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(2) input").val(),
-                uni: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(3) input").val(),
-                department: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(4) input").val(),
-                course: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(5) input").val(),
-                semester: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(6) input").val(),
-                avatar: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(7) input").val(),
-                url: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(8) input").val(),
-                decision: true
-            });
-        });
-    }
-});
-
-// data posting
-$("#tabCourse button").click(function() {
-    var index = $(this).parent().parent().attr("data-request");
-    var decision = true;
-    if ($(this).hasClass('decline')) {
-        decision = false;
-    }
-    $.post("/url/",
-    {
-        request_id: $("tr[data-request=" + index + "] td:nth-child(1)").text(),
-        subject: $("tr[data-request=" + index + "] td:nth-child(2)").text(),
-        course_num: $("tr[data-request=" + index + "] td:nth-child(3)").text(),
-        course_name: $("tr[data-request=" + index + "] td:nth-child(4)").text(),
-        department: $("tr[data-request=" + index + "] td:nth-child(5)").text(),
-        semester: $("tr[data-request=" + index + "] td:nth-child(6)").text(),
-        decision: decision
-    });
-});
-
-$("#tabProf button").click(function(){
-    var index = $(this).parent().parent().attr("data-request");
-    var decision = true;
-    if ($(this).hasClass('decline')) {
-        decision = false;
-    }
-    $.post("/url/",
-    {
-        request_id: $("tr[data-request=" + index + "] td:nth-child(1)").text(),
-        name: $("tr[data-request=" + index + "] td:nth-child(2)").text(),
-        uni: $("tr[data-request=" + index + "] td:nth-child(3)").text(),
-        department: $("tr[data-request=" + index + "] td:nth-child(4)").text(),
-        course: $("tr[data-request=" + index + "] td:nth-child(5)").text(),
-        semester: $("tr[data-request=" + index + "] td:nth-child(6)").text(),
-        avatar: $("tr[data-request=" + index + "] td:nth-child(7)").text(),
-        url: $("tr[data-request=" + index + "] td:nth-child(8)").text(),
-        decision: decision
-    });
-});
 
 // tab switching
 function switchTab(evt, tab) {
@@ -257,3 +160,42 @@ function ClearChild(element) {
 }    
 
 
+// notify
+function notify(msg) {
+    $.notify({
+        message: msg
+    },{
+        element: 'body',
+        position: 'fixed',
+        type: "danger",
+        allow_dismiss: true,
+        placement: {
+            from: "top",
+            align: "center"
+        },
+        offset: 60,
+        spacing: 10,
+        z_index: 1031,
+        delay: 3000,
+        timer: 1000,
+        url_target: '_blank',
+        animate: {
+            enter: 'animated fadeInDown',
+            exit: 'animated fadeOutUp'
+        },
+        onShow: null,
+        onShown: null,
+        onClose: null,
+        onClosed: null,
+        icon_type: 'class',
+        template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+            '<span data-notify="icon"></span> ' +
+            '<span data-notify="title">{1}</span> ' +
+            '<span data-notify="message">{2}</span>' +
+            '<div class="progress" data-notify="progressbar">' +
+                '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+            '</div>' +
+            '<a href="{3}" target="{4}" data-notify="url"></a>' +
+        '</div>'
+    });
+}

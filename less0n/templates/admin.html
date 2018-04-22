@@ -38,15 +38,6 @@
                                 <th>Semester</th>
                                 <th>Approve</th>
                             </tr>
-{#                            <tr data-request="course-request-{{ course_request.id }}">#}
-{#                                <td>{{ course_request.id }}</td>#}
-{#                                <td>{{ course_request.subject.id}}</td>#}
-{#                                <td>{{ course_request.course_number }}</td>#}
-{#                                <td>{{ course_request.course_name }}</td>#}
-{#                                <td>{{ course_request.department.id }}</td>#}
-{#                                <td>{{ course_request.term.id }}</td>#}
-{#                                <td><button class="btn btn-success approve"><i class="fa fa-check"></i></button><button class="btn btn-danger decline"><i class="fa fa-trash"></i></button></td>#}
-{#                            </tr>#}
                         </table>
                     </div>
 
@@ -64,17 +55,6 @@
                                 <th EditType="TextBox">Website</th>
                                 <th>Approve</th>
                             </tr>
-{#                            <tr data-request="prof-request-{{ prof_request.id }}">#}
-{#                                <td>{{ prof_request.id }}</td>#}
-{#                                <td>{{ prof_request.name }}</td>#}
-{#                                <td></td>#}
-{#                                <td>{{ prof_request.department.id }}</td>#}
-{#                                <td>{{ prof_request.course.id }}</td>#}
-{#                                <td>{{ prof_request.term.id }}</td>#}
-{#                                <td></td>#}
-{#                                <td></td>#}
-{#                                <td><button class="btn btn-success approve"><i class="fa fa-check"></i></button><button class="btn btn-danger decline"><i class="fa fa-trash"></i></button></td>#}
-{#                            </tr>#}
                         </table>
                     </div>
                 </div>
@@ -90,11 +70,77 @@
                 url: '/admin/course?pending=1',
                 dataType: 'json',
                 success: function(data) {
+                    var cur_course = 0;
                     renderCourseRequest(data);
+                    cur_course = data.length;
+                    $('#cnum').text(cur_course);
 
                     // set editable
                     var tabCourse = document.getElementById("tabCourse");
                     EditTables(tabCourse);
+
+                    // data posting
+                    $("#tabCourse button").click(function() {
+                        var id = $(this).parent().parent().attr("data-request");
+                        var decision = true;
+                        if ($(this).hasClass('decline')) {
+                            decision = false;
+                        }
+                        var check = checkEmpty(id);
+                        if (check != -1) {
+                            var field = $("#tabCourse tr:nth-child(1) th:nth-child(" + check + ")").text();
+                            notify(field + ' is empty. Please fill up all the empty fields before submission.');
+                        } else {
+                            $.post("/admin/course",
+                            {
+                                request_id: $("tr[data-request=" + id + "] td:nth-child(1)").text(),
+                                subject: $("tr[data-request=" + id + "] td:nth-child(2)").text(),
+                                course_num: $("tr[data-request=" + id + "] td:nth-child(3)").text(),
+                                course_name: $("tr[data-request=" + id + "] td:nth-child(4)").text(),
+                                department: $("tr[data-request=" + id + "] td:nth-child(5)").text(),
+                                semester: $("tr[data-request=" + id + "] td:nth-child(6)").text(),
+                                decision: decision
+                            });
+                        }
+                    });
+
+                    // add entry
+                    $(".add").click(function() {
+                        if ($(this).parent().parent().attr('id') == "course_tab") {
+                            cur_course++;
+                            $('#tabCourse').append(
+                                '<tr data-request=' + cur_course + '>' +
+                                    '<td>' + cur_course + '</td>' +
+                                    '<td><input type="text" value=""></td>' +
+                                    '<td><input type="text" value=""></td>' +
+                                    '<td><input type="text" value=""></td>' +
+                                    '<td><input type="text" value=""></td>' +
+                                    '<td><input type="text" value=""></td>' +
+                                    '<td><button class="btn btn-success submit">Submit</button></td>' +
+                                '</tr>'
+                            );
+
+                            $("#tabCourse .submit").click(function() {
+                                var index = $('#tabCourse tr').index($(this).parent().parent());
+                                var id = $(this).parent().parent().attr("data-request");
+                                var check = checkEmpty(id);
+                                if (check != -1) {
+                                    var field = $("#tabCourse tr:nth-child(1) th:nth-child(" + check + ")").text();
+                                    notify(field + ' is empty. Please fill up all the empty fields before submission.');
+                                } else {
+                                    $.post("/url/",
+                                    {
+                                        subject: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(2) input").val(),
+                                        course_num: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(3) input").val(),
+                                        course_name: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(4) input").val(),
+                                        department: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(5) input").val(),
+                                        semester: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(6) input").val(),
+                                        decision: true
+                                    });
+                                }
+                            });
+                        }
+                    });
                 }
             });
 
@@ -103,11 +149,83 @@
                 url: '/admin/prof?pending=1',
                 dataType: 'json',
                 success: function(data) {
+                    var cur_prof = 0;
                     renderProfRequest(data);
+                    cur_prof = data.length;
+                    $('#pnum').text(cur_prof);
 
                     // set editable
                     var tabProf = document.getElementById("tabProf");
                     EditTables(tabProf);
+
+                    // data posting
+                    $("#tabProf button").click(function(){
+                        var id = $(this).parent().parent().attr("data-request");
+                        var decision = true;
+                        if ($(this).hasClass('decline')) {
+                            decision = false;
+                        }
+                        var check = checkEmpty(id);
+                        if (check != -1) {
+                            var field = $("#tabProf tr:nth-child(1) th:nth-child(" + check + ")").text();
+                            notify(field + ' is empty. Please fill up all the empty fields before submission.');
+                        } else {
+                            $.post("/admin/prof",
+                            {
+                                request_id: $("tr[data-request=" + id + "] td:nth-child(1)").text(),
+                                name: $("tr[data-request=" + id + "] td:nth-child(2)").text(),
+                                uni: $("tr[data-request=" + id + "] td:nth-child(3)").text(),
+                                department: $("tr[data-request=" + id + "] td:nth-child(4)").text(),
+                                course: $("tr[data-request=" + id + "] td:nth-child(5)").text(),
+                                semester: $("tr[data-request=" + id + "] td:nth-child(6)").text(),
+                                avatar: $("tr[data-request=" + id + "] td:nth-child(7)").text(),
+                                url: $("tr[data-request=" + id + "] td:nth-child(8)").text(),
+                                decision: decision
+                            });
+                        }
+                    });
+
+                    // add entry
+                    $(".add").click(function() {
+                        if ($(this).parent().parent().attr('id') == "professor_tab") {
+                            cur_prof++;
+                            $('#tabProf').append(
+                                '<tr data-request=' + cur_prof + '>' +
+                                    '<td>' + cur_prof + '</td>' +
+                                    '<td><input type="text" value=""></td>' +
+                                    '<td><input type="text" value=""></td>' +
+                                    '<td><input type="text" value=""></td>' +
+                                    '<td><input type="text" value=""></td>' +
+                                    '<td><input type="text" value=""></td>' +
+                                    '<td><input type="text" value=""></td>' +
+                                    '<td><input type="text" value=""></td>' +
+                                    '<td><button class="btn btn-success submit">Submit</button></td>' +
+                                '</tr>'
+                            );
+
+                            $("#tabProf .submit").click(function () {
+                                var index = $('#tabProf tr').index($(this).parent().parent());
+                                var id = $(this).parent().parent().attr("data-request");
+                                var check = checkEmpty(id);
+                                if (check != -1) {
+                                    var field = $("#tabProf tr:nth-child(1) th:nth-child(" + check + ")").text();
+                                    notify(field + ' is empty. Please fill up all the empty fields before submission.');
+                                } else {
+                                    $.post("/url/",
+                                    {
+                                        name: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(2) input").val(),
+                                        uni: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(3) input").val(),
+                                        department: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(4) input").val(),
+                                        course: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(5) input").val(),
+                                        semester: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(6) input").val(),
+                                        avatar: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(7) input").val(),
+                                        url: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(8) input").val(),
+                                        decision: true
+                                    });
+                                }
+                            });
+                        }
+                    });
                 }
             });
         </script>
