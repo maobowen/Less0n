@@ -699,7 +699,7 @@ def admin_approve_course_request():
     redirect_url = request.args.get('redirect') or url_for('index')
 
     # get parameters
-    req_id = int(request.form['id']) # 1
+    req_id = int(request.form['request_id']) # 1
     subject_id = str(request.form['subject'])  # COMS
     course_number = str(request.form["course_num"])  # 4771
     course_name = str(request.form["course_name"])  # Intro to ML
@@ -772,7 +772,7 @@ def admin_approve_prof_request():
     redirect_url = request.args.get('redirect') or url_for('index')
 
     # get parameters
-    req_id = int(request.form['id'])
+    req_id = int(request.form['request_id'])
     uni = str(request.form['uni'])
     prof_name = str(request.form["name"])
     department_id = str(request.form["department"])

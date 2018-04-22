@@ -20,6 +20,7 @@ class MainTest(unittest.TestCase):
 
     def tearDown(self):
         database.drop_db()
+        database.init_db()
 
     def testIndex(self):
         rv = self.app.get('/')
@@ -371,7 +372,7 @@ class MainTest(unittest.TestCase):
         # current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
         for test_case in test_cases:
             rv = self.app.post('/admin/prof', data=dict(
-                id=test_case['id'],
+                request_id=test_case['id'],
                 uni=test_case['uni'],
                 name=test_case['name'],
                 department=test_case['department'],
@@ -450,7 +451,7 @@ class MainTest(unittest.TestCase):
         # current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
         for test_case in test_cases:
             rv = self.app.post('/admin/prof', data=dict(
-                id=test_case['id'],
+                request_id=test_case['id'],
                 uni=test_case['uni'],
                 name=test_case['name'],
                 department=test_case['department_id'],
@@ -494,7 +495,7 @@ class MainTest(unittest.TestCase):
         # current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
         for test_case in test_cases:
             rv = self.app.post('/admin/course', data=dict(
-                id=test_case['id'],
+                request_id=test_case['id'],
                 subject=test_case['subject'],
                 course_num=test_case['course_num'],
                 course_name=test_case['course_name'],
@@ -556,7 +557,7 @@ class MainTest(unittest.TestCase):
         # current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
         for test_case in test_cases:
             rv = self.app.post('/admin/course', data=dict(
-                id=test_case['id'],
+                request_id=test_case['id'],
                 subject=test_case['subject'],
                 course_num=test_case['course_num'],
                 course_name=test_case['course_name'],
