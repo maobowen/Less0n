@@ -759,29 +759,28 @@ def approve_new_prof():
     redirect_url = request.args.get('redirect') or url_for('index')
 
     # get parameters
-    id = request.form['id']
+    req_id = int(request.form['id'])
     uni = request.form['uni']
     prof_name = request.form["name"]
-    department_id = request.form["department_id"]
-    term_id = request.form["term_id"]
+    department_id = request.form["department"]
+    term_id = request.form["semester"]
     avatar = request.form['avatar']
     url = request.form['url']
-    course_id = request.form['course_id']
-    approved = request.form['approved']
+    course_id = request.form['course']
+    approved = True if request.form['decision'] in ['True', 'true'] else False
 
-    approved_types = {'Approved': ApprovalType.APPROVED, 'Pending': ApprovalType.PENDING,
-                     'Declined': ApprovalType.DECLINED}
+    approved_types = {True: ApprovalType.APPROVED, False: ApprovalType.DECLINED}
 
     # check parameters
-    for param in (id, uni, prof_name, department_id, term_id, course_id, approved):
-        if param == None or len(param) == 0:
+    for param in (req_id, uni, prof_name, department_id, term_id, course_id, approved):
+        if param is None or param == '':
             return redirect(redirect_url, code='404')
 
     # check if this professor exists
-    if approved == 'Declined':
+    if not approved:
         pass
 
-    elif approved == 'Approved':
+    elif approved:
         # get objects
         department = Department.query.filter_by(id=department_id).first()
         term = Term.query.filter_by(id=term_id).first()
@@ -793,20 +792,23 @@ def approve_new_prof():
                 return redirect(redirect_url, code='404')
 
         # update professor if not exist
-        professor = Professor(uni=uni, name=prof_name, department=department,
+
+        if Professor.query.filter_by(uni=uni).first() is None:
+            professor = Professor(uni=uni, name=prof_name, department=department,
                          avatar=avatar, url=url)
-        if Professor.query.filter_by(uni=uni).first() is not None:
             # construct objects
             db.session.add(professor)
 
         # update teaching if not exist
-        teaching = Teaching(course=course, professor=professor)
         if len(Teaching.query.filter_by(course_id=course_id, professor_uni=uni).all()) == 0:
+            teaching = Teaching(course=course, professor=professor)
             db.session.add(teaching)
 
     # update the approved column
-    new_prof_request = AddProfRequest.query.filter_by(id=id).first()
-    new_prof_request.approved = approved_types[approved]
+    if req_id != -1:  # If it is not added by admin
+        new_prof_request = AddProfRequest.query.filter_by(id=req_id).first()
+        new_prof_request.approved = approved_types[approved]
+
     db.session.commit()
 
     return jsonify('OK')
