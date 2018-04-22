@@ -699,37 +699,44 @@ def admin_approve_course_request():
     redirect_url = request.args.get('redirect') or url_for('index')
 
     # get parameters
-    course_name = request.form["course-name"]
-    course_number = request.form["course-number"]
-    professor_name = request.form["professor-name"]
-    department_name = request.form["department-name"]
+    req_id = int(request.form['id']) # 1
+    subject_id = str(request.form['subject'])  # COMS
+    course_number = str(request.form["course_num"])  # 4771
+    course_name = str(request.form["course_name"])  # Intro to ML
+    department_id = str(request.form["department"])  # COMS
+    term_id = str(request.form['semester']) # Fall 2017
+    approved = True if request.form['decision'] in ['True', 'true'] else False # True
+
+    approved_types = {True: ApprovalType.APPROVED, False: ApprovalType.DECLINED}
 
     # check parameters
-    for param in (course_name, course_number, professor_name, department_name):
-        if param == None or len(param) == 0:
+    for param in (req_id, subject_id, course_number, course_name, department_id, term_id, approved):
+        if param is None or param == '':
             return redirect(redirect_url, code='404')
 
-    # extract parameters
-    subject_id = course_number[0: 4] # COMS4156 -> COMS
-    number = course_number[len(course_number) - 4: ]
+    # preprocess parameters
+    course_id = subject_id + course_number
 
     # get objects
-    subject = Subject.query.filter(Subject.id.contains(subject_id)).first()
-    department = Department.query.filter(Department.name.contains(department_name)).first()
-    professor = Professor.query.filter(Professor.name.contains(professor_name)).first()
+    subject = Subject.query.filter_by(id=subject_id).first()
+    department = Department.query.filter_by(id=department_id).first()
+    term = Term.query.filter_by(id=term_id).first()
 
     # check objects
-    for obj in (subject, department, professor):
-        if obj == None:
+    for obj in (subject, department, term):
+        if obj is None:
             return redirect(redirect_url, code='404')
 
     # construct objects
-    course = Course(id=course_number, subject=subject, number=number, department=department, name=course_name)
-    teaching = Teaching(professor=professor, course=course)
+    course = Course(id=course_id, subject=subject, number=course_number, department=department, name=course_name)
+
+    # update add prof request
+    if req_id != -1 and AddCourseRequest.query.filter_by(id=req_id).first() is not None:
+        new_course_request = AddCourseRequest.query.filter_by(id=req_id).first()
+        new_course_request.approved = approved_types[approved]
 
     # add to db
     db.session.add(course)
-    db.session.add(teaching)
     db.session.commit()
     return jsonify('OK')
 
@@ -749,7 +756,7 @@ def admin_approve_prof_request():
         "course_id": "COMS4115",
         "avatar": "",
         "url": "",
-        "approved": "Declined"
+        "approved": False
     }
 
     :return: json-str.
@@ -759,13 +766,13 @@ def admin_approve_prof_request():
 
     # get parameters
     req_id = int(request.form['id'])
-    uni = request.form['uni']
-    prof_name = request.form["name"]
-    department_id = request.form["department"]
-    term_id = request.form["semester"]
-    avatar = request.form['avatar']
-    url = request.form['url']
-    course_id = request.form['course']
+    uni = str(request.form['uni'])
+    prof_name = str(request.form["name"])
+    department_id = str(request.form["department"])
+    term_id = str(request.form["semester"])
+    avatar = str(request.form['avatar'])
+    url = str(request.form['url'])
+    course_id = str(request.form['course'])
     approved = True if request.form['decision'] in ['True', 'true'] else False
 
     approved_types = {True: ApprovalType.APPROVED, False: ApprovalType.DECLINED}
@@ -804,7 +811,7 @@ def admin_approve_prof_request():
             db.session.add(teaching)
 
     # update the approved column
-    if req_id != -1:  # If it is not added by admin
+    if req_id != -1 and AddProfRequest.query.filter_by(id=req_id).first() is not None:  # If it is not added by admin
         new_prof_request = AddProfRequest.query.filter_by(id=req_id).first()
         new_prof_request.approved = approved_types[approved]
 

@@ -82,6 +82,7 @@ class Course(db.Model):
     number = db.Column(db.String(6), nullable=False)  # 3827
     name = db.Column(db.String(100), nullable=False)  # Fundamentals of Computer Systems
     department_id = db.Column(db.String(6), db.ForeignKey('departments.id'), nullable=False)  # COMS
+    # department = db.relationship('Department', backref='courses', lazy=True)
 
     def __init__(self, id=None, subject=None, number=None, name=None, department=None):
         db.Model.__init__(self, id=id, subject=subject, number=number, name=name, department=department)
