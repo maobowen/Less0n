@@ -1,6 +1,11 @@
-function checkEmpty(id) {
-    for (var i = 0; i < $("tr[data-request=" + id + "] td").length; i++) {
-        var text = $("tr[data-request=" + id + "] td:nth-child(" + (i + 1) + ")").text();
+function checkEmpty(id, added) {
+    for (var i = 0; i < $("tr[data-request=" + id + "] td").length - 1; i++) {
+        var text = "";
+        if (added == 0) {
+            text = $("tr[data-request=" + id + "] td:nth-child(" + (i + 1) + ")").text();
+        } else {
+            text = $("tr[data-request=" + id + "] td:nth-child(" + (i + 1) + ") input").val();
+        }
         if (text == "") {
             return i + 1;
         }

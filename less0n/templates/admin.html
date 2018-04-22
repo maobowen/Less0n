@@ -92,12 +92,12 @@
                         if ($(this).hasClass('decline')) {
                             decision = false;
                         }
-                        var check = checkEmpty(id);
+                        var check = checkEmpty(id, 0);
                         if (check != -1) {
                             var field = $("#tabCourse tr:nth-child(1) th:nth-child(" + check + ")").text();
                             notify(field + ' is empty. Please fill up all the empty fields before submission.');
                         } else {
-                            $.post("/admin/course",
+                            $.post(POST_CRS_REQ,
                             {
                                 request_id: $("tr[data-request=" + id + "] td:nth-child(1)").text(),
                                 subject: $("tr[data-request=" + id + "] td:nth-child(2)").text(),
@@ -106,6 +106,13 @@
                                 department: $("tr[data-request=" + id + "] td:nth-child(5)").text(),
                                 semester: $("tr[data-request=" + id + "] td:nth-child(6)").text(),
                                 decision: decision
+                            }, function(data, status){
+                                console.log(data);
+                                if (status == 200) {
+                                    notify('Successfully added record.')
+                                } else {
+                                    notify('Adding record failed.')
+                                }
                             });
                         }
                     });
@@ -129,12 +136,12 @@
                             $("#tabCourse .submit").click(function() {
                                 var index = $('#tabCourse tr').index($(this).parent().parent());
                                 var id = $(this).parent().parent().attr("data-request");
-                                var check = checkEmpty(id);
+                                var check = checkEmpty(id, 1);
                                 if (check != -1) {
                                     var field = $("#tabCourse tr:nth-child(1) th:nth-child(" + check + ")").text();
                                     notify(field + ' is empty. Please fill up all the empty fields before submission.');
                                 } else {
-                                    $.post("/url/",
+                                    $.post(POST_CRS_REQ,
                                     {
                                         subject: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(2) input").val(),
                                         course_num: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(3) input").val(),
@@ -142,6 +149,13 @@
                                         department: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(5) input").val(),
                                         semester: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(6) input").val(),
                                         decision: true
+                                    }, function(data, status){
+                                        console.log(data);
+                                        if (status == 200) {
+                                            notify('Successfully added record.')
+                                        } else {
+                                            notify('Adding record failed.')
+                                        }
                                     });
                                 }
                             });
@@ -171,12 +185,12 @@
                         if ($(this).hasClass('decline')) {
                             decision = false;
                         }
-                        var check = checkEmpty(id);
+                        var check = checkEmpty(id, 0);
                         if (check != -1) {
                             var field = $("#tabProf tr:nth-child(1) th:nth-child(" + check + ")").text();
                             notify(field + ' is empty. Please fill up all the empty fields before submission.');
                         } else {
-                            $.post("/admin/prof",
+                            $.post(POST_PROF_REQ,
                             {
                                 request_id: $("tr[data-request=" + id + "] td:nth-child(1)").text(),
                                 name: $("tr[data-request=" + id + "] td:nth-child(2)").text(),
@@ -187,6 +201,13 @@
                                 avatar: $("tr[data-request=" + id + "] td:nth-child(7)").text(),
                                 url: $("tr[data-request=" + id + "] td:nth-child(8)").text(),
                                 decision: decision
+                            }, function(data, status){
+                                console.log(data);
+                                if (data == 'OK') {
+                                    notify('Successfully added record.')
+                                } else {
+                                    notify('Adding record failed.')
+                                }
                             });
                         }
                     });
@@ -212,12 +233,12 @@
                             $("#tabProf .submit").click(function () {
                                 var index = $('#tabProf tr').index($(this).parent().parent());
                                 var id = $(this).parent().parent().attr("data-request");
-                                var check = checkEmpty(id);
+                                var check = checkEmpty(id, 1);
                                 if (check != -1) {
                                     var field = $("#tabProf tr:nth-child(1) th:nth-child(" + check + ")").text();
                                     notify(field + ' is empty. Please fill up all the empty fields before submission.');
                                 } else {
-                                    $.post("/url/",
+                                    $.post(POST_PROF_REQ,
                                     {
                                         name: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(2) input").val(),
                                         uni: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(3) input").val(),
@@ -227,6 +248,13 @@
                                         avatar: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(7) input").val(),
                                         url: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(8) input").val(),
                                         decision: true
+                                    }, function(data, status){
+                                        console.log(data);
+                                        if (status == 200) {
+                                            notify('Successfully added record.')
+                                        } else {
+                                            notify('Adding record failed.')
+                                        }
                                     });
                                 }
                             });
