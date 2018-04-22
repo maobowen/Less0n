@@ -34,26 +34,36 @@ body {
         margin: 30px;
         overflow: auto;
         white-space: nowrap; }
+        body .statistics .stats_box .tabcontent .add {
+          background-color: #E67E22;
+          color: white;
+          font-size: 15px;
+          margin-top: -2px;
+          margin-left: 8px;
+          padding: 4px 9px; }
         body .statistics .stats_box .tabcontent h3 {
           margin-bottom: 35px; }
         body .statistics .stats_box .tabcontent table th {
-          color: #e67e22;
+          color: #E67E22;
           font-size: 20px;
-          width: 120px; }
+          width: auto; }
+        body .statistics .stats_box .tabcontent table th[EditType="TextBox"] {
+          text-decoration: underline; }
         body .statistics .stats_box .tabcontent table td {
           height: 40px;
           line-height: 40px;
           font-size: 18px;
-          overflow: hidden; }
+          overflow: hidden;
+          width: 100%; }
           body .statistics .stats_box .tabcontent table td input {
             height: 30px;
             line-height: 30px;
-            width: 90px; }
-          body .statistics .stats_box .tabcontent table td button {
-            margin-right: 5px;
+            width: 100%; }
+          body .statistics .stats_box .tabcontent table td .approve, body .statistics .stats_box .tabcontent table td .decline {
+            margin: 0 5px;
             width: 30px;
             height: 30px; }
-            body .statistics .stats_box .tabcontent table td button i {
+            body .statistics .stats_box .tabcontent table td .approve i, body .statistics .stats_box .tabcontent table td .decline i {
               font-size: 20px;
               position: relative;
               top: -3px;
@@ -72,7 +82,7 @@ body {
       color: white;
       height: 100%; }
     body .statistics .tab button.active, body .statistics .tab button:hover {
-      background-color: #e67e22;
+      background-color: #E67E22;
       color: white; }
 
 /*# sourceMappingURL=admin.css.map */

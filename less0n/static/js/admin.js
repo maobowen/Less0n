@@ -1,60 +1,147 @@
+var cur_course = 0;
+var cur_prof = 0;
+
+// ajax
+function renderCourseRequest(all_course_request) {
+    cur_course = all_course_request.length;
+    $('#cnum').text(cur_course);
+    $.each(all_course_request, function(i, request) {
+        $('#tabCourse').append(
+            '<tr data-request="course-request-' + request['id'] + '">' +
+                '<td>' + (i + 1) + '</td>' +
+                '<td>' + request['subject_id'] + '</td>' +
+                '<td>' + request['course_number'] + '</td>' +
+                '<td>' + request['course_name'] + '</td>' +
+                '<td>' + request['department_id'] + '</td>' +
+                '<td>' + request['term_id'] + '</td>' +
+                '<td><button class="btn btn-success approve"><i class="fa fa-check"></i></button><button class="btn btn-danger decline"><i class="fa fa-trash"></i></button></td>' +
+            '</tr>'
+        );
+    });
+}
+
+function renderProfRequest(all_prof_request) {
+    cur_prof = all_prof_request.length;
+    $('#pnum').text(cur_prof);
+    $.each(all_prof_request, function(i, request) {
+        $('#tabProf').append(
+            '<tr data-request="prof-request-' + request['id'] + '">' +
+                '<td>' + (i + 1) + '</td>' +
+                '<td>' + request['name'] + '</td>' +
+                '<td></td>' +
+                '<td>' + request['department_id'] + '</td>' +
+                '<td>' + request['course_id'] + '</td>' +
+                '<td>' + request['term_id'] + '</td>' +
+                '<td></td>' +
+                '<td></td>' +
+                '<td><button class="btn btn-success approve"><i class="fa fa-check"></i></button><button class="btn btn-danger decline"><i class="fa fa-trash"></i></button></td>' +
+            '</tr>'
+        );
+    });
+}
+
+// add entry
+$(".add").click(function() {
+    if ($(this).parent().parent().attr('id') == "course_tab") {
+        cur_course++;
+        $('#tabCourse').append(
+            '<tr>' +
+                '<td>' + cur_course + '</td>' +
+                '<td><input type="text" value=""></td>' +
+                '<td><input type="text" value=""></td>' +
+                '<td><input type="text" value=""></td>' +
+                '<td><input type="text" value=""></td>' +
+                '<td><input type="text" value=""></td>' +
+                '<td><button class="btn btn-success submit">Submit</button></td>' +
+            '</tr>'
+        );
+
+        $("#tabCourse .submit").click(function() {
+            var index = $('#tabCourse tr').index($(this).parent().parent());
+            $.post("/url/",
+            {
+                subject: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(2) input").val(),
+                course_num: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(3) input").val(),
+                course_name: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(4) input").val(),
+                department: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(5) input").val(),
+                semester: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(6) input").val(),
+                decision: true
+            });
+        });
+    } else {
+        cur_prof++;
+        $('#tabProf').append(
+            '<tr>' +
+                '<td>' + cur_prof + '</td>' +
+                '<td><input type="text" value=""></td>' +
+                '<td><input type="text" value=""></td>' +
+                '<td><input type="text" value=""></td>' +
+                '<td><input type="text" value=""></td>' +
+                '<td><input type="text" value=""></td>' +
+                '<td><input type="text" value=""></td>' +
+                '<td><input type="text" value=""></td>' +
+                '<td><button class="btn btn-success submit">Submit</button></td>' +
+            '</tr>'
+        );
+
+        $("#tabProf .submit").click(function() {
+            var index = $('#tabProf tr').index($(this).parent().parent());
+            $.post("/url/",
+            {
+                name: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(2) input").val(),
+                uni: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(3) input").val(),
+                department: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(4) input").val(),
+                course: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(5) input").val(),
+                semester: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(6) input").val(),
+                avatar: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(7) input").val(),
+                url: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(8) input").val(),
+                decision: true
+            });
+        });
+    }
+});
+
 // data posting
-$("#course_tab .approve").click(function(){
-    var index = $("#course_tab .approve").index(this);
+$("#tabCourse button").click(function() {
+    var index = $(this).parent().parent().attr("data-request");
+    var decision = true;
+    if ($(this).hasClass('decline')) {
+        decision = false;
+    }
     $.post("/url/",
     {
-        request_id: $("#course_tab tr:nth-child(" + (index + 1) + " td:nth-child(1))").text(),
-        course_id: $("#course_tab tr:nth-child(" + (index + 1) + " td:nth-child(2))").text(),
-        course_name: $("#course_tab tr:nth-child(" + (index + 1) + " td:nth-child(3))").text(),
-        department: $("#course_tab tr:nth-child(" + (index + 1) + " td:nth-child(4))").text(),
-        subject: $("#course_tab tr:nth-child(" + (index + 1) + " td:nth-child(5))").text(),
-        decision: true
+        request_id: $("tr[data-request=" + index + "] td:nth-child(1)").text(),
+        subject: $("tr[data-request=" + index + "] td:nth-child(2)").text(),
+        course_num: $("tr[data-request=" + index + "] td:nth-child(3)").text(),
+        course_name: $("tr[data-request=" + index + "] td:nth-child(4)").text(),
+        department: $("tr[data-request=" + index + "] td:nth-child(5)").text(),
+        semester: $("tr[data-request=" + index + "] td:nth-child(6)").text(),
+        decision: decision
     });
 });
 
-$("#course_tab .decline").click(function(){
-    var index = $("#course_tab .decline").index(this);
+$("#tabProf button").click(function(){
+    var index = $(this).parent().parent().attr("data-request");
+    var decision = true;
+    if ($(this).hasClass('decline')) {
+        decision = false;
+    }
     $.post("/url/",
     {
-        request_id: $("#course_tab tr:nth-child(" + (index + 1) + " td:nth-child(1))").text(),
-        course_id: $("#course_tab tr:nth-child(" + (index + 1) + " td:nth-child(2))").text(),
-        course_name: $("#course_tab tr:nth-child(" + (index + 1) + " td:nth-child(3))").text(),
-        department: $("#course_tab tr:nth-child(" + (index + 1) + " td:nth-child(4))").text(),
-        subject: $("#course_tab tr:nth-child(" + (index + 1) + " td:nth-child(5))").text(),
-        decision: false
-    });
-});
-
-$("#professor_tab .approve").click(function(){
-    var index = $("#professor_tab .approve").index(this);
-    $.post("/url/",
-    {
-        request_id: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(1))").text(),
-        name: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(2))").text(),
-        uni: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(3))").text(),
-        department: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(4))").text(),
-        avatar: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(5))").text(),
-        url: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(6))").text(),
-        decision: true
-    });
-});
-
-$("#professor_tab .decline").click(function(){
-    var index = $("#professor_tab .decline").index(this);
-    $.post("/url/",
-    {
-        request_id: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(1))").text(),
-        name: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(2))").text(),
-        uni: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(3))").text(),
-        department: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(4))").text(),
-        avatar: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(5))").text(),
-        url: $("#professor_tab tr:nth-child(" + (index + 1) + " td:nth-child(6))").text(),
-        decision: false
+        request_id: $("tr[data-request=" + index + "] td:nth-child(1)").text(),
+        name: $("tr[data-request=" + index + "] td:nth-child(2)").text(),
+        uni: $("tr[data-request=" + index + "] td:nth-child(3)").text(),
+        department: $("tr[data-request=" + index + "] td:nth-child(4)").text(),
+        course: $("tr[data-request=" + index + "] td:nth-child(5)").text(),
+        semester: $("tr[data-request=" + index + "] td:nth-child(6)").text(),
+        avatar: $("tr[data-request=" + index + "] td:nth-child(7)").text(),
+        url: $("tr[data-request=" + index + "] td:nth-child(8)").text(),
+        decision: decision
     });
 });
 
 // tab switching
-function openCity(evt, tab) {
+function switchTab(evt, tab) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
     for (i = 0; i < tabcontent.length; i++) {
@@ -170,9 +257,3 @@ function ClearChild(element) {
 }    
 
 
-// set editable
-var tabCourse = document.getElementById("tabCourse");
-EditTables(tabCourse);
-
-var tabProf = document.getElementById("tabProf");
-EditTables(tabProf);

@@ -46,6 +46,15 @@ body {
         overflow: auto;
         white-space: nowrap;
 
+        .add {
+          background-color: $orange;
+          color: white;
+          font-size: 15px;
+          margin-top: -2px;
+          margin-left: 8px;
+          padding: 4px 9px;
+        }
+
         h3 {
           margin-bottom: 35px;
         }
@@ -54,9 +63,13 @@ body {
         table {
 
           th {
-            color: #e67e22;
+            color: $orange;
             font-size: 20px;
-            width: 120px;
+            width: auto;
+          }
+
+          th[EditType="TextBox"] {
+            text-decoration: underline;
           }
 
           td {
@@ -64,15 +77,16 @@ body {
             line-height: 40px;
             font-size: 18px;
             overflow: hidden;
+            width: 100%;
 
             input {
               height: 30px;
               line-height: 30px;
-              width: 90px;
+              width: 100%;
             }
 
-            button {
-              margin-right: 5px;
+            .approve, .decline {
+              margin: 0 5px;
               width: 30px;
               height: 30px;
 
@@ -104,7 +118,7 @@ body {
     }
 
     .tab button.active, .tab button:hover {
-      background-color: #e67e22;
+      background-color: $orange;
       color: white;
     }
   }
