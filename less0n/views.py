@@ -729,6 +729,7 @@ def admin_approve_course_request():
 
     # construct objects
     course = Course(id=course_id, subject=subject, number=course_number, department=department, name=course_name)
+    db.session.add(course)
 
     # update add prof request
     if req_id != -1 and AddCourseRequest.query.filter_by(id=req_id).first() is not None:
@@ -736,8 +737,14 @@ def admin_approve_course_request():
         new_course_request.approved = approved_types[approved]
 
     # add to db
-    db.session.add(course)
     db.session.commit()
+
+    # check if the new course is in the db
+    if approved:
+        new_course = Course.query.filter_by(id=course_id)
+        if new_course is None:
+            return redirect(redirect_url, code='404')
+    print('OK')  # for test
     return jsonify('OK')
 
 
@@ -816,6 +823,13 @@ def admin_approve_prof_request():
         new_prof_request.approved = approved_types[approved]
 
     db.session.commit()
+
+    # check if the professor is added to db
+    if approved:
+        new_prof = Professor.query.filter_by(uni=uni).first()
+        new_teaching = Teaching.query.filter_by(course_id=course_id, professor_uni=uni).first()
+        if new_prof is None or new_teaching is None:
+            return redirect(redirect_url, code='404')
 
     return jsonify('OK')
 
