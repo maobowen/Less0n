@@ -7,7 +7,13 @@ function checkEmpty(id, added) {
             text = $("tr[data-request=" + id + "] td:nth-child(" + (i + 1) + ") input").val();
         }
         if (text == "") {
-            return i + 1;
+            var field = $("#tabProf tr:nth-child(1) th:nth-child(" + (i + 1) + ")").text();
+            console.log(field);
+            if (field == "Avatar" && id.charAt(0) == 'p') {
+                continue;
+            } else {
+                return i + 1;
+            }
         }
     }
     return -1;
@@ -166,13 +172,13 @@ function ClearChild(element) {
 
 
 // notify
-function notify(msg) {
+function notify(msg, type) {
     $.notify({
         message: msg
     },{
         element: 'body',
         position: 'fixed',
-        type: "danger",
+        type: type,
         allow_dismiss: true,
         placement: {
             from: "top",

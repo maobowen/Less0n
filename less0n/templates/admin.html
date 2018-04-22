@@ -95,7 +95,7 @@
                         var check = checkEmpty(id, 0);
                         if (check != -1) {
                             var field = $("#tabCourse tr:nth-child(1) th:nth-child(" + check + ")").text();
-                            notify(field + ' is empty. Please fill up all the empty fields before submission.');
+                            notify(field + ' is empty. Please fill up all the empty fields before submission.', "danger");
                         } else {
                             $.post(POST_CRS_REQ,
                             {
@@ -107,11 +107,10 @@
                                 semester: $("tr[data-request=" + id + "] td:nth-child(6)").text(),
                                 decision: decision
                             }, function(data, status){
-                                console.log(data);
-                                if (status == 200) {
-                                    notify('Successfully added record.')
+                                if (data == 'OK') {
+                                    notify('Successfully added record.', "success")
                                 } else {
-                                    notify('Adding record failed.')
+                                    notify('Adding record failed.', "danger")
                                 }
                             });
                         }
@@ -139,10 +138,11 @@
                                 var check = checkEmpty(id, 1);
                                 if (check != -1) {
                                     var field = $("#tabCourse tr:nth-child(1) th:nth-child(" + check + ")").text();
-                                    notify(field + ' is empty. Please fill up all the empty fields before submission.');
+                                    notify(field + ' is empty. Please fill up all the empty fields before submission.', "danger");
                                 } else {
                                     $.post(POST_CRS_REQ,
                                     {
+                                        request_id: -1,
                                         subject: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(2) input").val(),
                                         course_num: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(3) input").val(),
                                         course_name: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(4) input").val(),
@@ -150,11 +150,10 @@
                                         semester: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(6) input").val(),
                                         decision: true
                                     }, function(data, status){
-                                        console.log(data);
-                                        if (status == 200) {
-                                            notify('Successfully added record.')
+                                        if (data == 'OK') {
+                                            notify('Successfully added record.', "success")
                                         } else {
-                                            notify('Adding record failed.')
+                                            notify('Adding record failed.', "danger")
                                         }
                                     });
                                 }
@@ -188,7 +187,7 @@
                         var check = checkEmpty(id, 0);
                         if (check != -1) {
                             var field = $("#tabProf tr:nth-child(1) th:nth-child(" + check + ")").text();
-                            notify(field + ' is empty. Please fill up all the empty fields before submission.');
+                            notify(field + ' is empty. Please fill up all the empty fields before submission.', "danger");
                         } else {
                             $.post(POST_PROF_REQ,
                             {
@@ -202,11 +201,10 @@
                                 url: $("tr[data-request=" + id + "] td:nth-child(8)").text(),
                                 decision: decision
                             }, function(data, status){
-                                console.log(data);
                                 if (data == 'OK') {
-                                    notify('Successfully added record.')
+                                    notify('Successfully added record.', "success")
                                 } else {
-                                    notify('Adding record failed.')
+                                    notify('Adding record failed.', "danger")
                                 }
                             });
                         }
@@ -236,10 +234,11 @@
                                 var check = checkEmpty(id, 1);
                                 if (check != -1) {
                                     var field = $("#tabProf tr:nth-child(1) th:nth-child(" + check + ")").text();
-                                    notify(field + ' is empty. Please fill up all the empty fields before submission.');
+                                    notify(field + ' is empty. Please fill up all the empty fields before submission.', "danger");
                                 } else {
                                     $.post(POST_PROF_REQ,
                                     {
+                                        request_id: -1,
                                         name: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(2) input").val(),
                                         uni: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(3) input").val(),
                                         department: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(4) input").val(),
@@ -249,11 +248,10 @@
                                         url: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(8) input").val(),
                                         decision: true
                                     }, function(data, status){
-                                        console.log(data);
-                                        if (status == 200) {
-                                            notify('Successfully added record.')
+                                        if (data == 'OK') {
+                                            notify('Successfully added record.', "success")
                                         } else {
-                                            notify('Adding record failed.')
+                                            notify('Adding record failed.', "danger")
                                         }
                                     });
                                 }
