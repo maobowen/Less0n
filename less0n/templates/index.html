@@ -27,7 +27,7 @@
                     </ul>
                     <ul class="main-nav">
                         {%- if current_user.is_authenticated -%}
-                        <div class="dropdown">
+                        <div class="dropdown" style="float:right;">
                             <button class="dropbtn"><li class="loginall1"><img class="user-logo" src="{{current_user.avatar}}?sz=50" width="50" height="50" alt="{{current_user.name}}"> {{current_user.name}}</li></button>
                             <div class="dropdown-content">
                                 <ul>
