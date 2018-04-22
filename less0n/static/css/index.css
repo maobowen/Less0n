@@ -352,12 +352,14 @@ input[type=submit]:active {
 .dropbtn {
     background-color: transparent;
     color: white;
+    /*padding: 16px;*/
     padding-right: 10px;
     /*font-size: 16px;*/
     border: none;
     margin-bottom: 5px;
 
 }
+
 
 .dropdown {
     position: relative;
@@ -367,19 +369,18 @@ input[type=submit]:active {
 .dropdown-content {
     display: none;
     position: absolute;
+    right: 0;
     background-color: transparent;
-    /*min-width: 0px;*/
-    width: 300px;
-    /*box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);*/
+    min-width: 240px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
-    align-content: right;
-    margin-left: 0px;
 }
+
 
 .dropdown-content a {
     color: #FFFFFF;
-    padding: 16px 16px;
-    margin-left: 50px;
+    padding: 12px 16px;
+    /*margin-left: 50px;*/
     text-decoration: none;
     display: block;
     /*box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);*/
@@ -399,3 +400,4 @@ input[type=submit]:active {
     margin-right: -10px;
     color: #FFFFFF;
 }
+

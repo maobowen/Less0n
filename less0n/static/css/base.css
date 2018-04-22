@@ -180,7 +180,8 @@ footer li a:hover {
 .dropbtn {
     background-color: transparent;
     color: #000000;
-    padding-right: 0px;
+    /*padding: 16px;*/
+    padding-right: 10px;
     /*font-size: 16px;*/
     border: none;
     margin-bottom: 5px;
@@ -196,8 +197,9 @@ footer li a:hover {
     display: none;
     position: absolute;
     background-color: transparent;
-    /*min-width: 0px;*/
-    width: 300px;
+    right: 0;
+    min-width: 240px;
+    /*width: 300px;*/
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
     align-content: right;
@@ -208,8 +210,8 @@ footer li a:hover {
 
 .dropdown-content a {
     color: #FFFFFF;
-    padding: 16px 16px;
-    margin-left: 10px;
+    padding: 12px 16px;
+    /*margin-left: 10px;*/
     text-decoration: none;
     display: block;
     /*background-color: #FFFFFF;*/
@@ -225,3 +227,5 @@ footer li a:hover {
 .dropdown:hover .dropbtn {
     background-color: transparent;
 }
+
+
