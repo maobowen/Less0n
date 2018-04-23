@@ -741,7 +741,7 @@ def admin_approve_course_request():
 
     # check if the new course is in the db
     if approved:
-        new_course = Course.query.filter_by(id=course_id)
+        new_course = Course.query.filter_by(id=course_id).first()
         if new_course is None:
             return redirect(redirect_url, code='404')
     print('OK')  # for test
