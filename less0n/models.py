@@ -1,5 +1,6 @@
 from less0n import db, login_manager
 from datetime import datetime
+import enum
 from flask_login import UserMixin
 
 
@@ -36,7 +37,9 @@ class Membership(db.Model):
     __tablename__ = 'memberships'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.String(40), db.ForeignKey('users.id'), nullable=False)
+    user = db.relation(User, backref='memberships', lazy=True)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
+    role = db.relation(Role, backref='memberships', lazy=True)
     __table_args__ = (
         db.UniqueConstraint('user_id', 'role_id', name='_memberships_uc'),
     )
@@ -79,6 +82,7 @@ class Course(db.Model):
     number = db.Column(db.String(6), nullable=False)  # 3827
     name = db.Column(db.String(100), nullable=False)  # Fundamentals of Computer Systems
     department_id = db.Column(db.String(6), db.ForeignKey('departments.id'), nullable=False)  # COMS
+    # department = db.relationship('Department', backref='courses', lazy=True)
 
     def __init__(self, id=None, subject=None, number=None, name=None, department=None):
         db.Model.__init__(self, id=id, subject=subject, number=number, name=name, department=department)
@@ -149,3 +153,47 @@ class Tag(db.Model):
     __tablename__ = 'tags'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # 1
     text = db.Column(db.String(40), nullable=False)
+
+
+class ApprovalType(enum.Enum):
+    APPROVED = 1
+    PENDING = 0
+    DECLINED = -1
+
+
+class AddProfRequest(db.Model):
+    __tablename__ = 'add_prof_requests'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # 1
+    user_id = db.Column(db.String(40), db.ForeignKey('users.id'), nullable=False)  # zj2226
+    user = db.relation(User, backref='professor_requests', lazy=True)
+    name = db.Column(db.String(100), nullable=False)  # Ewan Lowe
+    department_id = db.Column(db.String(6), db.ForeignKey('departments.id'), nullable=False)  # COMS
+    department = db.relationship('Department', backref='professor_requests', lazy=True)
+    course_id = db.Column(db.String(12), db.ForeignKey('courses.id'), nullable=False)  # CSEE3827
+    course = db.relation(Course, lazy=True)
+    term_id = db.Column(db.String(12), db.ForeignKey('terms.id'), nullable=False)
+    term = db.relation(Term, lazy=True)
+    approved = db.Column(db.Enum(ApprovalType), nullable=False)
+
+    def __repr__(self):
+        return '<Professor Request %r>' % self.name
+
+
+class AddCourseRequest(db.Model):
+    __tablename__ = 'add_course_requests'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # 1
+    user_id = db.Column(db.String(40), db.ForeignKey('users.id'), nullable=False)  # zj2226
+    user = db.relation(User, backref='course_requests', lazy=True)
+    course_id = db.Column(db.String(12), nullable=False)  # CSEE3827
+    course_name = db.Column(db.String(100), nullable=False)  # Fundamentals of Computer Systems
+    course_number = db.Column(db.String(6), nullable=False)  # 3827
+    department_id = db.Column(db.String(6), db.ForeignKey('departments.id'), nullable=False)  # COMS
+    department = db.relationship('Department', backref='course_requests', lazy=True)
+    subject_id = db.Column(db.String(6), db.ForeignKey('subjects.id'), nullable=False)  # CSEE
+    subject = db.relationship('Subject', backref='course_requests', lazy=True)
+    term_id = db.Column(db.String(12), db.ForeignKey('terms.id'), nullable=False)
+    term = db.relation(Term, lazy=True)
+    approved = db.Column(db.Enum(ApprovalType), nullable=False)
+
+    def __repr__(self):
+        return '<Course Request %r>' % self.course_id

@@ -83,10 +83,10 @@ function changeProf(index, all_profs) {
     }
 
     // Default prof
-    if (current_prof['name'] == 'All Instructors') {
+    if (current_prof['uni'] == null) {
         $('#professor-selection').val('');
     } else {
-        $('#professor-selection').val(current_prof['name']);
+        $('#professor-selection').val(current_prof['uni']);
     }
 }
 
@@ -178,7 +178,7 @@ $('#pens li').on('click', function() {
     $('#workload').val(workloadValue);
 });
 
-$('.contact-form').submit(function(e){
+$('.comment-form').submit(function(e){
     if ($('#rating').val() == '') {
         $('#error').text('Please input a rating scale.');
         return false;

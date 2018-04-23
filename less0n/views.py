@@ -2,7 +2,7 @@
 # - http://bitwiser.in/2015/09/09/add-google-login-in-flask.html
 # - https://stackoverflow.com/questions/34235590/how-do-you-restrict-google-login-oauth2-to-emails-from-a-specific-google-apps
 
-from less0n import app, helpers
+from less0n import app, helpers, db
 from less0n.models import *
 import json
 import logging
@@ -34,6 +34,11 @@ def get_google_auth(state=None, token=None):
         return OAuth2Session(Auth.CLIENT_ID, state=state, redirect_uri=app.config['GOOGLE_OAUTH_REDIRECT_URI'])
     oauth = OAuth2Session(Auth.CLIENT_ID, redirect_uri=app.config['GOOGLE_OAUTH_REDIRECT_URI'], scope=Auth.SCOPE)
     return oauth
+
+
+def has_membership(user_id, role):
+    membership = Membership.query.filter_by(user_id=user_id, role=role).first()
+    return membership is not None
 
 
 def get_or_create(model, defaults=None, **kwargs):
@@ -103,6 +108,7 @@ def oauth2callback():
                 flash('You cannot login using this email. Please use Lionmail instead.', 'danger')
                 return redirect(session.get('oauth_redirect', url_for('index')))
 
+            # Register user
             user = User.query.filter_by(email=email).first()
             if user is None:
                 user = User()
@@ -114,6 +120,13 @@ def oauth2callback():
             user.avatar = user_data['picture']
             db.session.add(user)
             db.session.commit()
+
+            # Register membership
+            role_student = Role.query.filter_by(name='student').first()
+            role_instructor = Role.query.filter_by(name='instructor').first()
+            if not has_membership(user.id, role_instructor) and not has_membership(user.id, role_student):
+                db.session.add(Membership(user=user, role=role_student))
+                db.session.commit()
 
             login_user(user)
             return redirect(session.get('oauth_redirect', url_for('index')))
@@ -195,10 +208,12 @@ def department_course(dept_arg):
 @app.route('/course/<regex("[A-Za-z]{4}[A-Za-z0-9]{4,5}"):course_arg>/')
 def course(course_arg):
     c = Course.query.filter_by(id=course_arg.upper()).first()
+    depts = Department.query.all()
     if c is None:
         return redirect(url_for('department'))
     context = {
         'course': c,
+        'depts': depts,
     }
     return render_template('course-detail.html', **context)
 
@@ -302,6 +317,70 @@ def course_json(course_arg):
     return jsonify(ret)
 
 
+@app.route('/course/new/', methods=['GET', 'POST'])
+@login_required
+def add_new_course():
+    """
+    Add course request
+
+    Request form example:
+    {
+        'course_name': 'Computer Networks',
+        'course_number': 'CSEE4119',
+        'department_name': 'Computer Science',
+        'subject_name': 'Computer Science and Electrical Engineering'
+    }
+
+    :return: json-str.
+        "OK" if add successfully. "Fail" + error info if subject / department / professor not exists.
+    """
+    redirect_url = request.args.get('redirect') or url_for('index')
+    if request.method == "GET":
+        depts = Department.query.all()
+        subjs = Subject.query.all()
+        context = {
+            'depts': depts,
+            'subjs': subjs,
+            'redirect_url': redirect_url,
+        }
+        return render_template('add-course.html', **context)
+
+    elif request.method == "POST":
+        # Pre check
+        form_arguments = {'course-name', 'course-number', 'department', 'subject', 'semester', 'year'}
+        for arg in form_arguments:
+            if arg not in request.form:
+                abort(404)
+
+        # Retrieve request arguments
+        course_name = request.form.get('course-name', type=str)
+        course_number = request.form.get('course-number', type=str)
+        department_id = request.form.get('department', type=str)
+        subject_id = request.form.get('subject', type=str)
+        course_id = subject_id + course_number
+        term_id = request.form.get('semester', type=str) + ' ' + request.form.get('year', type=str)
+
+        # Post check
+        department = Department.query.filter_by(id=department_id).first()
+        subject = Subject.query.filter_by(id=subject_id).first()
+        for param in (course_id, course_name, course_number, department, subject, term_id):  # None or empty
+            if not param:
+                flash('The values you have input are invalid. Please check and submit again.', 'danger')
+                return redirect(redirect_url)
+
+        # Add request to database
+        try:
+            term, _ = get_or_create(Term, id=term_id)
+            add_course_request = AddCourseRequest(
+                course_id=course_id, course_name=course_name, course_number=course_number,
+                department=department, subject=subject, term=term,
+                user_id=current_user.id, approved=ApprovalType.PENDING)
+            db.session.add(add_course_request)
+            db.session.commit()
+            flash('The adding course request is submitted.', 'success')
+        except SQLAlchemyError:
+            flash('An error occurred when submitting an adding course request.', 'danger')
+        return redirect(redirect_url)
 
 
 @app.route('/search/', methods=['GET'])
@@ -431,6 +510,56 @@ def prof(prof_arg):
     return render_template('faculty-page.html', **context)
 
 
+@app.route('/prof/new/', methods=['POST'])
+def add_new_prof():
+    """
+    Add professor request
+    Request form example:
+    {
+        'name': 'Clifford Stein',
+        'department_id': 'COMS',
+        'term_id': 'Fall 2016'
+    }
+    :return: json-str.
+        "OK" if add successfully. "Fail" + error info if subject / department / professor not exists.
+    """
+    redirect_url = request.args.get('redirect') or url_for('index')
+
+    # Pre check
+    form_arguments = {'name', 'department', 'course', 'semester', 'year'}
+    for arg in form_arguments:
+        if arg not in request.form:
+            abort(404)
+
+    # Retrieve request arguments
+    name = request.form.get('name', type=str)
+    department_id = request.form.get('department', type=str)
+    course_id = request.form.get('course', type=str)
+    term_id = request.form.get('semester', type=str) + ' ' + request.form.get('year', type=str)
+
+    # Post check
+    department = Department.query.filter_by(id=department_id).first()
+    course = Course.query.filter_by(id=course_id).first()
+    for param in (name, department, course, term_id):  # None or empty
+        if not param:
+            flash('The values you have input are invalid. Please check and submit again.', 'danger')
+            return redirect(redirect_url)
+
+    # Add request to database
+    try:
+        term, _ = get_or_create(Term, id=term_id)
+        add_prof_request = AddProfRequest(
+            name=name, department=department, course=course, term=term,
+            user_id=current_user.id, approved=ApprovalType.PENDING)
+        db.session.add(add_prof_request)
+        db.session.commit()
+        flash('The adding instructor request is submitted.', 'success')
+        return redirect(redirect_url)
+    except SQLAlchemyError:
+        flash('An error occurred when submitting an adding instructor request.', 'danger')
+        return redirect(redirect_url, code=500)
+
+
 @app.route('/comment/', methods=["POST"])
 @login_required
 def comment():
@@ -476,9 +605,233 @@ def comment():
                 db.session.add(comment)
                 db.session.commit()
                 flash('The evaluation is published.', 'success')
+            return redirect(redirect_url)
         except SQLAlchemyError:
             flash('An error occurred when publishing the evaluation.', 'danger')
-        return redirect(redirect_url)
+            return redirect(redirect_url, code=500)
+
+
+@app.route('/admin/', methods=['GET'])
+@login_required
+def admin():
+    """Return the admin page, or redirect to index page if not authorized."""
+    role_admin = Role.query.filter_by(name='admin').first()
+    if current_user.is_authenticated and has_membership(current_user.id, role_admin):
+        return render_template('admin.html')
+    else:
+        flash('You do not have the permission to view this page.', 'danger')
+        return redirect(url_for('index'), code=401)
+
+
+@app.route('/admin/course', methods=['GET'])
+@login_required
+def admin_list_course_request():
+    """Return a JSON containing adding course requests, or raise 401 if not authorized."""
+    role_admin = Role.query.filter_by(name='admin').first()
+    if current_user.is_authenticated and has_membership(current_user.id, role_admin):
+        list_approved = request.args.get('approved', type=int) or 0
+        list_pending = request.args.get('pending', type=int) or 0
+        list_declined = request.args.get('declined', type=int) or 0
+        course_requests = []
+        if list_approved:
+            course_requests.extend(AddCourseRequest.query.filter_by(approved=ApprovalType.APPROVED).all())
+        if list_pending:
+            course_requests.extend(AddCourseRequest.query.filter_by(approved=ApprovalType.PENDING).all())
+        if list_declined:
+            course_requests.extend(AddCourseRequest.query.filter_by(approved=ApprovalType.DECLINED).all())
+        ret = []
+        for course_request in course_requests:
+            ret.append({
+                'id': course_request.id,
+                'subject_id': course_request.subject.id,
+                'course_number': course_request.course_number,
+                'course_name': course_request.course_name,
+                'department_id': course_request.department.id,
+                'term_id': course_request.term.id,
+                'approved': course_request.approved.value,
+            })
+        return jsonify(ret)
+    else:
+        abort(401)
+
+
+@app.route('/admin/prof', methods=['GET'])
+@login_required
+def admin_list_prof_request():
+    """Return a JSON containing adding instructor requests, or raise 401 if not authorized."""
+    role_admin = Role.query.filter_by(name='admin').first()
+    if current_user.is_authenticated and has_membership(current_user.id, role_admin):
+        list_approved = request.args.get('approved', type=int) or 0
+        list_pending = request.args.get('pending', type=int) or 0
+        list_declined = request.args.get('declined', type=int) or 0
+        prof_requests = []
+        if list_approved:
+            prof_requests.extend(AddProfRequest.query.filter_by(approved=ApprovalType.APPROVED).all())
+        if list_pending:
+            prof_requests.extend(AddProfRequest.query.filter_by(approved=ApprovalType.PENDING).all())
+        if list_declined:
+            prof_requests.extend(AddProfRequest.query.filter_by(approved=ApprovalType.DECLINED).all())
+        ret = []
+        for prof_request in prof_requests:
+            ret.append({
+                'id': prof_request.id,
+                'name': prof_request.name,
+                'department_id': prof_request.department.id,
+                'course_id': prof_request.course.id,
+                'term_id': prof_request.term.id,
+                'approved': prof_request.approved.value,
+            })
+        return jsonify(ret)
+    else:
+        abort(401)
+
+
+@app.route('/admin/course', methods=['POST'])
+def admin_approve_course_request():
+    """
+    Admin approves a course.
+    - Add a new course to Course entity
+    - Add a new teaching to Teaching entity
+
+    :return: json-str.
+        "OK" if add successfully. "Fail" + error info if subject / department / professor not exists.
+    """
+    redirect_url = request.args.get('redirect') or url_for('index')
+
+    # get parameters
+    req_id = int(request.form['request_id']) # 1
+    subject_id = str(request.form['subject'])  # COMS
+    course_number = str(request.form["course_num"])  # 4771
+    course_name = str(request.form["course_name"])  # Intro to ML
+    department_id = str(request.form["department"])  # COMS
+    term_id = str(request.form['semester']) # Fall 2017
+    approved = True if request.form['decision'] in ['True', 'true'] else False # True
+
+    approved_types = {True: ApprovalType.APPROVED, False: ApprovalType.DECLINED}
+
+    # check parameters
+    for param in (req_id, subject_id, course_number, course_name, department_id, term_id, approved):
+        if param is None or param == '':
+            return redirect(redirect_url, code='404')
+
+    # preprocess parameters
+    course_id = subject_id + course_number
+
+    # get objects
+    subject = Subject.query.filter_by(id=subject_id).first()
+    department = Department.query.filter_by(id=department_id).first()
+    term = Term.query.filter_by(id=term_id).first()
+
+    # check objects
+    for obj in (subject, department, term):
+        if obj is None:
+            return redirect(redirect_url, code='404')
+
+    # construct objects
+    course = Course(id=course_id, subject=subject, number=course_number, department=department, name=course_name)
+    db.session.add(course)
+
+    # update add prof request
+    if req_id != -1 and AddCourseRequest.query.filter_by(id=req_id).first() is not None:
+        new_course_request = AddCourseRequest.query.filter_by(id=req_id).first()
+        new_course_request.approved = approved_types[approved]
+
+    # add to db
+    db.session.commit()
+
+    # check if the new course is in the db
+    if approved:
+        new_course = Course.query.filter_by(id=course_id).first()
+        if new_course is None:
+            return redirect(redirect_url, code='404')
+    print('OK')  # for test
+    return jsonify('OK')
+
+
+@app.route('/admin/prof', methods=['POST'])
+def admin_approve_prof_request():
+    """
+    Admin approves a prof.
+
+    Example:
+    {
+        "id": 1,
+        "uni": "ab1234",
+        "prof_name: "Alpha Beta",
+        "department_id": "COMS",
+        "term_id": "Fall 2017",
+        "course_id": "COMS4115",
+        "avatar": "",
+        "url": "",
+        "approved": False
+    }
+
+    :return: json-str.
+        "OK" if add successfully. "Fail" + error info if subject / department / professor not exists.
+    """
+    redirect_url = request.args.get('redirect') or url_for('index')
+
+    # get parameters
+    req_id = int(request.form['request_id'])
+    uni = str(request.form['uni'])
+    prof_name = str(request.form["name"])
+    department_id = str(request.form["department"])
+    term_id = str(request.form["semester"])
+    avatar = str(request.form['avatar'])
+    url = str(request.form['url'])
+    course_id = str(request.form['course'])
+    approved = True if request.form['decision'] in ['True', 'true'] else False
+
+    approved_types = {True: ApprovalType.APPROVED, False: ApprovalType.DECLINED}
+
+    # check parameters
+    for param in (req_id, uni, prof_name, department_id, term_id, course_id, approved):
+        if param is None or param == '':
+            return redirect(redirect_url, code='404')
+
+    # check if this professor exists
+    if not approved:
+        pass
+
+    elif approved:
+        # get objects
+        department = Department.query.filter_by(id=department_id).first()
+        term = Term.query.filter_by(id=term_id).first()
+        course = Course.query.filter_by(id=course_id).first()
+
+        # check objects
+        for obj in (department, term, course):
+            if obj is None:
+                return redirect(redirect_url, code='404')
+
+        # update professor if not exist
+
+        if Professor.query.filter_by(uni=uni).first() is None:
+            professor = Professor(uni=uni, name=prof_name, department=department,
+                         avatar=avatar, url=url)
+            # construct objects
+            db.session.add(professor)
+
+        # update teaching if not exist
+        if len(Teaching.query.filter_by(course_id=course_id, professor_uni=uni).all()) == 0:
+            teaching = Teaching(course=course, professor=professor)
+            db.session.add(teaching)
+
+    # update the approved column
+    if req_id != -1 and AddProfRequest.query.filter_by(id=req_id).first() is not None:  # If it is not added by admin
+        new_prof_request = AddProfRequest.query.filter_by(id=req_id).first()
+        new_prof_request.approved = approved_types[approved]
+
+    db.session.commit()
+
+    # check if the professor is added to db
+    if approved:
+        new_prof = Professor.query.filter_by(uni=uni).first()
+        new_teaching = Teaching.query.filter_by(course_id=course_id, professor_uni=uni).first()
+        if new_prof is None or new_teaching is None:
+            return redirect(redirect_url, code='404')
+
+    return jsonify('OK')
 
 
 @app.errorhandler(500)
