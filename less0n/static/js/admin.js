@@ -20,6 +20,7 @@ function checkEmpty(id, added) {
 
 // ajax
 function renderCourseRequest(all_course_request) {
+    $('#tabCourse tr').slice(1).remove();
     $.each(all_course_request, function(i, request) {
         $('#tabCourse').append(
             '<tr data-request="course-request-' + request['id'] + '">' +
@@ -36,6 +37,7 @@ function renderCourseRequest(all_course_request) {
 }
 
 function renderProfRequest(all_prof_request) {
+    $('#tabProf tr').slice(1).remove();
     $.each(all_prof_request, function(i, request) {
         $('#tabProf').append(
             '<tr data-request="prof-request-' + request['id'] + '">' +
