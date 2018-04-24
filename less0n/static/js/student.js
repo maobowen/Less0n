@@ -79,7 +79,10 @@ function renderComment(all_comment) {
                             '<li class="list-group-item">Workload: ' + workload_html + '</li>' +
                             '<li class="list-group-item">Grade: ' + current_comment['grade'] + '</li>' +
                             '<li class="list-group-item">Tags: ' + renderTag(current_comment['tags']) + '</li>' +
-                            '<li class="list-group-item" display="none">' + current_comment['tags'] + '</li>' +
+                            '<li class="list-group-item" style="display:none">' + current_comment['id'] + '</li>' +
+                            '<li class="list-group-item" style="display:none">' + current_comment['tags'] + '</li>' +
+                            '<li class="list-group-item" style="display:none">' + current_comment['rating'] + '</li>' +
+                            '<li class="list-group-item" style="display:none">' + current_comment['workload'] + '</li>' +
                         '</ul>' +
                     '</div>' +
                 '</div>' +
@@ -89,27 +92,40 @@ function renderComment(all_comment) {
             var index = $('.container.card-columns .card').index($(this).parent().parent());
             var cur_course = $('#c' + index + ' ul li:nth-child(1)').text().split(': ')[1];
             var cur_prof = $('#c' + index + ' ul li:nth-child(2)').text().split(': ')[1];
+
+            var cur_id = $('#c' + index + ' ul li:nth-child(8)').text();
             var cur_title = $('.container.card-columns .card:nth-child(' + (index + 1) + ') h5').text();
             var cur_year = $('#c' + index + ' ul li:nth-child(3)').text().split(': ')[1].split(' ')[1];
             var cur_sem = $('#c' + index + ' ul li:nth-child(3)').text().split(': ')[1].split(' ')[0];
             var cur_grade = $('#c' + index + ' ul li:nth-child(6)').text().split(': ')[1];
-            var cur_rating = 0;
-            var cur_workload = 0;
-            var cur_tags = $('#c' + index + ' ul li:nth-child(8)').text();
+            var cur_rating = parseInt($('#c' + index + ' ul li:nth-child(10)').text());
+            var cur_workload = parseInt($('#c' + index + ' ul li:nth-child(11)').text());
+            var cur_tags = $('#c' + index + ' ul li:nth-child(9)').text();
             var cur_msg = $('.container.card-columns .card:nth-child(' + (index + 1) + ') p').text();
 
+            $('input[name=commentid]').val(cur_id);
             $('input[name=title]').val(cur_title);
             $('select[name=year]').val(cur_year);
             $('select[name=semester]').val(cur_sem);
             $('select[name=grade]').val(cur_grade);
-            $('form[name=rating]').val(cur_rating);
-            $('form[name=workload]').val(cur_workload);
+            $('input[name=rating]').val(cur_rating);
+            $('input[name=workload]').val(cur_workload);
             $('input[name=tags]').tagsinput('removeAll');
             $('input[name=tags]').tagsinput('add', cur_tags);
             $('textarea[name=message]').val(cur_msg);
 
             $('.cmt_course').text(cur_course);
             $('#cmt_prof').text(cur_prof);
+
+            for (i = 0; i < cur_rating; i++) {
+                var stars = $('#stars li');
+                $(stars[i]).addClass('selected');
+            }
+
+            for (i = 0; i < cur_workload; i++) {
+                var pens = $('#pens li');
+                $(pens[i]).addClass('selected');
+            }
         });
     });
 }
