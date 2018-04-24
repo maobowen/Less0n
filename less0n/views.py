@@ -962,7 +962,7 @@ def student_list_comment():
         abort(401)
 
 
-@app.route('/student/comment/', methods=['POST'])
+@app.route('/student/comment/update/', methods=['POST'])
 @login_required
 def student_update_comment():
     redirect_url = url_for('student')
@@ -1012,7 +1012,7 @@ def student_update_comment():
         return redirect(redirect_url, code=500)
 
 
-@app.route('/student/comment/', methods=['DELETE'])
+@app.route('/student/comment/delete/', methods=['POST'])
 @login_required
 def student_delete_comment():
     redirect_url = url_for('student')

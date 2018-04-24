@@ -222,7 +222,7 @@
         <div class="modal fade bd-example-modal-lg" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
-                    <form method="delete" action="{{ url_for('student_delete_comment') }}" class="delete-form modal-form">
+                    <form method="POST" action="{{ url_for('student_delete_comment') }}" class="delete-form modal-form">
                         <div class="comment-bar">
                             <div class="comment-classname">Delete a Comment for <span class="cmt_course"></span></div>
                             <button type="button" class="close close-icon" data-dismiss="modal" aria-label="Close">
