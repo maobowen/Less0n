@@ -71,6 +71,7 @@
         </script>
         <script src="{{ url_for('static', filename='js/admin.js')}}"></script>
         <script type="text/javascript">
+        var cur_submit = 0;
         $('.refresh').on('click',function (e) {
             $.ajax({
                 type: 'GET',
@@ -116,6 +117,7 @@
                                         $(".refresh").trigger("click");
                                     } else {
                                         notify('Request operation failed.', "danger")
+                                        $(".refresh").trigger("click");
                                     }
                                 });
                         }
@@ -171,6 +173,7 @@
                                         $(".refresh").trigger("click");
                                     } else {
                                         notify('Request operation failed.', "danger")
+                                        $(".refresh").trigger("click");
                                     }
                                 });
                         }
@@ -186,10 +189,10 @@
         // add entry
         $(".add").click(function () {
             if ($(this).parent().parent().attr('id') == "professor_tab") {
-                var cur_prof = $('#tabCourse tr').length;
+                cur_submit ++;
                 $('#tabProf').append(
-                    '<tr data-request=' + cur_prof + '>' +
-                    '<td>' + cur_prof + '</td>' +
+                    '<tr data-request="p' + cur_submit + '">' +
+                    '<td>*</td>' +
                     '<td><input type="text" value=""></td>' +
                     '<td><input type="text" value=""></td>' +
                     '<td><input type="text" value=""></td>' +
@@ -226,6 +229,7 @@
                                     $(".refresh").trigger("click");
                                 } else {
                                     notify('Request operation failed.', "danger")
+                                    $(".refresh").trigger("click");
                                 }
                             });
                     }
@@ -236,10 +240,10 @@
         // add entry
         $(".add").click(function () {
             if ($(this).parent().parent().attr('id') == "course_tab") {
-                var cur_course = $('#tabCourse tr').length;
+                cur_submit ++;
                 $('#tabCourse').append(
-                    '<tr data-request=' + cur_course + '>' +
-                    '<td>' + cur_course + '</td>' +
+                    '<tr data-request=' + cur_submit + '>' +
+                    '<td>*</td>' +
                     '<td><input type="text" value=""></td>' +
                     '<td><input type="text" value=""></td>' +
                     '<td><input type="text" value=""></td>' +
@@ -272,6 +276,7 @@
                                     $(".refresh").trigger("click");
                                 } else {
                                     notify('Request operation failed.', "danger")
+                                    $(".refresh").trigger("click");
                                 }
                             });
                     }
