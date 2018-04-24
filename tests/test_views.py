@@ -416,7 +416,7 @@ class MainTest(unittest.TestCase):
                 assert add_prof_request is not None
                 assert add_prof_request.approved == ApprovalType.DECLINED
 
-    def testApproveNewProfWithUnvalidArg(self):
+    def testApproveNewProfWithInvalidArg(self):
         """
         Test if admin_approve_prof_request() return
         Test case:
@@ -463,7 +463,8 @@ class MainTest(unittest.TestCase):
                 course=test_case['course_id'],
                 decision=test_case['approved']
             ))
-            assert rv._status_code == 404
+            assert rv._status_code == 500
+            assert 'failure' in rv.data.decode('utf-8').lower()
             # assert rv.content_type == 'text/html; charset=utf-8'
 
     def testApproveNewCourseWithValidArg(self):
@@ -528,7 +529,7 @@ class MainTest(unittest.TestCase):
                 assert add_prof_request is not None
                 assert add_prof_request.approved == ApprovalType.DECLINED
 
-    def testApproveNewCourseWithUnvalidArg(self):
+    def testApproveNewCourseWithInvalidArg(self):
         """
         Test if admin_approve_prof_request() return
         Test case:
@@ -567,7 +568,8 @@ class MainTest(unittest.TestCase):
                 semester=test_case['semester'],
                 decision=test_case['decision']
             ))
-            assert rv._status_code == 404
+            assert rv._status_code == 500
+            assert 'failure' in rv.data.decode('utf-8').lower()
 
     def testProfWithValidArg(self):
         """
