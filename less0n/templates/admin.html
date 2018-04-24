@@ -107,7 +107,7 @@
                                 semester: $("tr[data-request=" + id + "] td:nth-child(6)").text(),
                                 decision: decision
                             }, function(data, status){
-                                if (data == 'OK') {
+                                if (data == 'success') {
                                     notify('Successfully added record.', "success")
                                 } else {
                                     notify('Adding record failed.', "danger")

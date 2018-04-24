@@ -150,13 +150,13 @@ def department():
     :return: rendered template
     """
     if request.method == "GET":
-        all_depts = Department.query.all()
+        all_depts = Department.query.order_by(Department.id).all()
         context = {'depts': all_depts}
         return render_template('department.html', **context)
 
     elif request.method == "POST":
         dept_keyword = request.form['dept_keyword']
-        depts = Department.query.filter(Department.name.contains(dept_keyword)).all()
+        depts = Department.query.filter(Department.name.contains(dept_keyword)).order_by(Department.id).all()
         context = {'depts': depts}
         return render_template('department.html', **context)
 
@@ -168,7 +168,7 @@ def department_course(dept_arg):
         return redirect(url_for('department'))
 
     statistics = {}
-    all_courses = Course.query.filter_by(department=dept).all()
+    all_courses = Course.query.filter_by(department=dept).order_by(Course.id).all()
     for c in all_courses:
         sum_rating = sum_workload = sum_grade = 0
         count_all_comments = count_nonempty_comments = 0
@@ -408,8 +408,10 @@ def search():
         depts = re.split(',\s*|\s+', dept)  # split keywords by , |\s
         results = []
         for dept in depts:
-            for result in Department.query.filter((Department.id.like("%%" + dept + "%")) |
-                                                  (Department.name.like("%%" + dept + "%"))).all():
+            for result in Department.query.filter(
+                    (Department.id.like("%%" + dept + "%")) |
+                    (Department.name.like("%%" + dept + "%"))
+            ).order_by(Department.id).all():
                 results.append(result)
         context['depts'] = results
         context['count'] += len(results)
@@ -418,8 +420,10 @@ def search():
         subjs = re.split(',\s*|\s+', subj)
         results = []
         for subj in subjs:
-            for result in Subject.query.filter((Subject.id.like("%%" + subj + "%")) |
-                                               (Subject.name.like("%%" + subj + "%"))).all():
+            for result in Subject.query.filter(
+                    (Subject.id.like("%%" + subj + "%")) |
+                    (Subject.name.like("%%" + subj + "%"))
+            ).order_by(Subject.id).all():
                 results.append(result)
         context['subjs'] = results
         context['count'] += len(results)
@@ -428,8 +432,10 @@ def search():
         profs = re.split(',\s*|\s+', prof)
         results = []
         for prof in profs:
-            for result in Professor.query.filter((Professor.uni.like("%%" + prof + "%")) |
-                                                 (Professor.name.like("%%" + prof + "%"))).all():
+            for result in Professor.query.filter(
+                    (Professor.uni.like("%%" + prof + "%")) |
+                    (Professor.name.like("%%" + prof + "%"))
+            ).order_by(Professor.name).all():
                 results.append(result)
         context['profs'] = results
         context['count'] += len(results)
@@ -438,8 +444,10 @@ def search():
         courses = re.split(',\s*|\s+', course)
         results = []
         for course in courses:
-            for result in Course.query.filter((Course.id.like("%%" + course + "%")) |
-                                              (Course.name.like("%%" + course + "%"))).all():
+            for result in Course.query.filter(
+                    (Course.id.like("%%" + course + "%")) |
+                    (Course.name.like("%%" + course + "%"))
+            ).order_by(Course.id).all():
                 results.append(result)
         context['courses'] = results
         context['count'] += len(results)
@@ -696,56 +704,58 @@ def admin_approve_course_request():
     :return: json-str.
         "OK" if add successfully. "Fail" + error info if subject / department / professor not exists.
     """
-    redirect_url = request.args.get('redirect') or url_for('index')
-
-    # get parameters
-    req_id = int(request.form['request_id']) # 1
-    subject_id = str(request.form['subject'])  # COMS
-    course_number = str(request.form["course_num"])  # 4771
-    course_name = str(request.form["course_name"])  # Intro to ML
-    department_id = str(request.form["department"])  # COMS
-    term_id = str(request.form['semester']) # Fall 2017
-    approved = True if request.form['decision'] in ['True', 'true'] else False # True
+    # Get parameters
+    req_id = request.form.get('request_id', type=int)  # 1
+    subject_id = request.form.get('subject', type=str)  # COMS
+    course_number = request.form.get('course_num', type=str)  # 4771
+    course_name = request.form.get('course_name', type=str)  # Machine Learning
+    department_id = request.form.get('department', type=str)  # COMS
+    term_id = request.form.get('semester', type=str)  # Fall 2017
+    approved = True if request.form.get('decision', type=str).lower() == 'true' else False  # True
 
     approved_types = {True: ApprovalType.APPROVED, False: ApprovalType.DECLINED}
 
-    # check parameters
+    # Check parameters
     for param in (req_id, subject_id, course_number, course_name, department_id, term_id, approved):
-        if param is None or param == '':
-            return redirect(redirect_url, code='404')
+        if not param:  # None or empty string
+            return jsonify(error=500, text='failure'), 500
 
-    # preprocess parameters
-    course_id = subject_id + course_number
+    try:
+        if approved:
+            # Pre-process parameters
+            course_id = subject_id + course_number
 
-    # get objects
-    subject = Subject.query.filter_by(id=subject_id).first()
-    department = Department.query.filter_by(id=department_id).first()
-    term = Term.query.filter_by(id=term_id).first()
+            # Get objects
+            subject = Subject.query.filter_by(id=subject_id).first()
+            department = Department.query.filter_by(id=department_id).first()
+            term = Term.query.filter_by(id=term_id).first()
 
-    # check objects
-    for obj in (subject, department, term):
-        if obj is None:
-            return redirect(redirect_url, code='404')
+            # Check objects
+            for obj in (subject, department, term):
+                if obj is None:
+                    return jsonify(error=500, text='failure'), 500
 
-    # construct objects
-    course = Course(id=course_id, subject=subject, number=course_number, department=department, name=course_name)
-    db.session.add(course)
+            # Construct objects
+            course = Course(id=course_id, subject=subject, number=course_number, department=department, name=course_name)
+            db.session.add(course)
 
-    # update add prof request
-    if req_id != -1 and AddCourseRequest.query.filter_by(id=req_id).first() is not None:
-        new_course_request = AddCourseRequest.query.filter_by(id=req_id).first()
-        new_course_request.approved = approved_types[approved]
+        # Update add prof request
+        if req_id > -1 and AddCourseRequest.query.filter_by(id=req_id).first() is not None:
+            new_course_request = AddCourseRequest.query.filter_by(id=req_id).first()
+            new_course_request.approved = approved_types[approved]
 
-    # add to db
-    db.session.commit()
+        # Add to db
+        db.session.commit()
 
-    # check if the new course is in the db
-    if approved:
-        new_course = Course.query.filter_by(id=course_id).first()
-        if new_course is None:
-            return redirect(redirect_url, code='404')
-    print('OK')  # for test
-    return jsonify('OK')
+        # Check if the new course is in the db
+        if approved:
+            new_course = Course.query.filter_by(id=course_id).first()
+            if new_course is None:
+                return jsonify(error=500, text='failure'), 500
+
+        return jsonify('success')
+    except SQLAlchemyError:
+        return jsonify(error=500, text='failure'), 500
 
 
 @app.route('/admin/prof', methods=['POST'])
@@ -771,67 +781,65 @@ def admin_approve_prof_request():
     """
     redirect_url = request.args.get('redirect') or url_for('index')
 
-    # get parameters
-    req_id = int(request.form['request_id'])
-    uni = str(request.form['uni'])
-    prof_name = str(request.form["name"])
-    department_id = str(request.form["department"])
-    term_id = str(request.form["semester"])
-    avatar = str(request.form['avatar'])
-    url = str(request.form['url'])
-    course_id = str(request.form['course'])
-    approved = True if request.form['decision'] in ['True', 'true'] else False
+    # Get parameters
+    req_id = request.form.get('request_id', type=int)
+    uni = request.form.get('uni', type=str)
+    prof_name = request.form.get('name', type=str)
+    department_id = request.form.get('department', type=str)
+    term_id = request.form.get('semester', type=str)
+    avatar = request.form.get('avatar', type=str)
+    url = request.form.get('url', type=str)
+    course_id = request.form.get('course', type=str)
+    approved = True if request.form.get('decision', type=str).lower() == 'true' else False
 
     approved_types = {True: ApprovalType.APPROVED, False: ApprovalType.DECLINED}
 
-    # check parameters
+    # Check parameters
     for param in (req_id, uni, prof_name, department_id, term_id, course_id, approved):
-        if param is None or param == '':
-            return redirect(redirect_url, code='404')
+        if not param:  # None or empty string
+            return jsonify(error=500, text='failure'), 500
 
-    # check if this professor exists
-    if not approved:
-        pass
+    try:
+        # Check if this professor exists
+        if approved:
+            # Get objects
+            department = Department.query.filter_by(id=department_id).first()
+            term = Term.query.filter_by(id=term_id).first()
+            course = Course.query.filter_by(id=course_id).first()
 
-    elif approved:
-        # get objects
-        department = Department.query.filter_by(id=department_id).first()
-        term = Term.query.filter_by(id=term_id).first()
-        course = Course.query.filter_by(id=course_id).first()
+            # Check objects
+            for obj in (department, term, course):
+                if obj is None:
+                    return jsonify(error=500, text='failure'), 500
 
-        # check objects
-        for obj in (department, term, course):
-            if obj is None:
-                return redirect(redirect_url, code='404')
-
-        # update professor if not exist
-
-        if Professor.query.filter_by(uni=uni).first() is None:
+            # Update professor
             professor = Professor(uni=uni, name=prof_name, department=department,
-                         avatar=avatar, url=url)
-            # construct objects
-            db.session.add(professor)
+                                  avatar=avatar, url=url)
+            if Professor.query.filter_by(uni=uni).first() is None:
+                db.session.add(professor)
 
-        # update teaching if not exist
-        if len(Teaching.query.filter_by(course_id=course_id, professor_uni=uni).all()) == 0:
-            teaching = Teaching(course=course, professor=professor)
-            db.session.add(teaching)
+            # Add a new teaching if not exists
+            if Teaching.query.filter_by(course_id=course_id, professor_uni=uni).first() is None:
+                teaching = Teaching(course=course, professor=professor)
+                db.session.add(teaching)
 
-    # update the approved column
-    if req_id != -1 and AddProfRequest.query.filter_by(id=req_id).first() is not None:  # If it is not added by admin
-        new_prof_request = AddProfRequest.query.filter_by(id=req_id).first()
-        new_prof_request.approved = approved_types[approved]
+        # Update the approved column
+        if req_id > -1 and AddProfRequest.query.filter_by(id=req_id).first() is not None:  # If it is not added by admin
+            new_prof_request = AddProfRequest.query.filter_by(id=req_id).first()
+            new_prof_request.approved = approved_types[approved]
 
-    db.session.commit()
+        db.session.commit()
 
-    # check if the professor is added to db
-    if approved:
-        new_prof = Professor.query.filter_by(uni=uni).first()
-        new_teaching = Teaching.query.filter_by(course_id=course_id, professor_uni=uni).first()
-        if new_prof is None or new_teaching is None:
-            return redirect(redirect_url, code='404')
+        # Check if the professor is added to db
+        if approved:
+            new_prof = Professor.query.filter_by(uni=uni).first()
+            new_teaching = Teaching.query.filter_by(course_id=course_id, professor_uni=uni).first()
+            if new_prof is None or new_teaching is None:
+                return jsonify(error=500, text='failure'), 500
 
-    return jsonify('OK')
+        return jsonify('success')
+    except SQLAlchemyError:
+        return jsonify(error=500, text='failure'), 500
 
 
 @app.errorhandler(500)
