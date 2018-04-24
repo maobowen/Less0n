@@ -266,6 +266,7 @@ def course_json(course_arg):
             # Only show comments that have titles or contents
             if not (not comment.title.strip()) and not (not comment.content.strip()):
                 json_comment = {
+                    'professor_name': comment.teaching.professor.name,
                     'title': comment.title,
                     'content': comment.content,
                     'term': comment.term.id,

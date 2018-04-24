@@ -414,6 +414,7 @@ body {
         margin-right: 2px;
         color: white;
         background-color: #5BC0DE;
+        display: inline-block;
       }
     }
 
@@ -465,6 +466,14 @@ body {
       .list-group {
         border: none;
         font-size: 15px;
+
+        a {
+          @include border-radius(3px);
+          color: white;
+          padding: 5px;
+          margin: 0 5px 5px 0;
+          display: inline-block;
+        }
       }
 
       .fa-star {
