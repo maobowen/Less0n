@@ -8,8 +8,9 @@ function checkEmpty(id, added) {
         }
         if (text == "") {
             var field = $("#tabProf tr:nth-child(1) th:nth-child(" + (i + 1) + ")").text();
-            console.log(field);
             if (field == "Avatar" && id.charAt(0) == 'p') {
+                continue;
+            } else if (field == "Website" && id.charAt(0) == 'p') {
                 continue;
             } else {
                 return i + 1;
