@@ -23,7 +23,7 @@
                                 <ul>
                                     {% for membership in current_user.memberships %}
                                         {% if membership.role.name == 'student' %}
-                                    <li><a href="#">My Less0n (Student)</a></li>
+                                    <li><a href="{{ url_for('student') }}">My Less0n (Student)</a></li>
                                         {% endif %}
                                         {% if membership.role.name == 'instructor' %}
                                     <li><a href="#">My Less0n (Instructor)</a></li>
