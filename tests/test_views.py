@@ -593,45 +593,65 @@ class MainTest(unittest.TestCase):
             rv = self.app.get(test_case)
             assert rv.status_code == 404
 
-    # @mock.patch('flask_login.utils._get_user')
-    # def testCommentWithValidArg(self, current_user):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     test_cases = (
-    #         {'prof': 'etl2115', 'course': 'COMS4156', 'semester': 'Spring', 'year': '2018', 'title': 'Title', 'content': 'Content',
-    #          'rating': 5, 'workload': 5, 'grade': 'A+', 'tags_str': 'tag1,tag2'},
-    #     )
-    #     for test_case in test_cases:
-    #         current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
-    #         rv = self.app.post('/comment/', data=dict(
-    #             prof=test_case['prof'],
-    #             course=test_case['course'],
-    #             semester=test_case['semester'],
-    #             year=test_case['year'],
-    #             title=test_case['title'],
-    #             content=test_case['content'],
-    #             rating=test_case['rating'],
-    #             workload=test_case['workload'],
-    #             grade=test_case['grade'],
-    #             tags=test_case['tags_str']
-    #         ))
-    #         # assert rv.status_code == 200
-    #         # clean records
-    #         teaching = Teaching.query.filter_by(course_id=test_case['course'].upper(),
-    #                                             professor_uni=test_case['prof'].lower()).first()
-    #         assert teaching is not None
-    #         term = Term.query.filter_by(id=test_case['semester'] + ' ' + test_case['year'])
-    #
-    #         assert term is not None
-    #
-    #
-    #         comment = Comment.query.filter_by(user_id=current_user.return_value.id,
-    #                                            teaching=teaching,
-    #                                            term=term).first()
-    #         assert comment is not None
+    @mock.patch('flask_login.utils._get_user')
+    def testCommentWithValidArg(self, current_user):
+        """
 
+        :return:
+        """
+        test_cases = (
+            {'prof': 'etl2115', 'course': 'COMS4156', 'semester': 'Spring', 'year': '2018', 'title': 'Title', 'content': 'Content',
+             'rating': 5, 'workload': 5, 'grade': 'A+', 'tags_str': 'tag1,tag2'},
+        )
+        for test_case in test_cases:
+            current_user.return_value = User.query.filter_by(id='bm2734').first()  # Mocking current_user
+            rv = self.app.post('/comment/', data=dict(
+                prof=test_case['prof'],
+                course=test_case['course'],
+                semester=test_case['semester'],
+                year=test_case['year'],
+                title=test_case['title'],
+                content=test_case['content'],
+                rating=test_case['rating'],
+                workload=test_case['workload'],
+                grade=test_case['grade'],
+                tags=test_case['tags_str']
+            ))
+            # assert rv.status_code == 200
+            # clean records
+            teaching = Teaching.query.filter_by(course_id=test_case['course'].upper(),
+                                                professor_uni=test_case['prof'].lower()).first()
+            assert teaching is not None
+            term = Term.query.filter_by(id=test_case['semester'] + ' ' + test_case['year']).first()
+
+            assert term is not None
+
+            # comment = Comment.query.filter_by(user_id=current_user.return_value.id,
+            #                                    teaching=teaching,
+            #                                    term=term).first()
+            # assert comment is not None
+
+    @mock.patch('flask_login.utils._get_user')
+    def testAdminListCourseRequest(self, current_user):
+        current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
+        test_cases = ('/admin/course?approved=1&pending=1&declined=1',)
+        for test_case in test_cases:
+            rv = self.app.get(test_case)
+            assert rv.status_code == 200
+            assert rv.data is not None
+            data = rv.data.decode('utf-8')
+            assert 'approved' in data
+
+    @mock.patch('flask_login.utils._get_user')
+    def testAdminListProfRequest(self, current_user):
+        current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
+        test_cases = ('/admin/prof?approved=1&pending=1&declined=1',)
+        for test_case in test_cases:
+            rv = self.app.get(test_case)
+            assert rv.status_code == 200
+            assert rv.data is not None
+            data = rv.data.decode('utf-8')
+            assert 'approved' in data
 
 
 if __name__ == '__main__':
