@@ -65,7 +65,7 @@ function renderComment(all_comment) {
         $('.container.card-columns').append(
             '<div class="card">' +
                 '<div class="card-body ' + rating_to_color(current_comment['rating']) + '">' +
-                    '<button class="btn btn-danger delete"><i class="fa fa-trash"></i></button>' +
+                    '<button class="btn btn-danger delete" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i></button>' +
                     '<button class="btn btn-warning edit" data-toggle="modal" data-target="#commentModal"><i class="fa fa-edit"></i></button>' +
                     '<h5 class="card-title">' + current_comment['title'] + '</h5>' +
                     '<p class="card-text">' + current_comment['content'] + '</p>' +
@@ -103,7 +103,7 @@ function renderComment(all_comment) {
             var cur_tags = $('#c' + index + ' ul li:nth-child(9)').text();
             var cur_msg = $('.container.card-columns .card:nth-child(' + (index + 1) + ') p').text();
 
-            $('input[name=comment-id]').val(cur_id);
+            $('.comment-form input[name=comment-id]').val(cur_id);
             $('input[name=title]').val(cur_title);
             $('select[name=year]').val(cur_year);
             $('select[name=semester]').val(cur_sem);
@@ -126,6 +126,15 @@ function renderComment(all_comment) {
                 var pens = $('#pens li');
                 $(pens[i]).addClass('selected');
             }
+        });
+
+        $('.delete').on('click', function() {
+            var index = $('.container.card-columns .card').index($(this).parent().parent());
+            var cur_course = $('#c' + index + ' ul li:nth-child(1)').text().split(': ')[1];
+            var cur_id = $('#c' + index + ' ul li:nth-child(8)').text();
+
+            $('.delete-form input[name=comment-id]').val(cur_id);
+            $('.cmt_course').text(cur_course);
         });
     });
 }

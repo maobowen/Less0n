@@ -129,6 +129,10 @@ body {
       width: 80%;
     }
 
+    .delete-notice {
+      text-align: center;
+    }
+
     .comment-bar{
       color: whitesmoke;
       border-top-left-radius: 10px;
@@ -151,7 +155,7 @@ body {
           text-align: center;
         }
 
-        #reminder {
+        .reminder {
           font-size: 15px;
           color: lightgray;
         }
@@ -167,7 +171,7 @@ body {
       }
     }
 
-    .comment-form {
+    .comment-form, .delete-form {
       width: 100%;
       margin: 0 auto;
       font-size: 20px;

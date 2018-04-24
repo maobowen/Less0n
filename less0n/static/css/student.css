@@ -97,6 +97,8 @@ body {
     body .modal-content .modal-body {
       margin: 0 auto;
       width: 80%; }
+    body .modal-content .delete-notice {
+      text-align: center; }
     body .modal-content .comment-bar {
       color: whitesmoke;
       border-top-left-radius: 10px;
@@ -113,7 +115,7 @@ body {
         text-align: center; }
         body .modal-content .comment-bar #professor p {
           text-align: center; }
-        body .modal-content .comment-bar #professor #reminder {
+        body .modal-content .comment-bar #professor .reminder {
           font-size: 15px;
           color: lightgray; }
       body .modal-content .comment-bar .close-icon {
@@ -123,61 +125,61 @@ body {
         position: absolute;
         top: 15px;
         right: 20px; }
-    body .modal-content .comment-form {
+    body .modal-content .comment-form, body .modal-content .delete-form {
       width: 100%;
       margin: 0 auto;
       font-size: 20px;
       font-weight: 300; }
-      body .modal-content .comment-form .required {
+      body .modal-content .comment-form .required, body .modal-content .delete-form .required {
         color: #EE3B3B; }
-      body .modal-content .comment-form .row {
+      body .modal-content .comment-form .row, body .modal-content .delete-form .row {
         margin: 8px; }
-      body .modal-content .comment-form .col-md-4 {
+      body .modal-content .comment-form .col-md-4, body .modal-content .delete-form .col-md-4 {
         text-align: right; }
-      body .modal-content .comment-form .sem {
+      body .modal-content .comment-form .sem, body .modal-content .delete-form .sem {
         padding: 0px;
         margin: 0px; }
-        body .modal-content .comment-form .sem .row {
+        body .modal-content .comment-form .sem .row, body .modal-content .delete-form .sem .row {
           margin: 0px; }
-          body .modal-content .comment-form .sem .row .col-md-6:nth-child(1) {
+          body .modal-content .comment-form .sem .row .col-md-6:nth-child(1), body .modal-content .delete-form .sem .row .col-md-6:nth-child(1) {
             padding-right: 5px; }
-          body .modal-content .comment-form .sem .row .col-md-6:nth-child(2) {
+          body .modal-content .comment-form .sem .row .col-md-6:nth-child(2), body .modal-content .delete-form .sem .row .col-md-6:nth-child(2) {
             padding-left: 5px; }
-      body .modal-content .comment-form .rating-stars ul {
+      body .modal-content .comment-form .rating-stars ul, body .modal-content .delete-form .rating-stars ul {
         padding: 0;
         margin: 5px 0 0 0;
         list-style-type: none;
         -moz-user-select: none;
         -webkit-user-select: none;
         text-align: left; }
-        body .modal-content .comment-form .rating-stars ul li.star {
+        body .modal-content .comment-form .rating-stars ul li.star, body .modal-content .delete-form .rating-stars ul li.star {
           padding-right: 5px;
           display: inline-block; }
-          body .modal-content .comment-form .rating-stars ul li.star i.fa {
+          body .modal-content .comment-form .rating-stars ul li.star i.fa, body .modal-content .delete-form .rating-stars ul li.star i.fa {
             font-size: 25px;
             color: lightgray; }
-        body .modal-content .comment-form .rating-stars ul li.star.hover i.fa {
+        body .modal-content .comment-form .rating-stars ul li.star.hover i.fa, body .modal-content .delete-form .rating-stars ul li.star.hover i.fa {
           color: #FFB90F; }
-        body .modal-content .comment-form .rating-stars ul li.star.selected i.fa {
+        body .modal-content .comment-form .rating-stars ul li.star.selected i.fa, body .modal-content .delete-form .rating-stars ul li.star.selected i.fa {
           color: #FFB90F; }
-      body .modal-content .comment-form .workload-pens ul {
+      body .modal-content .comment-form .workload-pens ul, body .modal-content .delete-form .workload-pens ul {
         padding: 0;
         margin: 0;
         list-style-type: none;
         -moz-user-select: none;
         -webkit-user-select: none;
         text-align: left; }
-        body .modal-content .comment-form .workload-pens ul li.pen {
+        body .modal-content .comment-form .workload-pens ul li.pen, body .modal-content .delete-form .workload-pens ul li.pen {
           padding-right: 6px;
           display: inline-block; }
-          body .modal-content .comment-form .workload-pens ul li.pen i.fa {
+          body .modal-content .comment-form .workload-pens ul li.pen i.fa, body .modal-content .delete-form .workload-pens ul li.pen i.fa {
             font-size: 25px;
             color: lightgray; }
-        body .modal-content .comment-form .workload-pens ul li.pen.hover i.fa {
+        body .modal-content .comment-form .workload-pens ul li.pen.hover i.fa, body .modal-content .delete-form .workload-pens ul li.pen.hover i.fa {
           color: #B0171F; }
-        body .modal-content .comment-form .workload-pens ul li.pen.selected i.fa {
+        body .modal-content .comment-form .workload-pens ul li.pen.selected i.fa, body .modal-content .delete-form .workload-pens ul li.pen.selected i.fa {
           color: #B0171F; }
-      body .modal-content .comment-form input, body .modal-content .comment-form select, body .modal-content .comment-form textarea {
+      body .modal-content .comment-form input, body .modal-content .comment-form select, body .modal-content .comment-form textarea, body .modal-content .delete-form input, body .modal-content .delete-form select, body .modal-content .delete-form textarea {
         width: 100%;
         padding: 7px;
         font-weight: 300;
@@ -186,11 +188,11 @@ body {
         -moz-border-radius: 3px;
         -ms-border-radius: 3px;
         border-radius: 3px; }
-      body .modal-content .comment-form textarea {
+      body .modal-content .comment-form textarea, body .modal-content .delete-form textarea {
         height: 80px; }
-      body .modal-content .comment-form *:focus {
+      body .modal-content .comment-form *:focus, body .modal-content .delete-form *:focus {
         outline: none; }
-      body .modal-content .comment-form .label {
+      body .modal-content .comment-form .label, body .modal-content .delete-form .label {
         display: inline;
         padding: .2em .6em .3em;
         font-size: 15px;
@@ -201,7 +203,7 @@ body {
         white-space: nowrap;
         vertical-align: baseline;
         border-radius: .25em; }
-      body .modal-content .comment-form .bootstrap-tagsinput {
+      body .modal-content .comment-form .bootstrap-tagsinput, body .modal-content .delete-form .bootstrap-tagsinput {
         background-color: #fff;
         border: 1px solid #ccc;
         box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
@@ -213,7 +215,7 @@ body {
         min-width: 100%;
         line-height: 22px;
         cursor: text; }
-      body .modal-content .comment-form .bootstrap-tagsinput input {
+      body .modal-content .comment-form .bootstrap-tagsinput input, body .modal-content .delete-form .bootstrap-tagsinput input {
         border: none;
         box-shadow: none;
         outline: none;
@@ -222,7 +224,7 @@ body {
         margin: 10px 0 0 0;
         width: auto;
         min-width: 100%; }
-      body .modal-content .comment-form .bootstrap-tagsinput .tag {
+      body .modal-content .comment-form .bootstrap-tagsinput .tag, body .modal-content .delete-form .bootstrap-tagsinput .tag {
         margin-right: 2px;
         color: white;
         background-color: #5BC0DE; }

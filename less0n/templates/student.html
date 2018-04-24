@@ -73,7 +73,7 @@
                             <input class="cmt_course" type="hidden" name="course" value="" required>
                             <div id="professor">
                                 <p>Instructor: <span id="cmt_prof"></span></p>
-                                <p id="reminder">* Should you wish to evaluate another course or instructor<br>please delete this evaluation and post a new one.</p>
+                                <p class="reminder">* Should you wish to evaluate another course or instructor<br>please delete this evaluation and post a new one.</p>
                             </div>
                             <button type="button" class="close close-icon" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -218,6 +218,32 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade bd-example-modal-lg" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <form method="delete" action="{{ url_for('student_delete_comment') }}" class="delete-form modal-form">
+                        <div class="comment-bar">
+                            <div class="comment-classname">Delete a Comment for <span class="cmt_course"></span></div>
+                            <button type="button" class="close close-icon" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                        <div class="section-form">
+                            <input type="hidden" name="comment-id" class="form-control">
+                            <p class="delete-notice">Are you sure to delete this comment?<br> * Should you wish to evaluate another course or instructor<br>please delete this evaluation and post a new one.</p>
+                        </div>
+                    </div>
+                        <div class="comment-footer">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
 
         <div class="container card-columns">
         </div>
