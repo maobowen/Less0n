@@ -716,7 +716,7 @@ def admin_approve_course_request():
     approved_types = {True: ApprovalType.APPROVED, False: ApprovalType.DECLINED}
 
     # Check parameters
-    for param in (req_id, subject_id, course_number, course_name, department_id, term_id, approved):
+    for param in (req_id, subject_id, course_number, course_name, department_id, term_id):
         if not param:  # None or empty string
             return jsonify(error=500, text='failure'), 500
 
@@ -740,7 +740,7 @@ def admin_approve_course_request():
             db.session.add(course)
 
         # Update add prof request
-        if req_id > -1 and AddCourseRequest.query.filter_by(id=req_id).first() is not None:
+        if req_id != -1 and AddCourseRequest.query.filter_by(id=req_id).first() is not None:
             new_course_request = AddCourseRequest.query.filter_by(id=req_id).first()
             new_course_request.approved = approved_types[approved]
 
@@ -795,7 +795,7 @@ def admin_approve_prof_request():
     approved_types = {True: ApprovalType.APPROVED, False: ApprovalType.DECLINED}
 
     # Check parameters
-    for param in (req_id, uni, prof_name, department_id, term_id, course_id, approved):
+    for param in (req_id, uni, prof_name, department_id, term_id, course_id):
         if not param:  # None or empty string
             return jsonify(error=500, text='failure'), 500
 
@@ -813,10 +813,14 @@ def admin_approve_prof_request():
                     return jsonify(error=500, text='failure'), 500
 
             # Update professor
-            professor = Professor(uni=uni, name=prof_name, department=department,
-                                  avatar=avatar, url=url)
-            if Professor.query.filter_by(uni=uni).first() is None:
-                db.session.add(professor)
+            professor = Professor.query.filter_by(uni=uni).first()
+            if professor is None:  # Create a new professor object if not exists
+                professor = Professor(uni=uni, name=prof_name, department=department)
+            if avatar:  # Update avatar or URL if not empty
+                professor.avatar = avatar
+            if url:
+                professor.url = url
+            db.session.add(professor)
 
             # Add a new teaching if not exists
             if Teaching.query.filter_by(course_id=course_id, professor_uni=uni).first() is None:
@@ -824,7 +828,7 @@ def admin_approve_prof_request():
                 db.session.add(teaching)
 
         # Update the approved column
-        if req_id > -1 and AddProfRequest.query.filter_by(id=req_id).first() is not None:  # If it is not added by admin
+        if req_id != -1 and AddProfRequest.query.filter_by(id=req_id).first() is not None:  # If it is not added by admin
             new_prof_request = AddProfRequest.query.filter_by(id=req_id).first()
             new_prof_request.approved = approved_types[approved]
 
