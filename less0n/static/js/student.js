@@ -79,6 +79,7 @@ function renderComment(all_comment) {
                             '<li class="list-group-item">Workload: ' + workload_html + '</li>' +
                             '<li class="list-group-item">Grade: ' + current_comment['grade'] + '</li>' +
                             '<li class="list-group-item">Tags: ' + renderTag(current_comment['tags']) + '</li>' +
+                            '<li class="list-group-item" display="none">' + current_comment['tags'] + '</li>' +
                         '</ul>' +
                     '</div>' +
                 '</div>' +
@@ -86,14 +87,116 @@ function renderComment(all_comment) {
 
         $('.edit').on('click', function() {
             var index = $('.container.card-columns .card').index($(this).parent().parent());
-            var cur_course = $('#c' + index + ' ul li:nth-child(1)').text().split(' ')[1];
-            var cur_prof = $('#c' + index + ' ul li:nth-child(2)').text();
+            var cur_course = $('#c' + index + ' ul li:nth-child(1)').text().split(': ')[1];
+            var cur_prof = $('#c' + index + ' ul li:nth-child(2)').text().split(': ')[1];
+            var cur_title = $('.container.card-columns .card:nth-child(' + (index + 1) + ') h5').text();
+            var cur_year = $('#c' + index + ' ul li:nth-child(3)').text().split(': ')[1].split(' ')[1];
+            var cur_sem = $('#c' + index + ' ul li:nth-child(3)').text().split(': ')[1].split(' ')[0];
+            var cur_grade = $('#c' + index + ' ul li:nth-child(6)').text().split(': ')[1];
+            var cur_rating = 0;
+            var cur_workload = 0;
+            var cur_tags = $('#c' + index + ' ul li:nth-child(8)').text();
+            var cur_msg = $('.container.card-columns .card:nth-child(' + (index + 1) + ') p').text();
+
+            $('input[name=title]').val(cur_title);
+            $('select[name=year]').val(cur_year);
+            $('select[name=semester]').val(cur_sem);
+            $('select[name=grade]').val(cur_grade);
+            $('form[name=rating]').val(cur_rating);
+            $('form[name=workload]').val(cur_workload);
+            $('input[name=tags]').tagsinput('removeAll');
+            $('input[name=tags]').tagsinput('add', cur_tags);
+            $('textarea[name=message]').val(cur_msg);
 
             $('.cmt_course').text(cur_course);
             $('#cmt_prof').text(cur_prof);
         });
     });
 }
+
+// Pen effect
+// hover
+$('#pens li').on('mouseover', function() {
+    var onPen = parseInt($(this).data('value'));
+    $(this).parent().children('li.pen').each(function(e) {
+        if (e < onPen) {
+            $(this).addClass('hover');
+        }
+        else {
+            $(this).removeClass('hover');
+        }
+    });
+}).on('mouseout', function() {
+    $(this).parent().children('li.pen').each(function(e) {
+        $(this).removeClass('hover');
+    });
+});
+
+// Star effect
+// hover
+$('#stars li').on('mouseover', function() {
+    var onStar = parseInt($(this).data('value'));
+    $(this).parent().children('li.star').each(function(e) {
+        if (e < onStar) {
+            $(this).addClass('hover');
+        }
+        else {
+            $(this).removeClass('hover');
+        }
+    });
+}).on('mouseout', function() {
+    $(this).parent().children('li.star').each(function(e) {
+        $(this).removeClass('hover');
+    });
+});
+
+// click
+$('#stars li').on('click', function() {
+    var onStar = parseInt($(this).data('value'), 10);
+    var stars = $(this).parent().children('li.star');
+
+    for (i = 0; i < stars.length; i++) {
+        $(stars[i]).removeClass('selected');
+    }
+
+    for (i = 0; i < onStar; i++) {
+        $(stars[i]).addClass('selected');
+    }
+
+    // response
+    var ratingValue = parseInt($('#stars li.selected').last().data('value'));
+    $('#rating').val(ratingValue);
+});
+
+// click
+$('#pens li').on('click', function() {
+    var onPen = parseInt($(this).data('value'), 10);
+    var pens = $(this).parent().children('li.pen');
+
+    for (i = 0; i < pens.length; i++) {
+        $(pens[i]).removeClass('selected');
+    }
+
+    for (i = 0; i < onPen; i++) {
+        $(pens[i]).addClass('selected');
+    }
+
+    // response
+    var workloadValue = parseInt($('#pens li.selected').last().data('value'));
+    $('#workload').val(workloadValue);
+});
+
+$('.comment-form').submit(function(e){
+    if ($('#rating').val() == '') {
+        $('#error').text('Please input a rating scale.');
+        return false;
+    } else if ($('#workload').val() == '') {
+        $('#error').text('Please input a workload scale.');
+        return false;
+    } else {
+        return true;
+    }
+});
 
 // tab switching
 function switchTab(evt, tab) {

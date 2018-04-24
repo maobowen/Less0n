@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block head_css %}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/student.css') }}">
 {% endblock %}
 
@@ -193,7 +194,7 @@
                                         <label for="tags">Tags</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" name="tags" value="Interesting,Useful" data-role="tagsinput" id="tags" class="form-control">
+                                        <input type="text" name="tags" data-role="tagsinput" id="tags" class="form-control">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -227,6 +228,9 @@
             const GET_ALL_PROF_REQ = "{{ url_for('student_list_prof_request') }}?approved=1&pending=1&declined=1";
             const GET_ALL_COMMENT = "{{ url_for('student_list_comment') }}";
         </script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput-angular.min.js"></script>
         <script src="{{ url_for('static', filename='js/student.js')}}"></script>
         <script type="text/javascript">
             $.ajax({
