@@ -176,9 +176,10 @@ class MainTest(unittest.TestCase):
         Input                             Expected Output
         /course/COMS3157/json             JSON data
         """
-        rv = self.app.get('/course/COMS3157/json/')
-        assert rv._status_code == 200
-        assert rv.content_type == 'application/json'
+        for test_case in '/course/COMS3157/json/', '/course/COMS4156/json/':
+            rv = self.app.get(test_case)
+            assert rv._status_code == 200
+            assert rv.content_type == 'application/json'
 
     def testCourseJsonWithInvalidArg(self):
         """
@@ -306,6 +307,7 @@ class MainTest(unittest.TestCase):
         """
         test_cases = (
             {'name': 'Clifford Stein', 'department': 'COMS'},
+            {'name': 'Alpha Beta', 'department': 'AAAA', 'course': 'No Course', 'semester': 'Fall 2017', 'year': 2017}
         )
 
         current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
@@ -566,6 +568,69 @@ class MainTest(unittest.TestCase):
                 decision=test_case['decision']
             ))
             assert rv._status_code == 404
+
+    def testProfWithValidArg(self):
+        """
+        test /prof/<regex("[A-Za-z]{2,3}[0-9]{1,4}"):prof_arg>/
+        :return:
+        """
+        test_cases = ('/prof/etl2115/', '/prof/rt2515/')
+        for test_case in test_cases:
+            rv = self.app.get(test_case)
+            assert rv.status_code == 200
+            if test_case == '/prof/etl2115/':
+                assert 'Ewan' in rv.data.decode('utf-8')
+
+    def testProfWithInvalidArg(self):
+        """
+        test /prof/<regex("[A-Za-z]{2,3}[0-9]{1,4}"):prof_arg>/
+        :return:
+        """
+        test_cases = ('/prof/ss1111/', )
+        for test_case in test_cases:
+            rv = self.app.get(test_case)
+            assert rv.status_code == 404
+
+    # @mock.patch('flask_login.utils._get_user')
+    # def testCommentWithValidArg(self, current_user):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     test_cases = (
+    #         {'prof': 'etl2115', 'course': 'COMS4156', 'semester': 'Spring', 'year': '2018', 'title': 'Title', 'content': 'Content',
+    #          'rating': 5, 'workload': 5, 'grade': 'A+', 'tags_str': 'tag1,tag2'},
+    #     )
+    #     for test_case in test_cases:
+    #         current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
+    #         rv = self.app.post('/comment/', data=dict(
+    #             prof=test_case['prof'],
+    #             course=test_case['course'],
+    #             semester=test_case['semester'],
+    #             year=test_case['year'],
+    #             title=test_case['title'],
+    #             content=test_case['content'],
+    #             rating=test_case['rating'],
+    #             workload=test_case['workload'],
+    #             grade=test_case['grade'],
+    #             tags=test_case['tags_str']
+    #         ))
+    #         # assert rv.status_code == 200
+    #         # clean records
+    #         teaching = Teaching.query.filter_by(course_id=test_case['course'].upper(),
+    #                                             professor_uni=test_case['prof'].lower()).first()
+    #         assert teaching is not None
+    #         term = Term.query.filter_by(id=test_case['semester'] + ' ' + test_case['year'])
+    #
+    #         assert term is not None
+    #
+    #
+    #         comment = Comment.query.filter_by(user_id=current_user.return_value.id,
+    #                                            teaching=teaching,
+    #                                            term=term).first()
+    #         assert comment is not None
+
+
 
 if __name__ == '__main__':
     unittest.main()
