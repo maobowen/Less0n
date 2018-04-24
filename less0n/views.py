@@ -965,11 +965,13 @@ def student_list_comment():
 @app.route('/student/comment/', methods=['POST'])
 @login_required
 def student_update_comment():
+    redirect_url = url_for('student')
     # Retrieve request arguments
-    id = request.form.get('id', type=int)
+    id = request.form.get('comment-id', type=int)
     comment = Comment.query.filter_by(id=id).first()
     if comment is None:
-        abort(500)
+        flash('An error occurred when updating the evaluation.', 'danger')
+        return redirect(redirect_url, code=500)
 
     term_id = request.form.get('semester', type=str) + ' ' + request.form.get('year', type=str)
     title = request.form.get('title', type=str)
@@ -980,7 +982,8 @@ def student_update_comment():
     tags_str = request.form.get('tags', type=str)
     # Post check
     if not is_valid_ratings(rating, workload, grade):
-        return jsonify('failure')
+        flash('The values you have input are invalid. Please check and submit again.', 'danger')
+        return redirect(redirect_url)
     tags_str_list = tags_str.split(',')
     # Update
     try:
@@ -1002,9 +1005,33 @@ def student_update_comment():
 
         db.session.add(comment)
         db.session.commit()
-        return jsonify('success')
+        flash('The evaluation is updated.', 'success')
+        return redirect(redirect_url)
     except SQLAlchemyError:
-        jsonify('failure')
+        flash('An error occurred when updating the evaluation.', 'danger')
+        return redirect(redirect_url, code=500)
+
+
+@app.route('/student/comment/', methods=['DELETE'])
+@login_required
+def student_delete_comment():
+    redirect_url = url_for('student')
+    # Retrieve request arguments
+    id = request.form.get('comment-id', type=int)
+    comment = Comment.query.filter_by(id=id).first()
+    if comment is None:
+        flash('An error occurred when deleting the evaluation.', 'danger')
+        return redirect(redirect_url, code=500)
+
+    # Delete
+    try:
+        db.session.delete(comment)
+        db.session.commit()
+        flash('The evaluation is deleted.', 'success')
+        return redirect(redirect_url)
+    except SQLAlchemyError:
+        flash('An error occurred when deleting the evaluation.', 'danger')
+        return redirect(redirect_url, code=500)
 
 
 @app.errorhandler(500)

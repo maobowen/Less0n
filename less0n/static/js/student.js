@@ -103,7 +103,7 @@ function renderComment(all_comment) {
             var cur_tags = $('#c' + index + ' ul li:nth-child(9)').text();
             var cur_msg = $('.container.card-columns .card:nth-child(' + (index + 1) + ') p').text();
 
-            $('input[name=commentid]').val(cur_id);
+            $('input[name=comment-id]').val(cur_id);
             $('input[name=title]').val(cur_title);
             $('select[name=year]').val(cur_year);
             $('select[name=semester]').val(cur_sem);
