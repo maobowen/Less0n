@@ -59,6 +59,8 @@ body {
       body .jumbotron .container .faculty-info {
         float: left;
         margin: 10px 0 0 60px; }
+        body .jumbotron .container .faculty-info p {
+          margin-left: 5px; }
   body .statistics {
     position: relative;
     top: -180px;

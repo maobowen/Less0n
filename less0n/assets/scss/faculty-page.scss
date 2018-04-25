@@ -66,6 +66,10 @@ body {
       .faculty-info {
         float: left;
         margin: 10px 0 0 60px;
+
+        p {
+          margin-left: 5px;
+        }
       }
     }
   }
@@ -187,6 +191,7 @@ body {
 
     .card {
       margin: 10px 0;
+
       box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 5px 0 rgba(0, 0, 0, 0.1);
 
       .card-text {

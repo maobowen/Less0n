@@ -465,7 +465,7 @@ def prof(prof_arg):
     if prof is None:
         abort(404)
 
-    all_teachings = Teaching.query.filter_by(professor=prof).all()
+    all_teachings = Teaching.query.filter_by(professor=prof).order_by(Teaching.course_id).all()
     statistics = {}  # Statistics of each course
     # Statistics of all courses
     all_courses_sum_rating = all_courses_sum_workload = all_courses_sum_grade = all_courses_count_all_comments = 0
