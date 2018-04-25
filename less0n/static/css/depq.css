@@ -13,7 +13,9 @@
 
 /* Small phones to small tablets: from 481px to 767px */
 @media only screen and (max-width: 767px) {
-        .main-nav { font-size: 90%;}
+        #sort-alphabetical a {
+            margin-right: 40px;
+        }
 
 
 }
@@ -22,10 +24,8 @@
 
 /* Small phones: from 0 to 480px */
 @media only screen and (max-width: 480px) {
-        .main-nav li {
-            display: inline-block;
-            margin-left: 20px;
+        #sort-alphabetical a {
+            margin-right: 30px;
         }
-
-
 }
+
