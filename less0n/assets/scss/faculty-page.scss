@@ -43,7 +43,17 @@ body {
 
   .jumbotron {
   	background-color: $blue;
-  	height: $jumbotron;
+  	height: 450px;
+
+    @media screen and (max-width: $large) {
+      height: 500px;
+    }
+    @media screen and (max-width: $small) {
+      height: 650px;
+    }
+    @media screen and (max-width: $extra-small) {
+      height: 650px;
+    }
 
     .container {
       margin-top: 50px;
@@ -61,11 +71,41 @@ body {
         float: left;
         position: relative;
         top: 20px;
+
+        @media screen and (max-width: $large) {
+          width: 200px;
+          height: 200px;
+        }
+        @media screen and (max-width: $small) {
+          float: none;
+          width: 180px;
+          margin: 0 auto;
+          height: 180px;
+        }
+        @media screen and (max-width: $extra-small) {
+          float: none;
+          width: 180px;
+          margin: 0 auto;
+          height: 180px;
+        }
       }
 
       .faculty-info {
         float: left;
         margin: 10px 0 0 60px;
+
+        @media screen and (max-width: $small) {
+          float: none;
+          margin: 0 auto;
+          text-align: center;
+          margin-top: 20px;
+        }
+        @media screen and (max-width: $extra-small) {
+          float: none;
+          margin: 0 auto;
+          text-align: center;
+          margin-top: 20px;
+        }
       }
     }
   }
@@ -78,6 +118,19 @@ body {
     box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
     width: 49%;
     margin-left: 34%;
+
+    @media screen and (max-width: $large) {
+      width: 80%;
+      margin: 0 auto;
+    }
+    @media screen and (max-width: $small) {
+      width: 80%;
+      margin: 0 auto;
+    }
+    @media screen and (max-width: $extra-small) {
+      width: 100%;
+      margin: 0 auto;
+    }
 
     .stats_box {
       display: flex;
@@ -159,7 +212,17 @@ body {
   	form {
   		width: 230px;
   		position: relative;
-  		top: -215px;  	
+  		top: -215px;
+
+        @media screen and (max-width: $large) {
+          top: -150px;
+        }
+        @media screen and (max-width: $small) {
+          top: -150px;
+        }
+        @media screen and (max-width: $extra-small) {
+          top: -150px;
+        }
   	}
   }
 
@@ -168,6 +231,16 @@ body {
     top: -170px;
     max-height: 100vh;
     overflow: auto;
+
+    @media screen and (max-width: $large) {
+      top: -130px;
+    }
+    @media screen and (max-width: $small) {
+      top: -130px;
+    }
+    @media screen and (max-width: $extra-small) {
+      top: -130px;
+    }
 
     .border-good {
       border-top: 10px solid $border-good;
