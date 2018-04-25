@@ -6,6 +6,7 @@
 
 {% block head_css %}
         <link rel="stylesheet" href="{{ url_for('static', filename='css/search-result.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/searchrq.css') }}">
 {% endblock %}
 
 {% block body_main %}
@@ -27,7 +28,7 @@
         {% if depts is not none %}
         <div class="row" id="department-card">
             {% for dept in depts %}
-            <div class="col-sm-4">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title d-name">{{ dept.name }}</h5>
@@ -43,7 +44,7 @@
         {% if subjs is not none %}
         <div class="row" id="subject-card">
             {% for subj in subjs %}
-            <div class="col-sm-4">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title  s-name">{{ subj.name }}</h5>
@@ -59,7 +60,7 @@
         {% if profs is not none %}
         <div class="row" id="professor-card">
             {% for prof in profs %}
-            <div class="col-sm-4">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
                 <a href="{{ url_for('prof', prof_arg=prof.uni) }}">
                     <div class="card">
                         <img class="p-photo" src="{{ prof.avatar }}" alt="{{ prof.name }}" height="90" width="90">
@@ -77,7 +78,7 @@
         {% if courses is not none %}
         <div class="row" id="course-card">
             {% for course in courses %}
-            <div class="col-sm-4">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
                 <a href="{{ url_for('course', course_arg=course.id) }}">
                     <div class="card">
                         <div class="card-body">
@@ -98,9 +99,9 @@
             <ul class="pagination justify-content-center">
                 <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>
                 <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                <li class="page-item disabled"><a class="page-link" href="#">2</a></li>
+                <li class="page-item disabled"><a class="page-link" href="#">3</a></li>
+                <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
           </ul>
         </nav>
 

@@ -41,7 +41,7 @@
 
         <div class="row" id="alphabetical-card">
         {% for dept in depts %}
-            <div class="col-sm-4 isotope-item" data-dept="{{ dept.id[0] }}">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 isotope-item" data-dept="{{ dept.id[0] }}">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">{{ dept.name }}</h5>
@@ -57,9 +57,9 @@
             <ul class="pagination justify-content-center">
                 <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>
                 <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                <li class="page-item disabled"><a class="page-link" href="#">2</a></li>
+                <li class="page-item disabled"><a class="page-link" href="#">3</a></li>
+                <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
             </ul>
         </nav>
 {% endblock %}
