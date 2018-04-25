@@ -12,7 +12,7 @@
         <div class="jumbotron jumbotron-fluid">
             <div class="container">
                 <div class="course-title">
-                    <h3 class="display-4">Console <button class="btn refresh"><i class="fa fa-refresh"></i></button></h3>
+                    <h3 class="display-4">Console <button class="btn refresh" style="display:none"><i class="fa fa-refresh"></i></button></h3>
                     <h3 class="display-5">{{ current_user.name }} ({{ current_user.id }})</h3>
                 </div>
             </div>
@@ -95,7 +95,7 @@
                             decision = false;
                         }
                         var check = checkEmpty(id, 0);
-                        if (check != -1) {
+                        if (check != -1 && decision == true) {
                             var field = $("#tabCourse tr:nth-child(1) th:nth-child(" + check + ")").text();
                             notify(field + ' is empty. Please fill up all the empty fields before submission.', "danger");
                         } else {
@@ -116,7 +116,7 @@
                                             notify('Successfully declined request.', "success");
                                         $(".refresh").trigger("click");
                                     } else {
-                                        notify('Request operation failed.', "danger")
+                                        notify('Request operation failed.', "danger");
                                         $(".refresh").trigger("click");
                                     }
                                 });
@@ -149,7 +149,7 @@
                             decision = false;
                         }
                         var check = checkEmpty(id, 0);
-                        if (check != -1) {
+                        if (check != -1 && decision == true) {
                             var field = $("#tabProf tr:nth-child(1) th:nth-child(" + check + ")").text();
                             notify(field + ' is empty. Please fill up all the empty fields before submission.', "danger");
                         } else {
@@ -172,7 +172,7 @@
                                             notify('Successfully declined request.', "success");
                                         $(".refresh").trigger("click");
                                     } else {
-                                        notify('Request operation failed.', "danger")
+                                        notify('Request operation failed.', "danger");
                                         $(".refresh").trigger("click");
                                     }
                                 });
@@ -193,13 +193,13 @@
                 $('#tabProf').append(
                     '<tr data-request="p' + cur_submit + '">' +
                     '<td>*</td>' +
-                    '<td><input type="text" value=""></td>' +
-                    '<td><input type="text" value=""></td>' +
-                    '<td><input type="text" value=""></td>' +
-                    '<td><input type="text" value=""></td>' +
-                    '<td><input type="text" value=""></td>' +
-                    '<td><input type="text" value=""></td>' +
-                    '<td><input type="text" value=""></td>' +
+                    '<td><input type="text" value="" placeholder="Adam Heath Cannon"></td>' +
+                    '<td><input type="text" value="" placeholder="ac1076"></td>' +
+                    '<td><input type="text" value="" placeholder="COMS"></td>' +
+                    '<td><input type="text" value="" placeholder="COMS1004"></td>' +
+                    '<td><input type="text" value="" placeholder="Fall 2018"></td>' +
+                    '<td><input type="text" value="" placeholder="http://www.cs.columbia.edu/~cannon/homepage/Adam_Heath_Cannon_files/shapeimage_1.jpg"></td>' +
+                    '<td><input type="text" value="" placeholder="http://www.cs.columbia.edu/~cannon/"></td>' +
                     '<td><button class="btn btn-success submit">Submit</button></td>' +
                     '</tr>'
                 )
@@ -244,11 +244,11 @@
                 $('#tabCourse').append(
                     '<tr data-request=' + cur_submit + '>' +
                     '<td>*</td>' +
-                    '<td><input type="text" value=""></td>' +
-                    '<td><input type="text" value=""></td>' +
-                    '<td><input type="text" value=""></td>' +
-                    '<td><input type="text" value=""></td>' +
-                    '<td><input type="text" value=""></td>' +
+                    '<td><input type="text" value="" placeholder="COMS"></td>' +
+                    '<td><input type="text" value="" placeholder="1004"></td>' +
+                    '<td><input type="text" value="" placeholder="Introduction to Computer Science and Programming in Java"></td>' +
+                    '<td><input type="text" value="" placeholder="COMS"></td>' +
+                    '<td></td>' +
                     '<td><button class="btn btn-success submit">Submit</button></td>' +
                     '</tr>'
                 );
@@ -275,7 +275,7 @@
                                     notify('Successfully added record.', "success");
                                     $(".refresh").trigger("click");
                                 } else {
-                                    notify('Request operation failed.', "danger")
+                                    notify('Request operation failed.', "danger");
                                     $(".refresh").trigger("click");
                                 }
                             });
