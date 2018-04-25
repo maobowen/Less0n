@@ -24,7 +24,7 @@ function renderCourseRequest(all_course_request) {
     $.each(all_course_request, function(i, request) {
         $('#tabCourse').append(
             '<tr data-request="course-request-' + request['id'] + '">' +
-                '<td>' + (i + 1) + '</td>' +
+                '<td>' + request['id'] + '</td>' +
                 '<td>' + request['subject_id'] + '</td>' +
                 '<td>' + request['course_number'] + '</td>' +
                 '<td>' + request['course_name'] + '</td>' +
@@ -41,7 +41,7 @@ function renderProfRequest(all_prof_request) {
     $.each(all_prof_request, function(i, request) {
         $('#tabProf').append(
             '<tr data-request="prof-request-' + request['id'] + '">' +
-                '<td>' + (i + 1) + '</td>' +
+                '<td>' + request['id'] + '</td>' +
                 '<td>' + request['name'] + '</td>' +
                 '<td></td>' +
                 '<td>' + request['department_id'] + '</td>' +

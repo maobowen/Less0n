@@ -396,6 +396,8 @@ class MainTest(unittest.TestCase):
                 decision=test_case['decision']
             ))
             assert rv._status_code == 200
+            assert 'success' in rv.data.decode('utf-8').lower()
+            assert rv.content_type == 'application/json'
 
             if test_case['decision']:
                 prof = Professor.query.filter_by(uni=test_case['uni']).first()
@@ -474,9 +476,9 @@ class MainTest(unittest.TestCase):
                 course=test_case['course_id'],
                 decision=test_case['approved']
             ))
-            assert rv._status_code == 500
+            assert rv._status_code == 200
             assert 'failure' in rv.data.decode('utf-8').lower()
-            # assert rv.content_type == 'text/html; charset=utf-8'
+            assert rv.content_type == 'application/json'
 
     def testApproveNewCourseWithValidArg(self):
         """
@@ -518,6 +520,8 @@ class MainTest(unittest.TestCase):
                 decision=test_case['decision']
             ))
             assert rv._status_code == 200
+            assert 'success' in rv.data.decode('utf-8').lower()
+            assert rv.content_type == 'application/json'
 
             if test_case['decision']:
                 course = Course.query.filter_by(id=(test_case['subject'] + test_case['course_num'])).first()
@@ -579,8 +583,9 @@ class MainTest(unittest.TestCase):
                 semester=test_case['semester'],
                 decision=test_case['decision']
             ))
-            assert rv._status_code == 500
+            assert rv._status_code == 200
             assert 'failure' in rv.data.decode('utf-8').lower()
+            assert rv.content_type == 'application/json'
 
     def testProfWithValidArg(self):
         """

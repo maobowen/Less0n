@@ -710,30 +710,27 @@ def admin_approve_course_request():
     course_number = request.form.get('course_num', type=str)  # 4771
     course_name = request.form.get('course_name', type=str)  # Machine Learning
     department_id = request.form.get('department', type=str)  # COMS
-    term_id = request.form.get('semester', type=str)  # Fall 2017
     approved = True if request.form.get('decision', type=str).lower() == 'true' else False  # True
 
     approved_types = {True: ApprovalType.APPROVED, False: ApprovalType.DECLINED}
 
-    # Check parameters
-    for param in (req_id, subject_id, course_number, course_name, department_id, term_id):
-        if not param:  # None or empty string
-            return jsonify(error=500, text='failure'), 500
-
     try:
         if approved:
+            # Check parameters
+            for param in (req_id, subject_id, course_number, course_name, department_id):
+                if not param:  # None or empty string
+                    return jsonify(error=500, text='failure')
+
             # Pre-process parameters
             course_id = subject_id + course_number
 
             # Get objects
             subject = Subject.query.filter_by(id=subject_id).first()
             department = Department.query.filter_by(id=department_id).first()
-            term = Term.query.filter_by(id=term_id).first()
 
             # Check objects
-            for obj in (subject, department, term):
-                if obj is None:
-                    return jsonify(error=500, text='failure'), 500
+            if subject is None or department is None:
+                return jsonify(error=500, text='failure')
 
             # Construct objects
             db.session.add(Course(id=course_id, subject=subject, number=course_number, department=department,
@@ -753,11 +750,11 @@ def admin_approve_course_request():
         if approved:
             new_course = Course.query.filter_by(id=course_id).first()
             if new_course is None:
-                return jsonify(error=500, text='failure'), 500
+                return jsonify(error=500, text='failure')
 
         return jsonify('success')
     except SQLAlchemyError:
-        return jsonify(error=500, text='failure'), 500
+        return jsonify(error=500, text='failure')
 
 
 @app.route('/admin/prof', methods=['POST'])
@@ -796,23 +793,21 @@ def admin_approve_prof_request():
 
     approved_types = {True: ApprovalType.APPROVED, False: ApprovalType.DECLINED}
 
-    # Check parameters
-    for param in (req_id, uni, prof_name, department_id, term_id, course_id):
-        if not param:  # None or empty string
-            return jsonify(error=500, text='failure'), 500
-
     try:
-        # Check if this professor exists
         if approved:
+            # Check parameters
+            for param in (req_id, uni, prof_name, department_id, term_id, course_id):
+                if not param:  # None or empty string
+                    return jsonify(error=500, text='failure')
+
+            # Check if this professor exists
             # Get objects
             department = Department.query.filter_by(id=department_id).first()
-            term = Term.query.filter_by(id=term_id).first()
             course = Course.query.filter_by(id=course_id).first()
 
             # Check objects
-            for obj in (department, term, course):
-                if obj is None:
-                    return jsonify(error=500, text='failure'), 500
+            if department is None or course is None:
+                return jsonify(error=500, text='failure')
 
             # Update professor
             professor = Professor.query.filter_by(uni=uni).first()
@@ -825,6 +820,7 @@ def admin_approve_prof_request():
             db.session.add(professor)
 
             # Add a new teaching if not exists
+            term, _ = get_or_create(Term, id=term_id)
             if Teaching.query.filter_by(course_id=course_id, professor_uni=uni).first() is None:
                 teaching = Teaching(course=course, professor=professor)
                 db.session.add(teaching)
@@ -841,11 +837,11 @@ def admin_approve_prof_request():
             new_prof = Professor.query.filter_by(uni=uni).first()
             new_teaching = Teaching.query.filter_by(course_id=course_id, professor_uni=uni).first()
             if new_prof is None or new_teaching is None:
-                return jsonify(error=500, text='failure'), 500
+                return jsonify(error=500, text='failure')
 
         return jsonify('success')
     except SQLAlchemyError:
-        return jsonify(error=500, text='failure'), 500
+        return jsonify(error=500, text='failure')
 
 
 @app.errorhandler(500)
