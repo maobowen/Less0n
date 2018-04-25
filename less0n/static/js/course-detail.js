@@ -83,10 +83,10 @@ function changeProf(index, all_profs) {
     }
 
     // Default prof
-    if (current_prof['name'] == 'All Instructors') {
+    if (current_prof['uni'] == null) {
         $('#professor-selection').val('');
     } else {
-        $('#professor-selection').val(current_prof['name']);
+        $('#professor-selection').val(current_prof['uni']);
     }
 }
 
