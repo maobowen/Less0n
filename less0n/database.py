@@ -16,6 +16,7 @@ def init_db():
         'yg2529': User(id='yg2529', avatar='', email='yg2529@columbia.edu', name='Yiming Guo', tokens=''),
         'yh2961': User(id='yh2961', avatar='', email='yh2961@columbia.edu', name='Yilan He', tokens=''),
         'zj2226': User(id='zj2226', avatar='', email='zj2226@columbia.edu', name='Zhijian Jiang', tokens=''),
+        'ky2371': User(id='ky2371', avatar='', email='ky2371@columbia.edu', name='Kaimao Yang', tokens='')
     }
     for _, user in users.items():
         db.session.add(user)
@@ -36,6 +37,8 @@ def init_db():
         Membership(user=users['yg2529'], role=role_admin),
         Membership(user=users['yh2961'], role=role_admin),
         Membership(user=users['zj2226'], role=role_admin),
+        Membership(user=users['ky2371'], role=role_student),
+        Membership(user=users['bm2734'], role=role_student)
     ]
     for membership in memberships:
         db.session.add(membership)
@@ -209,6 +212,13 @@ def init_db():
         Tag(text="Interesting"),
         Tag(text="Hot"),
         Tag(text="Ace Professor"),
+        Tag(text="Fabulous"),
+        Tag(text="Great"),
+        Tag(text="Heavy"),
+        Tag(text="Can learn a lot"),
+        Tag(text="Unforgettable"),
+        Tag(text="Cool"),
+        Tag(text="Average"),
     ]
     for tag in tags:
         db.session.add(tag)
@@ -229,13 +239,53 @@ def init_db():
         Comment(teaching=teachings[10], term=terms['Spring 2018'],
                 title='Wow',
                 content='Excellent!',
-                rating=4, workload=1, grade='A+', user=users['bm2734'], timestamp=datetime.now(),
+                rating=4, workload=1, grade='A+', user=users['zj2226'], timestamp=datetime.now(),
                 tags=[tags[0]]),
         Comment(teaching=teachings[8], term=terms['Spring 2018'],
                 title='Learned nothing',
-                content='A waste of time and money',
-                rating=1, workload=2, grade='B-', user=users['bm2734'], timestamp=datetime.now(),
+                content='A waste of time and money :(',
+                rating=1, workload=2, grade='B-', user=users['zj2226'], timestamp=datetime.now(),
                 tags=[]),
+        Comment(teaching=teachings[4], term=terms['Spring 2018'],
+                title='Super good',
+                content='A good teacher!',
+                rating=3, workload=3, grade='B+', user=users['bm2734'], timestamp=datetime.now(),
+                tags=[tags[0], tags[3], tags[4], tags[8]]),
+        Comment(teaching=teachings[5], term=terms['Spring 2018'],
+                title='Know a lot',
+                content='Really learn a lot',
+                rating=4, workload=3, grade='A-', user=users['bm2734'], timestamp=datetime.now(),
+                tags=[tags[1], tags[2], tags[4], tags[7]]),
+        Comment(teaching=teachings[6], term=terms['Spring 2018'],
+                title='Kind of boring',
+                content='Also kind of heavy.',
+                rating=1, workload=5, grade='C-', user=users['yh2961'], timestamp=datetime.now(),
+                tags=[tags[5]]),
+        Comment(teaching=teachings[7], term=terms['Spring 2018'],
+                title='Will recommend to others',
+                content='Best course ever.',
+                rating=5, workload=1, grade='A+', user=users['zj2226'], timestamp=datetime.now(),
+                tags=[tags[7], tags[8]]),
+        Comment(teaching=teachings[0], term=terms['Spring 2018'],
+                title='Just so so',
+                content='Average',
+                rating=2, workload=2, grade='B+', user=users['bm2734'], timestamp=datetime.now(),
+                tags=[tags[6], tags[9]]),
+        Comment(teaching=teachings[0], term=terms['Spring 2018'],
+                title='Good experience',
+                content='Average',
+                rating=2, workload=2, grade='B+', user=users['zj2226'], timestamp=datetime.now(),
+                tags=[tags[0], tags[3], tags[4], tags[5], tags[7], tags[9]]),
+        Comment(teaching=teachings[1], term=terms['Spring 2018'],
+                title='Too heavy',
+                content='The course is good but too heavy',
+                rating=4, workload=5, grade='B', user=users['yh2961'], timestamp=datetime.now(),
+                tags=[tags[1], tags[5], tags[7], tags[9]]),
+        Comment(teaching=teachings[2], term=terms['Spring 2018'],
+                title='Very good',
+                content='It is good to take this course',
+                rating=2, workload=2, grade='B+', user=users['bm2734'], timestamp=datetime.now(),
+                tags=[tags[2], tags[3], tags[4], tags[9]]),
     ]
     for comment in comments:
         db.session.add(comment)
