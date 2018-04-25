@@ -25,9 +25,11 @@
         <div id="sortby" class="container">
             <form>
                 <select class="form-control">
-                    <option>Sort by Name</option>
-                    <option>Sort by Popularity</option>
-                    <option>Sort by Rating</option>
+                    <option value="coursecode">Sort by Course Code</option>
+                    <option value="popularity">Sort by Popularity</option>
+                    <option value="rating">Sort by Rating</option>
+                    <option value="grade">Sort by Grade</option>
+                    <option value="workload">Sort by Workload</option>
                 </select>
             </form>
         </div>
@@ -35,15 +37,15 @@
         <div class="container cardcol">
             <div class="row">
             {% for course, statistics in courses.items() %}
-                <div class="col-md-6">
+                <div class="grid col-md-6">
                     <div class="card">
                         <div class="card-body">
-                            <h3 class="card-title"><a href="{{ url_for('course', course_arg=course.id) }}">{{ course.subject_id }} {{ course.number }}</a></h3>
+                            <h3 class="card-title"><a href="{{ url_for('course', course_arg=course.id) }}" class="coursecode">{{ course.subject_id }} {{ course.number }}</a></h3>
                             <h4 class="card-title"><a href="{{ url_for('course', course_arg=course.id) }}">{{ course.name }}</a></h4>
                             <p class="card-text">Subject: {{ course.subject.name }}</p>
-                            <div class="btn" data-stat-value="{{ statistics['rating'] }}">Rating: {{ '%0.2f' % statistics['rating'] if statistics['rating'] >= 0 else 'N/A' }}</div>
-                            <div class="btn" data-stat-value="{{ statistics['grade'] }}">Grade: {{ '%0.2f' % statistics['grade'] if statistics['grade'] >= 0 else 'N/A' }}</div>
-                            <div class="btn" data-stat-value="{{ statistics['workload'] }}">Workload: {{ '%0.2f' % statistics['workload'] if statistics['workload'] >= 0 else 'N/A' }}</div>
+                            <div class="btn rating" data-stat-value="{{ statistics['rating'] }}">Rating: {{ '%0.2f' % statistics['rating'] if statistics['rating'] >= 0 else 'N/A' }}</div>
+                            <div class="btn grade" data-stat-value="{{ statistics['grade'] }}">Grade: {{ '%0.2f' % statistics['grade'] if statistics['grade'] >= 0 else 'N/A' }}</div>
+                            <div class="btn workload" data-stat-value="{{ statistics['workload'] }}">Workload: {{ '%0.2f' % statistics['workload'] if statistics['workload'] >= 0 else 'N/A' }}</div>
                             <div class="btn comment">Comments: {{ statistics['comment'] }}</div>
                         </div>
                     </div>
@@ -54,6 +56,7 @@
 {% endblock %}
 
 {% block body2_js %}
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.5/isotope.pkgd.min.js"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/department-course.js') }}"></script>
         <script type="text/javascript">
             $('#add-course').on('click', function() {

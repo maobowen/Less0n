@@ -30,3 +30,43 @@ function workload_to_color(n) {
     else
         return 'bg-secondary';
 }
+
+function compareRating(a, b) {
+    if (a.rating < b.rating)
+        return 1;
+    if (a.rating > b.rating)
+        return -1;
+    return 0;
+}
+
+function compareGrade(a, b) {
+    var ag = a.grade;
+    var bg = b.grade;
+    ga = ag.charCodeAt(0);
+    gb = bg.charCodeAt(0);
+    if (ag.charAt(ag.length-1) == '-') {
+        ga += 0.1;
+    }
+    if (ag.charAt(ag.length-1) == '+') {
+        ga -= 0.1;
+    }
+    if (bg.charAt(bg.length-1) == '-') {
+        gb += 0.1;
+    }
+    if (bg.charAt(bg.length-1) == '+') {
+        gb -= 0.1;
+    }
+    if (ga < gb)
+        return -1;
+    if (ga > gb)
+        return 1;
+    return 0;
+}
+
+function compareWorkload(a, b) {
+    if (a.workload < b.workload)
+        return -1;
+    if (a.workload > b.workload)
+        return 1;
+    return 0;
+}
