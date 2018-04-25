@@ -147,7 +147,7 @@ def init_db():
                             url='http://www.cs.columbia.edu/~bauer/',
                             avatar='https://www.cs.columbia.edu/wp-content/uploads/2017/02/cs_profile-225x225.jpg'),
         'etl2115': Professor(uni='etl2115', name='Ewan T. Lowe', department=depts['COMS'],
-                             url=''),
+                             avatar='/static/img/etl2115.jpg', url=''),
         'jwl3': Professor(uni='jwl3', name='Jae Woo Lee', department=depts['COMS'],
                           url='http://www.cs.columbia.edu/~jae/',
                           avatar='http://www.cs.columbia.edu/~jae/images/jae-01.jpg'),
