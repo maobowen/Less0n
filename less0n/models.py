@@ -146,6 +146,9 @@ class Comment(db.Model):
     user = db.relation(User, backref='comments', lazy=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     tags = db.relationship('Tag', secondary=comments_tags, lazy='subquery', backref=db.backref('comments', lazy=True))
+    __table_args__ = (
+        db.UniqueConstraint('user_id', 'teaching_id', 'term_id', name='_comments_uc'),
+    )
 
 
 class Tag(db.Model):
