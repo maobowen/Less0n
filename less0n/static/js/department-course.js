@@ -4,8 +4,8 @@ $(function() {
         // options
         itemSelector: '.grid',
         getSortData: {
-            coursecode: function(itemElem) {
-                return $(itemElem).find('.coursecode').text();
+            coursenum: function(itemElem) {
+                return $(itemElem).find('.coursenum').text();
             },
             rating: function(itemElem) {
                 return parseFloat($(itemElem).find('.rating').text().split(': ')[1]);
@@ -24,9 +24,9 @@ $(function() {
 
     $('#sortby select').on('change', function(){
         var cur_entry = $('#sortby select').val();
-        if (cur_entry == 'coursecode') {
+        if (cur_entry == 'coursenum') {
             $grid.isotope({
-                sortBy: 'coursecode',
+                sortBy: 'coursenum',
                 sortAscending: true
             });
         } else if (cur_entry == 'rating') {
