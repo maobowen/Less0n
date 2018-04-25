@@ -414,7 +414,7 @@ def search():
         results = []
         for dept in depts:
             for result in Department.query.filter(
-                    (Department.id.like("%%" + dept + "%")) |
+                    (Department.id.like("%%" + dept.upper() + "%")) |
                     (Department.name.like("%%" + dept + "%"))
             ).order_by(Department.id).all():
                 results.append(result)
@@ -426,7 +426,7 @@ def search():
         results = []
         for subj in subjs:
             for result in Subject.query.filter(
-                    (Subject.id.like("%%" + subj + "%")) |
+                    (Subject.id.like("%%" + subj.upper() + "%")) |
                     (Subject.name.like("%%" + subj + "%"))
             ).order_by(Subject.id).all():
                 results.append(result)
@@ -450,7 +450,7 @@ def search():
         results = []
         for course in courses:
             for result in Course.query.filter(
-                    (Course.id.like("%%" + course + "%")) |
+                    (Course.id.like("%%" + course.upper() + "%")) |
                     (Course.name.like("%%" + course + "%"))
             ).order_by(Course.id).all():
                 results.append(result)
