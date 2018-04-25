@@ -71,7 +71,7 @@ function changeProf(index, all_profs) {
                     '<div class="collapse" id="c' + i + '">' +
                         '<ul class="list-group">' +
                             '<li class="list-group-item">Term: ' + current_comment['term'] + '</li>' +
-                            '<li class="list-group-item">Instructor: ' + current_prof['name'] + '</li>' +
+                            '<li class="list-group-item">Instructor: ' + current_comment['professor_name'] + '</li>' +
                             '<li class="list-group-item">Rating: ' + rating_html + '</li>' +
                             '<li class="list-group-item">Workload: ' + workload_html + '</li>' +
                             '<li class="list-group-item">Grade: '  + current_comment['grade'] +  '</li>' +

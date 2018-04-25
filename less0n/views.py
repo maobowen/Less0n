@@ -41,6 +41,10 @@ def has_membership(user_id, role):
     return membership is not None
 
 
+def is_valid_ratings(rating, workload, grade):
+    return 0 < rating < 6 and 0 < workload < 6 and re.compile('^[A-DF]$|^[A-C][\+-]$').match(grade)
+
+
 def get_or_create(model, defaults=None, **kwargs):
     instance = db.session.query(model).filter_by(**kwargs).first()
     if instance:
@@ -262,6 +266,7 @@ def course_json(course_arg):
             # Only show comments that have titles or contents
             if not (not comment.title.strip()) and not (not comment.content.strip()):
                 json_comment = {
+                    'professor_name': comment.teaching.professor.name,
                     'title': comment.title,
                     'content': comment.content,
                     'term': comment.term.id,
@@ -588,9 +593,7 @@ def comment():
         grade = request.form.get('grade', type=str)
         tags_str = request.form.get('tags', type=str)
         # Post check
-        if rating > 6 or rating < 1 \
-                or workload > 6 or workload < 1 \
-                or not re.compile('^[A-DF]$|^[A-C][\+-]$').match(grade):
+        if not is_valid_ratings(rating, workload, grade):
             flash('The values you have input are invalid. Please check and submit again.', 'danger')
             return redirect(redirect_url)
         tags_str_list = tags_str.split(',')
@@ -840,6 +843,203 @@ def admin_approve_prof_request():
         return jsonify('success')
     except SQLAlchemyError:
         return jsonify(error=500, text='failure')
+
+
+@app.route('/student/', methods=['GET'])
+@login_required
+def student():
+    """Return the student page, or redirect to index page if not authorized."""
+    role_student = Role.query.filter_by(name='student').first()
+    if current_user.is_authenticated and has_membership(current_user.id, role_student):
+        return render_template('student.html')
+    else:
+        flash('You do not have the permission to view this page.', 'danger')
+        return redirect(url_for('index'), code=401)
+
+
+@app.route('/student/course', methods=['GET'])
+@login_required
+def student_list_course_request():
+    """Return a JSON containing adding course requests, or raise 401 if not authorized."""
+    role_student = Role.query.filter_by(name='student').first()
+    if current_user.is_authenticated and has_membership(current_user.id, role_student):
+        list_approved = request.args.get('approved', type=int) or 0
+        list_pending = request.args.get('pending', type=int) or 0
+        list_declined = request.args.get('declined', type=int) or 0
+        course_requests = []
+        if list_approved:
+            course_requests.extend(AddCourseRequest.query.filter_by(
+                user_id=current_user.id,
+                approved=ApprovalType.APPROVED,
+            ).all())
+        if list_pending:
+            course_requests.extend(AddCourseRequest.query.filter_by(
+                user_id=current_user.id,
+                approved=ApprovalType.PENDING,
+            ).all())
+        if list_declined:
+            course_requests.extend(AddCourseRequest.query.filter_by(
+                user_id=current_user.id,
+                approved=ApprovalType.DECLINED
+            ).all())
+        ret = []
+        for course_request in course_requests:
+            ret.append({
+                'id': course_request.id,
+                'subject_id': course_request.subject.id,
+                'course_number': course_request.course_number,
+                'course_name': course_request.course_name,
+                'department_id': course_request.department.id,
+                'term_id': course_request.term.id,
+                'approved': course_request.approved.value,
+            })
+        return jsonify(ret)
+    else:
+        abort(401)
+
+
+@app.route('/student/prof', methods=['GET'])
+@login_required
+def student_list_prof_request():
+    """Return a JSON containing adding instructor requests, or raise 401 if not authorized."""
+    role_student = Role.query.filter_by(name='student').first()
+    if current_user.is_authenticated and has_membership(current_user.id, role_student):
+        list_approved = request.args.get('approved', type=int) or 0
+        list_pending = request.args.get('pending', type=int) or 0
+        list_declined = request.args.get('declined', type=int) or 0
+        prof_requests = []
+        if list_approved:
+            prof_requests.extend(AddProfRequest.query.filter_by(
+                user_id=current_user.id,
+                approved=ApprovalType.APPROVED,
+            ).all())
+        if list_pending:
+            prof_requests.extend(AddProfRequest.query.filter_by(
+                user_id=current_user.id,
+                approved=ApprovalType.PENDING,
+            ).all())
+        if list_declined:
+            prof_requests.extend(AddProfRequest.query.filter_by(
+                user_id=current_user.id,
+                approved=ApprovalType.DECLINED,
+            ).all())
+        ret = []
+        for prof_request in prof_requests:
+            ret.append({
+                'id': prof_request.id,
+                'name': prof_request.name,
+                'department_id': prof_request.department.id,
+                'course_id': prof_request.course.id,
+                'term_id': prof_request.term.id,
+                'approved': prof_request.approved.value,
+            })
+        return jsonify(ret)
+    else:
+        abort(401)
+
+
+@app.route('/student/comment/', methods=['GET'])
+@login_required
+def student_list_comment():
+    """Return a JSON containing all comments, or raise 401 if not authorized."""
+    role_student = Role.query.filter_by(name='student').first()
+    if current_user.is_authenticated and has_membership(current_user.id, role_student):
+        comments = Comment.query.filter_by(user_id=current_user.id).all()
+        ret = []
+        for comment in comments:
+            tags = []
+            for tag in comment.tags:
+                tags.append(tag.text)
+            ret.append({
+                'id': comment.id,  # For reference only
+                'teaching_id': comment.teaching_id,  # For reference only
+                'subject_id': comment.teaching.course.subject_id,
+                'course_number': comment.teaching.course.number,
+                'course_name': comment.teaching.course.name,
+                'professor_name': comment.teaching.professor.name,
+                'title': comment.title,
+                'content': comment.content,
+                'term_id': comment.term.id,
+                'rating': comment.rating,
+                'workload': comment.workload,
+                'grade': comment.grade,
+                'tags': tags,
+            })
+        return jsonify(ret)
+    else:
+        abort(401)
+
+
+@app.route('/student/comment/update/', methods=['POST'])
+@login_required
+def student_update_comment():
+    redirect_url = url_for('student')
+    # Retrieve request arguments
+    id = request.form.get('comment-id', type=int)
+    comment = Comment.query.filter_by(id=id).first()
+    if comment is None:
+        flash('An error occurred when updating the evaluation.', 'danger')
+        return redirect(redirect_url, code=500)
+
+    term_id = request.form.get('semester', type=str) + ' ' + request.form.get('year', type=str)
+    title = request.form.get('title', type=str)
+    content = request.form.get('message', type=str)
+    rating = request.form.get('rating', type=int)
+    workload = request.form.get('workload', type=int)
+    grade = request.form.get('grade', type=str)
+    tags_str = request.form.get('tags', type=str)
+    # Post check
+    if not is_valid_ratings(rating, workload, grade):
+        flash('The values you have input are invalid. Please check and submit again.', 'danger')
+        return redirect(redirect_url)
+    tags_str_list = tags_str.split(',')
+    # Update
+    try:
+        tags = []
+        for t in tags_str_list:
+            if t:  # Neither None nor empty string
+                tag, _ = get_or_create(Tag, text=t.capitalize())
+                tags.append(tag)
+        term, _ = get_or_create(Term, id=term_id)
+
+        # Update comment object
+        comment.term = term
+        comment.title = title
+        comment.content = content
+        comment.rating = rating
+        comment.workload = workload
+        comment.grade = grade
+        comment.tags = tags
+
+        db.session.add(comment)
+        db.session.commit()
+        flash('The evaluation is updated.', 'success')
+        return redirect(redirect_url)
+    except SQLAlchemyError:
+        flash('An error occurred when updating the evaluation.', 'danger')
+        return redirect(redirect_url, code=500)
+
+
+@app.route('/student/comment/delete/', methods=['POST'])
+@login_required
+def student_delete_comment():
+    redirect_url = url_for('student')
+    # Retrieve request arguments
+    id = request.form.get('comment-id', type=int)
+    comment = Comment.query.filter_by(id=id).first()
+    if comment is None:
+        flash('An error occurred when deleting the evaluation.', 'danger')
+        return redirect(redirect_url, code=500)
+
+    # Delete
+    try:
+        db.session.delete(comment)
+        db.session.commit()
+        flash('The evaluation is deleted.', 'success')
+        return redirect(redirect_url)
+    except SQLAlchemyError:
+        flash('An error occurred when deleting the evaluation.', 'danger')
+        return redirect(redirect_url, code=500)
 
 
 @app.errorhandler(500)
