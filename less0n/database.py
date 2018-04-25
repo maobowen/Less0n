@@ -37,7 +37,8 @@ def init_db():
         Membership(user=users['yg2529'], role=role_admin),
         Membership(user=users['yh2961'], role=role_admin),
         Membership(user=users['zj2226'], role=role_admin),
-        Membership(user=users['ky2371'], role=role_student)
+        Membership(user=users['ky2371'], role=role_student),
+        Membership(user=users['bm2734'], role=role_student)
     ]
     for membership in memberships:
         db.session.add(membership)
