@@ -38,7 +38,11 @@ body {
 
   .jumbotron {
   	background-color: $yellow;
-  	height: $jumbotron;
+    height: 450px;
+
+    @media screen and (max-width: $extra-small) {
+      height: 750px;
+    }
 
     .container {
       margin-top: 50px;
@@ -78,6 +82,13 @@ body {
     background: $dark;
     box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
 
+    @media screen and (max-width: $small) {
+      top: -100px;
+    }
+    @media screen and (max-width: $extra-small) {
+      top: -400px;
+    }
+
     .stats_box {
       box-shadow: -3px 0px rgba(255, 255, 255, 0.1);
       display: flex;
@@ -86,9 +97,19 @@ body {
 
       .stats_box_content {
         padding: 30px;
+
+        @media screen and (max-width: $small) {
+          padding: 20px;
+        }
+
+        @media screen and (max-width: $extra-small) {
+          padding: 20px;
+        }
       }
 
       #faculty_choice {
+        margin: 0 auto;
+
         a {
           color: white;
         }
@@ -106,6 +127,20 @@ body {
           display: block;
           margin-left: auto;
           margin-right: auto;
+
+          @media screen and (max-width: $large) {
+            width: 80px;
+            margin-top: 20px;
+            height: 80px;
+          }
+          @media screen and (max-width: $small) {
+            width: 100px;
+            height: 100px;
+          }
+          @media screen and (max-width: $extra-small) {
+            width: 100px;
+            height: 100px;
+          }
         }
 
         img:hover {
@@ -118,13 +153,23 @@ body {
           text-align: center;
           vertical-align: middle;
           display: block;
-          margin-left: auto;
-          margin-right: auto;
+          margin: 0 10px;
 
           i {
             font-size: 40px;
             color: $green;
             line-height: 120px;
+
+            @media screen and (max-width: $large) {
+              font-size: 30px;
+            }
+            @media screen and (max-width: $small) {
+              font-size: 40px;
+              margin-top: 20px;
+            }
+            @media screen and (max-width: $extra-small) {
+              font-size: 40px;
+            }
           }
         }
 
@@ -201,6 +246,14 @@ body {
     position: relative;
     top: -130px;
     margin-right: 10px;
+
+    @media screen and (max-width: $small) {
+      top: -80px;
+    }
+
+    @media screen and (max-width: $extra-small) {
+      top: -350px;
+    }
   }
 
   #sortby {
@@ -210,6 +263,14 @@ body {
       top: -130px;
       left: 0;
       float: right;
+
+      @media screen and (max-width: $small) {
+        top: -70px;
+      }
+
+      @media screen and (max-width: $extra-small) {
+        top: -320px;
+      }
     }
   }
 
@@ -219,6 +280,18 @@ body {
     .modal-body {
       margin: 0 auto;
       width: 80%;
+
+      @media screen and (max-width: $large) {
+        width: 90%;
+      }
+
+      @media screen and (max-width: $small) {
+        width: 100%;
+      }
+
+      @media screen and (max-width: $extra-small) {
+        width: 100%;
+      }
     }
 
     .comment-bar{
@@ -227,6 +300,10 @@ body {
       border-top-right-radius: 10px;
       background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url(../img/background-img.jpg);
       padding: 10px 0;
+
+      @media screen and (max-width: $extra-small) {
+        padding: 10px 20px;
+      }
 
       .comment-classname {
         font-size: 32px;
@@ -239,16 +316,28 @@ body {
         font-weight: 300;
         margin: 0 0 10px 20%;
 
+        @media screen and (max-width: $extra-small) {
+          margin: 0 0 10px 0;
+        }
+
         p {
           text-align: right;
           padding-right: 20px;
           width: 30%;
+
+          @media screen and (max-width: $extra-small) {
+            text-align: center;
+          }
         }
 
         #professor-selection{
           width: 30%;
           float: left;
           font-weight: 300;
+
+          @media screen and (max-width: $extra-small) {
+            width: 60%;
+          }
         }
       }
 
@@ -278,6 +367,12 @@ body {
 
       .col-md-4 {
         text-align: right;
+        @media screen and (max-width: $small) {
+          text-align: left;
+        }
+        @media screen and (max-width: $extra-small) {
+          text-align: left;
+        }
       }
 
       .sem {
@@ -287,12 +382,32 @@ body {
         .row {
           margin: 0px;
 
-          .col-md-6:nth-child(1) {
-            padding-right: 5px;
-          }
+          @media screen and (max-width: $large) {
+            .col-md-6:nth-child(1) {
+              padding-right: 5px;
+            }
 
-          .col-md-6:nth-child(2) {
-            padding-left: 5px;
+            .col-md-6:nth-child(2) {
+              padding-left: 5px;
+            }
+          }
+          @media screen and (max-width: $small) {
+            .col-md-6:nth-child(1) {
+              width: 50%;
+            }
+
+            .col-md-6:nth-child(2) {
+              width: 50%;
+            }
+          }
+          @media screen and (max-width: $extra-small) {
+            .col-md-6:nth-child(1) {
+              width: 50%;
+            }
+
+            .col-md-6:nth-child(2) {
+              width: 50%;
+            }
           }
         }
       }
@@ -420,7 +535,7 @@ body {
       font-size: 15px;
     }
 
-    .comment-footer{
+    .comment-footer {
       text-align: center;
       margin-bottom: 20px;
       font-weight: 300;
@@ -439,6 +554,18 @@ body {
     max-height: 100vh;
     overflow: auto;
     clear: both;
+
+    @media screen and (max-width: $large) {
+      @include content-columns(2);
+    }
+    @media screen and (max-width: $small) {
+      @include content-columns(1);
+      top: -60px;
+    }
+    @media screen and (max-width: $extra-small) {
+      @include content-columns(1);
+      top: -300px;
+    }
 
     .good {
       border-left: 7px solid $good;

@@ -21,7 +21,9 @@ header {
 
 #mainbody {
     min-height: 100vh;
+
 }
+
 
 /* ----------------------------------------------- */
 /* REUSABLE COMPONENTS */
@@ -31,6 +33,7 @@ header {
 .sticky .row {
     max-width: 1140px;
     margin: 0 auto;
+    /*min-width: 480px;*/
 }
 
 /* ----------------------------------------------- */
