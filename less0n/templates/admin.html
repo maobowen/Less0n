@@ -12,7 +12,7 @@
         <div class="jumbotron jumbotron-fluid">
             <div class="container">
                 <div class="course-title">
-                    <h3 class="display-4">Console</h3>
+                    <h3 class="display-4">Console <button class="btn refresh" style="display:none"><i class="fa fa-refresh"></i></button></h3>
                     <h3 class="display-5">{{ current_user.name }} ({{ current_user.id }})</h3>
                 </div>
             </div>
@@ -71,11 +71,13 @@
         </script>
         <script src="{{ url_for('static', filename='js/admin.js')}}"></script>
         <script type="text/javascript">
+        var cur_submit = 0;
+        $('.refresh').on('click',function (e) {
             $.ajax({
                 type: 'GET',
                 url: GET_PENDING_CRS_REQ,
                 dataType: 'json',
-                success: function(data) {
+                success: function (data) {
                     var cur_course = 0;
                     renderCourseRequest(data);
                     cur_course = data.length;
@@ -86,80 +88,42 @@
                     EditTables(tabCourse);
 
                     // data posting
-                    $("#tabCourse button").click(function() {
+                    $("#tabCourse button").click(function () {
                         var id = $(this).parent().parent().attr("data-request");
                         var decision = true;
                         if ($(this).hasClass('decline')) {
                             decision = false;
                         }
                         var check = checkEmpty(id, 0);
-                        if (check != -1) {
+                        if (check != -1 && decision == true) {
                             var field = $("#tabCourse tr:nth-child(1) th:nth-child(" + check + ")").text();
                             notify(field + ' is empty. Please fill up all the empty fields before submission.', "danger");
                         } else {
                             $.post(POST_CRS_REQ,
-                            {
-                                request_id: $("tr[data-request=" + id + "] td:nth-child(1)").text(),
-                                subject: $("tr[data-request=" + id + "] td:nth-child(2)").text(),
-                                course_num: $("tr[data-request=" + id + "] td:nth-child(3)").text(),
-                                course_name: $("tr[data-request=" + id + "] td:nth-child(4)").text(),
-                                department: $("tr[data-request=" + id + "] td:nth-child(5)").text(),
-                                semester: $("tr[data-request=" + id + "] td:nth-child(6)").text(),
-                                decision: decision
-                            }, function(data, status){
-                                if (data == 'OK') {
-                                    notify('Successfully added record.', "success")
-                                } else {
-                                    notify('Adding record failed.', "danger")
-                                }
-                            });
+                                {
+                                    request_id: $("tr[data-request=" + id + "] td:nth-child(1)").text(),
+                                    subject: $("tr[data-request=" + id + "] td:nth-child(2)").text(),
+                                    course_num: $("tr[data-request=" + id + "] td:nth-child(3)").text(),
+                                    course_name: $("tr[data-request=" + id + "] td:nth-child(4)").text(),
+                                    department: $("tr[data-request=" + id + "] td:nth-child(5)").text(),
+                                    semester: $("tr[data-request=" + id + "] td:nth-child(6)").text(),
+                                    decision: decision
+                                }, function (data, status) {
+                                    if (data == 'success') {
+                                        if (decision == true) {
+                                            notify('Successfully added record.', "success");
+                                        } else
+                                            notify('Successfully declined request.', "success");
+                                        $(".refresh").trigger("click");
+                                    } else {
+                                        notify('Request operation failed.', "danger");
+                                        $(".refresh").trigger("click");
+                                    }
+                                });
                         }
                     });
 
-                    // add entry
-                    $(".add").click(function() {
-                        if ($(this).parent().parent().attr('id') == "course_tab") {
-                            cur_course++;
-                            $('#tabCourse').append(
-                                '<tr data-request=' + cur_course + '>' +
-                                    '<td>' + cur_course + '</td>' +
-                                    '<td><input type="text" value=""></td>' +
-                                    '<td><input type="text" value=""></td>' +
-                                    '<td><input type="text" value=""></td>' +
-                                    '<td><input type="text" value=""></td>' +
-                                    '<td><input type="text" value=""></td>' +
-                                    '<td><button class="btn btn-success submit">Submit</button></td>' +
-                                '</tr>'
-                            );
 
-                            $("#tabCourse .submit").click(function() {
-                                var index = $('#tabCourse tr').index($(this).parent().parent());
-                                var id = $(this).parent().parent().attr("data-request");
-                                var check = checkEmpty(id, 1);
-                                if (check != -1) {
-                                    var field = $("#tabCourse tr:nth-child(1) th:nth-child(" + check + ")").text();
-                                    notify(field + ' is empty. Please fill up all the empty fields before submission.', "danger");
-                                } else {
-                                    $.post(POST_CRS_REQ,
-                                    {
-                                        request_id: -1,
-                                        subject: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(2) input").val(),
-                                        course_num: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(3) input").val(),
-                                        course_name: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(4) input").val(),
-                                        department: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(5) input").val(),
-                                        semester: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(6) input").val(),
-                                        decision: true
-                                    }, function(data, status){
-                                        if (data == 'OK') {
-                                            notify('Successfully added record.', "success")
-                                        } else {
-                                            notify('Adding record failed.', "danger")
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
                 }
             });
 
@@ -167,7 +131,7 @@
                 type: 'GET',
                 url: GET_PENDING_PROF_REQ,
                 dataType: 'json',
-                success: function(data) {
+                success: function (data) {
                     var cur_prof = 0;
                     renderProfRequest(data);
                     cur_prof = data.length;
@@ -178,87 +142,147 @@
                     EditTables(tabProf);
 
                     // data posting
-                    $("#tabProf button").click(function(){
+                    $("#tabProf button").click(function () {
                         var id = $(this).parent().parent().attr("data-request");
                         var decision = true;
                         if ($(this).hasClass('decline')) {
                             decision = false;
                         }
                         var check = checkEmpty(id, 0);
-                        if (check != -1) {
+                        if (check != -1 && decision == true) {
                             var field = $("#tabProf tr:nth-child(1) th:nth-child(" + check + ")").text();
                             notify(field + ' is empty. Please fill up all the empty fields before submission.', "danger");
                         } else {
                             $.post(POST_PROF_REQ,
-                            {
-                                request_id: $("tr[data-request=" + id + "] td:nth-child(1)").text(),
-                                name: $("tr[data-request=" + id + "] td:nth-child(2)").text(),
-                                uni: $("tr[data-request=" + id + "] td:nth-child(3)").text(),
-                                department: $("tr[data-request=" + id + "] td:nth-child(4)").text(),
-                                course: $("tr[data-request=" + id + "] td:nth-child(5)").text(),
-                                semester: $("tr[data-request=" + id + "] td:nth-child(6)").text(),
-                                avatar: $("tr[data-request=" + id + "] td:nth-child(7)").text(),
-                                url: $("tr[data-request=" + id + "] td:nth-child(8)").text(),
-                                decision: decision
-                            }, function(data, status){
-                                if (data == 'OK') {
-                                    notify('Successfully added record.', "success")
-                                } else {
-                                    notify('Adding record failed.', "danger")
-                                }
-                            });
+                                {
+                                    request_id: $("tr[data-request=" + id + "] td:nth-child(1)").text(),
+                                    name: $("tr[data-request=" + id + "] td:nth-child(2)").text(),
+                                    uni: $("tr[data-request=" + id + "] td:nth-child(3)").text(),
+                                    department: $("tr[data-request=" + id + "] td:nth-child(4)").text(),
+                                    course: $("tr[data-request=" + id + "] td:nth-child(5)").text(),
+                                    semester: $("tr[data-request=" + id + "] td:nth-child(6)").text(),
+                                    avatar: $("tr[data-request=" + id + "] td:nth-child(7)").text(),
+                                    url: $("tr[data-request=" + id + "] td:nth-child(8)").text(),
+                                    decision: decision
+                                }, function (data, status) {
+                                    if (data == 'success') {
+                                        if (decision == true) {
+                                            notify('Successfully added record.', "success");
+                                        } else
+                                            notify('Successfully declined request.', "success");
+                                        $(".refresh").trigger("click");
+                                    } else {
+                                        notify('Request operation failed.', "danger");
+                                        $(".refresh").trigger("click");
+                                    }
+                                });
                         }
                     });
 
-                    // add entry
-                    $(".add").click(function() {
-                        if ($(this).parent().parent().attr('id') == "professor_tab") {
-                            cur_prof++;
-                            $('#tabProf').append(
-                                '<tr data-request=' + cur_prof + '>' +
-                                    '<td>' + cur_prof + '</td>' +
-                                    '<td><input type="text" value=""></td>' +
-                                    '<td><input type="text" value=""></td>' +
-                                    '<td><input type="text" value=""></td>' +
-                                    '<td><input type="text" value=""></td>' +
-                                    '<td><input type="text" value=""></td>' +
-                                    '<td><input type="text" value=""></td>' +
-                                    '<td><input type="text" value=""></td>' +
-                                    '<td><button class="btn btn-success submit">Submit</button></td>' +
-                                '</tr>'
-                            );
 
-                            $("#tabProf .submit").click(function () {
-                                var index = $('#tabProf tr').index($(this).parent().parent());
-                                var id = $(this).parent().parent().attr("data-request");
-                                var check = checkEmpty(id, 1);
-                                if (check != -1) {
-                                    var field = $("#tabProf tr:nth-child(1) th:nth-child(" + check + ")").text();
-                                    notify(field + ' is empty. Please fill up all the empty fields before submission.', "danger");
-                                } else {
-                                    $.post(POST_PROF_REQ,
-                                    {
-                                        request_id: -1,
-                                        name: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(2) input").val(),
-                                        uni: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(3) input").val(),
-                                        department: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(4) input").val(),
-                                        course: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(5) input").val(),
-                                        semester: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(6) input").val(),
-                                        avatar: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(7) input").val(),
-                                        url: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(8) input").val(),
-                                        decision: true
-                                    }, function(data, status){
-                                        if (data == 'OK') {
-                                            notify('Successfully added record.', "success")
-                                        } else {
-                                            notify('Adding record failed.', "danger")
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
                 }
             });
+            e.preventDefault();
+        });
+        $('.refresh').trigger('click');
+
+        // add entry
+        $(".add").click(function () {
+            if ($(this).parent().parent().attr('id') == "professor_tab") {
+                cur_submit ++;
+                $('#tabProf').append(
+                    '<tr data-request="p' + cur_submit + '">' +
+                    '<td>*</td>' +
+                    '<td><input type="text" value="" placeholder="Adam Heath Cannon"></td>' +
+                    '<td><input type="text" value="" placeholder="ac1076"></td>' +
+                    '<td><input type="text" value="" placeholder="COMS"></td>' +
+                    '<td><input type="text" value="" placeholder="COMS1004"></td>' +
+                    '<td><input type="text" value="" placeholder="Fall 2018"></td>' +
+                    '<td><input type="text" value="" placeholder="http://www.cs.columbia.edu/~cannon/homepage/Adam_Heath_Cannon_files/shapeimage_1.jpg"></td>' +
+                    '<td><input type="text" value="" placeholder="http://www.cs.columbia.edu/~cannon/"></td>' +
+                    '<td><button class="btn btn-success submit">Submit</button></td>' +
+                    '</tr>'
+                )
+
+                $("#tabProf .submit").click(function () {
+                    var index = $('#tabProf tr').index($(this).parent().parent());
+                    var id = $(this).parent().parent().attr("data-request");
+                    var check = checkEmpty(id, 1);
+                    if (check != -1) {
+                        var field = $("#tabProf tr:nth-child(1) th:nth-child(" + check + ")").text();
+                        notify(field + ' is empty. Please fill up all the empty fields before submission.', "danger");
+                    } else {
+                        $.post(POST_PROF_REQ,
+                            {
+                                request_id: -1,
+                                name: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(2) input").val(),
+                                uni: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(3) input").val(),
+                                department: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(4) input").val(),
+                                course: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(5) input").val(),
+                                semester: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(6) input").val(),
+                                avatar: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(7) input").val(),
+                                url: $("#tabProf tr:nth-child(" + (index + 1) + ") td:nth-child(8) input").val(),
+                                decision: true
+                            }, function (data, status) {
+                                if (data == 'success') {
+                                    notify('Successfully added record.', "success");
+                                    $(".refresh").trigger("click");
+                                } else {
+                                    notify('Request operation failed.', "danger")
+                                    $(".refresh").trigger("click");
+                                }
+                            });
+                    }
+                });
+            }
+        });
+
+        // add entry
+        $(".add").click(function () {
+            if ($(this).parent().parent().attr('id') == "course_tab") {
+                cur_submit ++;
+                $('#tabCourse').append(
+                    '<tr data-request=' + cur_submit + '>' +
+                    '<td>*</td>' +
+                    '<td><input type="text" value="" placeholder="COMS"></td>' +
+                    '<td><input type="text" value="" placeholder="1004"></td>' +
+                    '<td><input type="text" value="" placeholder="Introduction to Computer Science and Programming in Java"></td>' +
+                    '<td><input type="text" value="" placeholder="COMS"></td>' +
+                    '<td></td>' +
+                    '<td><button class="btn btn-success submit">Submit</button></td>' +
+                    '</tr>'
+                );
+
+                $("#tabCourse .submit").click(function () {
+                    var index = $('#tabCourse tr').index($(this).parent().parent());
+                    var id = $(this).parent().parent().attr("data-request");
+                    var check = checkEmpty(id, 1);
+                    if (check != -1) {
+                        var field = $("#tabCourse tr:nth-child(1) th:nth-child(" + check + ")").text();
+                        notify(field + ' is empty. Please fill up all the empty fields before submission.', "danger");
+                    } else {
+                        $.post(POST_CRS_REQ,
+                            {
+                                request_id: -1,
+                                subject: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(2) input").val(),
+                                course_num: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(3) input").val(),
+                                course_name: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(4) input").val(),
+                                department: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(5) input").val(),
+                                semester: $("#tabCourse tr:nth-child(" + (index + 1) + ") td:nth-child(6) input").val(),
+                                decision: true
+                            }, function (data, status) {
+                                if (data == 'success') {
+                                    notify('Successfully added record.', "success");
+                                    $(".refresh").trigger("click");
+                                } else {
+                                    notify('Request operation failed.', "danger");
+                                    $(".refresh").trigger("click");
+                                }
+                            });
+                    }
+                });
+            }
+        });
+
         </script>
 {% endblock %}

@@ -8,8 +8,7 @@ function checkEmpty(id, added) {
         }
         if (text == "") {
             var field = $("#tabProf tr:nth-child(1) th:nth-child(" + (i + 1) + ")").text();
-            console.log(field);
-            if (field == "Avatar" && id.charAt(0) == 'p') {
+            if (((field == "Avatar") || (field == "Website")) && id.charAt(0) == 'p') {
                 continue;
             } else {
                 return i + 1;
@@ -21,10 +20,11 @@ function checkEmpty(id, added) {
 
 // ajax
 function renderCourseRequest(all_course_request) {
+    $('#tabCourse tr').slice(1).remove();
     $.each(all_course_request, function(i, request) {
         $('#tabCourse').append(
             '<tr data-request="course-request-' + request['id'] + '">' +
-                '<td>' + (i + 1) + '</td>' +
+                '<td>' + request['id'] + '</td>' +
                 '<td>' + request['subject_id'] + '</td>' +
                 '<td>' + request['course_number'] + '</td>' +
                 '<td>' + request['course_name'] + '</td>' +
@@ -37,10 +37,11 @@ function renderCourseRequest(all_course_request) {
 }
 
 function renderProfRequest(all_prof_request) {
+    $('#tabProf tr').slice(1).remove();
     $.each(all_prof_request, function(i, request) {
         $('#tabProf').append(
             '<tr data-request="prof-request-' + request['id'] + '">' +
-                '<td>' + (i + 1) + '</td>' +
+                '<td>' + request['id'] + '</td>' +
                 '<td>' + request['name'] + '</td>' +
                 '<td></td>' +
                 '<td>' + request['department_id'] + '</td>' +
