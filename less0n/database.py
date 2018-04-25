@@ -12,18 +12,33 @@ def init_db():
 
     # User
     users = {
+        'bm2734': User(id='bm2734', avatar='', email='bm2734@columbia.edu', name='Bowen Mao', tokens=''),
+        'yg2529': User(id='yg2529', avatar='', email='yg2529@columbia.edu', name='Yiming Guo', tokens=''),
+        'yh2961': User(id='yh2961', avatar='', email='yh2961@columbia.edu', name='Yilan He', tokens=''),
         'zj2226': User(id='zj2226', avatar='', email='zj2226@columbia.edu', name='Zhijian Jiang', tokens=''),
     }
     for _, user in users.items():
         db.session.add(user)
     db.session.commit()
 
-
     # Roles
     role_student = Role(name='student')
     db.session.add(role_student)
     role_instructor = Role(name='instructor')
     db.session.add(role_instructor)
+    role_admin = Role(name='admin')
+    db.session.add(role_admin)
+    db.session.commit()
+
+    # Membership
+    memberships = [
+        Membership(user=users['bm2734'], role=role_admin),
+        Membership(user=users['yg2529'], role=role_admin),
+        Membership(user=users['yh2961'], role=role_admin),
+        Membership(user=users['zj2226'], role=role_admin),
+    ]
+    for membership in memberships:
+        db.session.add(membership)
     db.session.commit()
 
     # Departments
@@ -160,20 +175,20 @@ def init_db():
     db.session.commit()
 
     # Teachings
-    teachings = {
-        1: Teaching(id=1, course=courses['CSEE3827'], professor=profs['mak2191']),
-        2: Teaching(id=2, course=courses['COMS3157'], professor=profs['jwl3']),
-        3: Teaching(id=3, course=courses['COMS3261'], professor=profs['tm2118']),
-        4: Teaching(id=4, course=courses['STAT4001'], professor=profs['dar27']),
-        5: Teaching(id=5, course=courses['COMS4701'], professor=profs['db2711']),
-        6: Teaching(id=6, course=courses['COMS4705'], professor=profs['mc3354']),
-        7: Teaching(id=7, course=courses['COMS4771'], professor=profs['nv2274']),
-        8: Teaching(id=8, course=courses['COMS4115'], professor=profs['rt2515']),
-        9: Teaching(id=9, course=courses['COMS4156'], professor=profs['etl2115']),
-        10: Teaching(id=10, course=courses['HIST1302'], professor=profs['lt95']),
-        11: Teaching(id=11, course=courses['COMS4156'], professor=profs['db2711']),
-    }
-    for _, teaching in teachings.items():
+    teachings = [
+        Teaching(course=courses['CSEE3827'], professor=profs['mak2191']),
+        Teaching(course=courses['COMS3157'], professor=profs['jwl3']),
+        Teaching(course=courses['COMS3261'], professor=profs['tm2118']),
+        Teaching(course=courses['STAT4001'], professor=profs['dar27']),
+        Teaching(course=courses['COMS4701'], professor=profs['db2711']),
+        Teaching(course=courses['COMS4705'], professor=profs['mc3354']),
+        Teaching(course=courses['COMS4771'], professor=profs['nv2274']),
+        Teaching(course=courses['COMS4115'], professor=profs['rt2515']),
+        Teaching(course=courses['COMS4156'], professor=profs['etl2115']),
+        Teaching(course=courses['HIST1302'], professor=profs['lt95']),
+        Teaching(course=courses['COMS4156'], professor=profs['db2711']),
+    ]
+    for teaching in teachings:
         db.session.add(teaching)
     db.session.commit()
 
@@ -190,40 +205,78 @@ def init_db():
     db.session.commit()
 
     # Tags
-    tags = {
-        1: Tag(id=1, text="Interesting"),
-        2: Tag(id=2, text="Hot"),
-        3: Tag(id=3, text="Ace Professor"),
-    }
-    for _, tag in tags.items():
+    tags = [
+        Tag(text="Interesting"),
+        Tag(text="Hot"),
+        Tag(text="Ace Professor"),
+    ]
+    for tag in tags:
         db.session.add(tag)
     db.session.commit()
 
     # Comments
-    comments = {
-        1: Comment(id=1, teaching=teachings[9], term=terms['Spring 2018'],
-                   title='Great course',
-                   content='A very good teacher!',
-                   rating=5, workload=1, grade='A+', user=users['zj2226'], timestamp=datetime.now(),
-                   tags=[tags[1], tags[2]]),
-        2: Comment(id=2, teaching=teachings[11], term=terms['Spring 2018'],
-                   title='Super excited',
-                   content='Excited!',
-                   rating=4, workload=2, grade='A', user=users['zj2226'], timestamp=datetime.now(),
-                   tags=[tags[1], tags[3]]),
-        3: Comment(id=3, teaching=teachings[11], term=terms['Spring 2018'],
-                   title='Wow',
-                   content='Excellent!',
-                   rating=4, workload=1, grade='A+', user=users['zj2226'], timestamp=datetime.now(),
-                   tags=[tags[1]]),
-        4: Comment(id=4, teaching=teachings[9], term=terms['Spring 2018'],
-                   title='Learned nothing',
-                   content='A waste of time and money',
-                   rating=1, workload=2, grade='B-', user=users['zj2226'], timestamp=datetime.now(),
-                   tags=[]),
-    }
-    for _, comment in comments.items():
+    comments = [
+        Comment(teaching=teachings[8], term=terms['Spring 2018'],
+                title='Great course',
+                content='A very good teacher!',
+                rating=5, workload=1, grade='A+', user=users['bm2734'], timestamp=datetime.now(),
+                tags=[tags[0], tags[1]]),
+        Comment(teaching=teachings[10], term=terms['Spring 2018'],
+                title='Super excited',
+                content='Excited!',
+                rating=4, workload=2, grade='A', user=users['bm2734'], timestamp=datetime.now(),
+                tags=[tags[0], tags[2]]),
+        Comment(teaching=teachings[10], term=terms['Spring 2018'],
+                title='Wow',
+                content='Excellent!',
+                rating=4, workload=1, grade='A+', user=users['bm2734'], timestamp=datetime.now(),
+                tags=[tags[0]]),
+        Comment(teaching=teachings[8], term=terms['Spring 2018'],
+                title='Learned nothing',
+                content='A waste of time and money',
+                rating=1, workload=2, grade='B-', user=users['bm2734'], timestamp=datetime.now(),
+                tags=[]),
+    ]
+    for comment in comments:
         db.session.add(comment)
+    db.session.commit()
+
+    # Adding instructor requests
+    add_prof_requests = [
+        AddProfRequest(user=users['zj2226'], name='Alpha Beta', department=depts['COMS'],
+                       course=courses['COMS4115'], term=terms['Fall 2017'], approved=ApprovalType.PENDING),
+        AddProfRequest(user=users['bm2734'], name='James McInerney', department=depts['COMS'],
+                       course=courses['COMS4771'], term=terms['Fall 2017'], approved=ApprovalType.PENDING),
+        AddProfRequest(user=users['bm2734'], name='Alfred V. Aho', department=depts['COMS'],
+                       course=courses['COMS3261'], term=terms['Fall 2016'], approved=ApprovalType.PENDING),
+        AddProfRequest(user=users['bm2734'], name='Xi Chen', department=depts['COMS'],
+                       course=courses['COMS3261'], term=terms['Fall 2016'], approved=ApprovalType.PENDING),
+    ]
+    for add_prof_request in add_prof_requests:
+        db.session.add(add_prof_request)
+    db.session.commit()
+
+    # Adding course requests
+    add_course_requests = [
+        AddCourseRequest(user=users['bm2734'], course_id='COMS3137', course_number='3137',
+                         course_name='Honors Data Structures and Algorithms',
+                         department=depts['COMS'], subject=subjs['COMS'],
+                         term=terms['Fall 2017'], approved=ApprovalType.PENDING),
+        AddCourseRequest(user=users['bm2734'], course_id='COMS4172', course_number='4172',
+                         course_name='3D User Interfaces and Augmented Reality',
+                         department=depts['COMS'], subject=subjs['COMS'],
+                         term=terms['Spring 2018'], approved=ApprovalType.PENDING),
+        AddCourseRequest(user=users['bm2734'], course_id='COMS4170', course_number='4170',
+                         course_name='User Interface Design',
+                         department=depts['COMS'], subject=subjs['COMS'],
+                         term=terms['Spring 2018'], approved=ApprovalType.PENDING),
+        AddCourseRequest(user=users['bm2734'], course_id='MATH3020', course_number='3020',
+                         course_name='Number Theory and Cryptography',
+                         department=depts['MATH'], subject=subjs['MATH'],
+                         term=terms['Spring 2018'], approved=ApprovalType.PENDING),
+    ]
+    for add_course_request in add_course_requests:
+        db.session.add(add_course_request)
     db.session.commit()
 
     print('Done!')
