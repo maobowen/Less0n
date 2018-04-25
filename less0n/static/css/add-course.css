@@ -12,6 +12,7 @@
     
     margin: 15vh auto;
     border-radius: 10px;
+    width: 50%;
 }
 
 .title {
@@ -33,6 +34,9 @@
 .section-form{
     margin: 0 10%;
 }
+
+
+
 input,select,textarea{
     font-weight: 300;
     padding-left: 10px;
@@ -96,4 +100,64 @@ label{
 
 .required {
     color: #EE3B3B;
+}
+
+@media screen and (max-width: 1023px) {
+    .section-form{
+        margin: 0;
+    }
+
+    label{
+    /*    margin: 0 auto;*/
+        width: 100%;
+        text-align: left;
+    }
+
+    .card{
+        width: 80%;
+    }
+
+    .sem .row .col-md-6 {
+        width: 50%;
+    }
+
+}
+
+@media screen and (max-width: 767px) {
+    .section-form{
+        margin: 0;
+    }
+
+    label{
+    /*    margin: 0 auto;*/
+        width: 100%;
+        text-align: left;
+    }
+
+    .card{
+        width: 80%;
+    }
+
+    .sem .row .col-md-6 {
+        width: 50%;
+    }
+
+}
+
+@media screen and (max-width: 480px) {
+    .section-form{
+        margin: 0;
+    }
+
+    .card{
+        width: 80%;
+    }
+
+    .col-sm-4 {
+        text-align: left;
+    }
+
+    .sem .row .col-md-6 {
+        width: 50%;
+    }
 }
