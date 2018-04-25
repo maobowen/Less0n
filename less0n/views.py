@@ -465,7 +465,7 @@ def prof(prof_arg):
     if prof is None:
         abort(404)
 
-    all_teachings = Teaching.query.filter_by(professor=prof).all()
+    all_teachings = Teaching.query.filter_by(professor=prof).order_by(Teaching.course_id).all()
     statistics = {}  # Statistics of each course
     # Statistics of all courses
     all_courses_sum_rating = all_courses_sum_workload = all_courses_sum_grade = all_courses_count_all_comments = 0
@@ -698,6 +698,7 @@ def admin_list_prof_request():
 
 
 @app.route('/admin/course', methods=['POST'])
+@login_required
 def admin_approve_course_request():
     """
     Admin approves a course.
@@ -708,56 +709,59 @@ def admin_approve_course_request():
         "OK" if add successfully. "Fail" + error info if subject / department / professor not exists.
     """
     # Get parameters
-    req_id = request.form.get('request_id', type=int)  # 1
-    subject_id = request.form.get('subject', type=str)  # COMS
-    course_number = request.form.get('course_num', type=str)  # 4771
-    course_name = request.form.get('course_name', type=str)  # Machine Learning
-    department_id = request.form.get('department', type=str)  # COMS
-    approved = True if request.form.get('decision', type=str).lower() == 'true' else False  # True
+    role_admin = Role.query.filter_by(name='admin').first()
+    if current_user.is_authenticated and has_membership(current_user.id, role_admin):
+        req_id = request.form.get('request_id', type=int)  # 1
+        subject_id = request.form.get('subject', type=str)  # COMS
+        course_number = request.form.get('course_num', type=str)  # 4771
+        course_name = request.form.get('course_name', type=str)  # Machine Learning
+        department_id = request.form.get('department', type=str)  # COMS
+        approved = True if request.form.get('decision', type=str).lower() == 'true' else False  # True
 
-    approved_types = {True: ApprovalType.APPROVED, False: ApprovalType.DECLINED}
+        approved_types = {True: ApprovalType.APPROVED, False: ApprovalType.DECLINED}
 
-    try:
-        if approved:
-            # Check parameters
-            for param in (req_id, subject_id, course_number, course_name, department_id):
-                if not param:  # None or empty string
+        try:
+            if approved:
+                # Check parameters
+                for param in (req_id, subject_id, course_number, course_name, department_id):
+                    if not param:  # None or empty string
+                        return jsonify(error=500, text='failure')
+
+                # Pre-process parameters
+                course_id = subject_id + course_number
+
+                # Get objects
+                subject = Subject.query.filter_by(id=subject_id).first()
+                department = Department.query.filter_by(id=department_id).first()
+
+                # Check objects
+                if subject is None or department is None:
                     return jsonify(error=500, text='failure')
 
-            # Pre-process parameters
-            course_id = subject_id + course_number
+                # Construct objects
+                db.session.add(Course(id=course_id, subject=subject, number=course_number, department=department,
+                                      name=course_name))
+                db.session.commit()
 
-            # Get objects
-            subject = Subject.query.filter_by(id=subject_id).first()
-            department = Department.query.filter_by(id=department_id).first()
+            # Update add prof request
+            if req_id != -1 and AddCourseRequest.query.filter_by(id=req_id).first() is not None:
+                new_course_request = AddCourseRequest.query.filter_by(id=req_id).first()
+                new_course_request.approved = approved_types[approved]
+                db.session.commit()
 
-            # Check objects
-            if subject is None or department is None:
-                return jsonify(error=500, text='failure')
+            # Check if the new course is in the db
+            if approved:
+                new_course = Course.query.filter_by(id=course_id).first()
+                if new_course is None:
+                    return jsonify(error=500, text='failure')
 
-            # Construct objects
-            db.session.add(Course(id=course_id, subject=subject, number=course_number, department=department,
-                                  name=course_name))
-            db.session.commit()
-
-        # Update add prof request
-        if req_id != -1 and AddCourseRequest.query.filter_by(id=req_id).first() is not None:
-            new_course_request = AddCourseRequest.query.filter_by(id=req_id).first()
-            new_course_request.approved = approved_types[approved]
-            db.session.commit()
-
-        # Check if the new course is in the db
-        if approved:
-            new_course = Course.query.filter_by(id=course_id).first()
-            if new_course is None:
-                return jsonify(error=500, text='failure')
-
-        return jsonify('success')
-    except SQLAlchemyError:
-        return jsonify(error=500, text='failure')
+            return jsonify('success')
+        except SQLAlchemyError:
+            return jsonify(error=500, text='failure')
 
 
 @app.route('/admin/prof', methods=['POST'])
+@login_required
 def admin_approve_prof_request():
     """
     Admin approves a prof.
@@ -779,70 +783,71 @@ def admin_approve_prof_request():
         "OK" if add successfully. "Fail" + error info if subject / department / professor not exists.
     """
     redirect_url = request.args.get('redirect') or url_for('index')
+    role_admin = Role.query.filter_by(name='admin').first()
+    if current_user.is_authenticated and has_membership(current_user.id, role_admin):
+        # Get parameters
+        req_id = request.form.get('request_id', type=int)
+        uni = request.form.get('uni', type=str)
+        prof_name = request.form.get('name', type=str)
+        department_id = request.form.get('department', type=str)
+        term_id = request.form.get('semester', type=str)
+        avatar = request.form.get('avatar', type=str)
+        url = request.form.get('url', type=str)
+        course_id = request.form.get('course', type=str)
+        approved = True if request.form.get('decision', type=str).lower() == 'true' else False
 
-    # Get parameters
-    req_id = request.form.get('request_id', type=int)
-    uni = request.form.get('uni', type=str)
-    prof_name = request.form.get('name', type=str)
-    department_id = request.form.get('department', type=str)
-    term_id = request.form.get('semester', type=str)
-    avatar = request.form.get('avatar', type=str)
-    url = request.form.get('url', type=str)
-    course_id = request.form.get('course', type=str)
-    approved = True if request.form.get('decision', type=str).lower() == 'true' else False
+        approved_types = {True: ApprovalType.APPROVED, False: ApprovalType.DECLINED}
 
-    approved_types = {True: ApprovalType.APPROVED, False: ApprovalType.DECLINED}
+        try:
+            if approved:
+                # Check parameters
+                for param in (req_id, uni, prof_name, department_id, term_id, course_id):
+                    if not param:  # None or empty string
+                        return jsonify(error=500, text='failure')
 
-    try:
-        if approved:
-            # Check parameters
-            for param in (req_id, uni, prof_name, department_id, term_id, course_id):
-                if not param:  # None or empty string
+                # Check if this professor exists
+                # Get objects
+                department = Department.query.filter_by(id=department_id).first()
+                course = Course.query.filter_by(id=course_id).first()
+
+                # Check objects
+                if department is None or course is None:
                     return jsonify(error=500, text='failure')
 
-            # Check if this professor exists
-            # Get objects
-            department = Department.query.filter_by(id=department_id).first()
-            course = Course.query.filter_by(id=course_id).first()
-
-            # Check objects
-            if department is None or course is None:
-                return jsonify(error=500, text='failure')
-
-            # Update professor
-            professor = Professor.query.filter_by(uni=uni).first()
-            if professor is None:  # Create a new professor object if not exists
-                professor = Professor(uni=uni, name=prof_name, department=department)
-            if avatar:  # Update avatar or URL if not empty
-                professor.avatar = avatar
-            if url:
-                professor.url = url
-            db.session.add(professor)
-            db.session.commit()
-
-            # Add a new teaching if not exists
-            term, _ = get_or_create(Term, id=term_id)
-            if Teaching.query.filter_by(course_id=course_id, professor_uni=uni).first() is None:
-                teaching = Teaching(course=course, professor=professor)
-                db.session.add(teaching)
+                # Update professor
+                professor = Professor.query.filter_by(uni=uni).first()
+                if professor is None:  # Create a new professor object if not exists
+                    professor = Professor(uni=uni, name=prof_name, department=department)
+                if avatar:  # Update avatar or URL if not empty
+                    professor.avatar = avatar
+                if url:
+                    professor.url = url
+                db.session.add(professor)
                 db.session.commit()
 
-        # Update the approved column
-        if req_id != -1 and AddProfRequest.query.filter_by(id=req_id).first() is not None:  # If it is not added by admin
-            new_prof_request = AddProfRequest.query.filter_by(id=req_id).first()
-            new_prof_request.approved = approved_types[approved]
-            db.session.commit()
+                # Add a new teaching if not exists
+                term, _ = get_or_create(Term, id=term_id)
+                if Teaching.query.filter_by(course_id=course_id, professor_uni=uni).first() is None:
+                    teaching = Teaching(course=course, professor=professor)
+                    db.session.add(teaching)
+                    db.session.commit()
 
-        # Check if the professor is added to db
-        if approved:
-            new_prof = Professor.query.filter_by(uni=uni).first()
-            new_teaching = Teaching.query.filter_by(course_id=course_id, professor_uni=uni).first()
-            if new_prof is None or new_teaching is None:
-                return jsonify(error=500, text='failure')
+            # Update the approved column
+            if req_id != -1 and AddProfRequest.query.filter_by(id=req_id).first() is not None:  # If it is not added by admin
+                new_prof_request = AddProfRequest.query.filter_by(id=req_id).first()
+                new_prof_request.approved = approved_types[approved]
+                db.session.commit()
 
-        return jsonify('success')
-    except SQLAlchemyError:
-        return jsonify(error=500, text='failure')
+            # Check if the professor is added to db
+            if approved:
+                new_prof = Professor.query.filter_by(uni=uni).first()
+                new_teaching = Teaching.query.filter_by(course_id=course_id, professor_uni=uni).first()
+                if new_prof is None or new_teaching is None:
+                    return jsonify(error=500, text='failure')
+
+            return jsonify('success')
+        except SQLAlchemyError:
+            return jsonify(error=500, text='failure')
 
 
 @app.route('/student/', methods=['GET'])

@@ -16,6 +16,7 @@ def init_db():
         'yg2529': User(id='yg2529', avatar='', email='yg2529@columbia.edu', name='Yiming Guo', tokens=''),
         'yh2961': User(id='yh2961', avatar='', email='yh2961@columbia.edu', name='Yilan He', tokens=''),
         'zj2226': User(id='zj2226', avatar='', email='zj2226@columbia.edu', name='Zhijian Jiang', tokens=''),
+        'ky2371': User(id='ky2371', avatar='', email='ky2371@columbia.edu', name='Kaimao Yang', tokens='')
     }
     for _, user in users.items():
         db.session.add(user)
@@ -36,6 +37,8 @@ def init_db():
         Membership(user=users['yg2529'], role=role_admin),
         Membership(user=users['yh2961'], role=role_admin),
         Membership(user=users['zj2226'], role=role_admin),
+        Membership(user=users['ky2371'], role=role_student),
+        Membership(user=users['bm2734'], role=role_student)
     ]
     for membership in memberships:
         db.session.add(membership)

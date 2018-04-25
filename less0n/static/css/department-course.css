@@ -17,7 +17,7 @@ body {
         float: left;
         margin-top: 10px; }
         body .jumbotron .container .dept-info h1 {
-          font-weight: lighter; }
+          font-weight: 300; }
         body .jumbotron .container .dept-info a {
           color: white; }
         body .jumbotron .container .dept-info a:hover {
