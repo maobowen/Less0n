@@ -733,16 +733,18 @@ def admin_approve_course_request():
                 return jsonify(error=500, text='failure')
 
             # Construct objects
-            course = Course(id=course_id, subject=subject, number=course_number, department=department, name=course_name)
-            db.session.add(course)
+            db.session.add(Course(id=course_id, subject=subject, number=course_number, department=department,
+                                  name=course_name))
+            db.session.commit()
 
         # Update add prof request
         if req_id != -1 and AddCourseRequest.query.filter_by(id=req_id).first() is not None:
             new_course_request = AddCourseRequest.query.filter_by(id=req_id).first()
             new_course_request.approved = approved_types[approved]
+            db.session.commit()
 
-        # Add to db
-        db.session.commit()
+        # # Add to db
+        # db.session.commit()
 
         # Check if the new course is in the db
         if approved:
