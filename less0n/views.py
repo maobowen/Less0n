@@ -711,8 +711,6 @@ def admin_approve_course_request():
     # Get parameters
     role_admin = Role.query.filter_by(name='admin').first()
     if current_user.is_authenticated and has_membership(current_user.id, role_admin):
-        role_admin = Role.query.filter_by(name='admin').first()
-
         req_id = request.form.get('request_id', type=int)  # 1
         subject_id = request.form.get('subject', type=str)  # COMS
         course_number = request.form.get('course_num', type=str)  # 4771
