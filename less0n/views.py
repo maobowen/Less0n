@@ -743,9 +743,6 @@ def admin_approve_course_request():
             new_course_request.approved = approved_types[approved]
             db.session.commit()
 
-        # # Add to db
-        # db.session.commit()
-
         # Check if the new course is in the db
         if approved:
             new_course = Course.query.filter_by(id=course_id).first()
@@ -818,19 +815,20 @@ def admin_approve_prof_request():
             if url:
                 professor.url = url
             db.session.add(professor)
+            db.session.commit()
 
             # Add a new teaching if not exists
             term, _ = get_or_create(Term, id=term_id)
             if Teaching.query.filter_by(course_id=course_id, professor_uni=uni).first() is None:
                 teaching = Teaching(course=course, professor=professor)
                 db.session.add(teaching)
+                db.session.commit()
 
         # Update the approved column
         if req_id != -1 and AddProfRequest.query.filter_by(id=req_id).first() is not None:  # If it is not added by admin
             new_prof_request = AddProfRequest.query.filter_by(id=req_id).first()
             new_prof_request.approved = approved_types[approved]
-
-        db.session.commit()
+            db.session.commit()
 
         # Check if the professor is added to db
         if approved:
