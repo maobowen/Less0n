@@ -19,6 +19,22 @@ header {
     letter-spacing: 50px;
 }
 
+@media screen and (max-width: 767px) {
+    #not-found{
+        font-size: 11em;
+        letter-spacing: 20px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #not-found{
+        font-size: 10em;
+        letter-spacing: 20px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+}
+
 #n-find{
     text-align: center;
     margin-top: 250px;
