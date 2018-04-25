@@ -1,8 +1,23 @@
 var cur = 0;
 var color_pool = ['success', 'primary', 'info', 'danger', 'warning'];
+var sortby = 'rating';
+
+$('#sortby').on('change', function() {
+    sortby = $('#sortby select').val();
+    changeProf(cur, all_profs);
+});
 
 function changeProf(index, all_profs) {
     var current_prof = all_profs[index];
+
+    if (sortby == 'rating') {
+        current_prof['comments'].sort(compareRating);
+    } else if (sortby == 'grade') {
+        current_prof['comments'].sort(compareGrade);
+    } else {
+        current_prof['comments'].sort(compareWorkload);
+    }
+
     $('#prof-pic').attr('src', current_prof['avatar']);
     $('#faculty_choice h4 a').text(current_prof['name']);
     if (current_prof['uni']) {
