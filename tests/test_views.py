@@ -32,6 +32,15 @@ class MainTest(unittest.TestCase):
         assert(rv._status_code == 302)
         assert(Auth.AUTH_URI in rv.location)
 
+    @mock.patch('flask_login.utils._get_user')
+    def testLogout(self, current_user):
+        """
+        test /logout
+        """
+        current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
+        rv = self.app.get('/logout')
+        assert rv.status_code == 302
+
     # Test /department/
 
     def testDepartment(self):
@@ -102,7 +111,7 @@ class MainTest(unittest.TestCase):
 
     # Test /dept/DEPT/
 
-    def test_departmentCourseWithValidArg(self):
+    def testDepartmentCourseWithValidArg(self):
         """
         Test if department_course() return department-course.html with valid department name
         Test cases:
@@ -110,12 +119,14 @@ class MainTest(unittest.TestCase):
         Input                             Expected Output
         /dept/COMS/                       COMS in html
         """
-        rv = self.app.get('/dept/COMS/')
-        assert rv._status_code == 200
-        assert rv.content_type == 'text/html; charset=utf-8'
-        data = rv.data.decode('utf-8').lower()  # convert data to lower case
-        assert 'department-course' in data
-        assert 'coms' in data
+        test_cases = ('/dept/COMS/', '/dept/EALC/')
+        for test_case in test_cases:
+            rv = self.app.get(test_case)
+            assert rv.status_code == 200
+            assert rv.content_type == 'text/html; charset=utf-8'
+            data = rv.data.decode('utf-8').lower()  # convert data to lower case
+            assert 'department-course' in data
+            assert test_case[6: 10].lower() in data
 
     def testDepartmentCourseWithInvalidArg(self):
         """
@@ -653,6 +664,14 @@ class MainTest(unittest.TestCase):
             data = rv.data.decode('utf-8')
             assert 'approved' in data
 
+    @mock.patch('flask_login.utils._get_user')
+    def testAddNewCourseGet(self, current_user):
+        """
+        test /course/new/ get
+        """
+        current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
+        rv = self.app.get('/course/new/')
+        assert rv.status_code == 200
 
 if __name__ == '__main__':
     unittest.main()
