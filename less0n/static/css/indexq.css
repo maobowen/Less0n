@@ -109,7 +109,7 @@
             font-size: 60%;
         }
         .search-back{
-            width: 401px;
+            width: 371px;
         }
         .search{
             width: 230px;
@@ -117,16 +117,17 @@
             height: 40px;
         }
         .custom-select {
-            width: 130px;
+            width: 100px;
             height: 40px;
             font-size: 80%;
             padding: 0px;
         }
         .select-selected {
             height: 40px;
-            width: 130px;
+            width: 100px;
             margin-top: -1px;
             margin-left: -1px;
+            /*padding: 0px;*/
         }
         /*style the arrow inside the select element:*/
         .select-selected:after {
