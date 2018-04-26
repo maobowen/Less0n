@@ -52,8 +52,38 @@ body {
         overflow: auto;
         float: left;
 
+        @media screen and (max-width: $small) {
+          max-width: 100%;
+          width: 100%;
+        }
+
+        @media screen and (max-width: $extra-small) {
+          max-width: 100%;
+          width: 100%;
+        }
+
         h1 {
           font-weight: 300;
+
+          @media screen and (max-width: $small) {
+            font-size: 2em;
+          }
+
+          @media screen and (max-width: $extra-small) {
+            font-size: 2em;
+          }
+        }
+
+        h3 {
+          font-weight: 300;
+
+          @media screen and (max-width: $small) {
+            font-size: 3em;
+          }
+
+          @media screen and (max-width: $extra-small) {
+            font-size: 3em;
+          }
         }
       }
 
@@ -62,6 +92,18 @@ body {
         margin-top: 20px;
         max-width: 25%;
         overflow: auto;
+
+        @media screen and (max-width: $small) {
+          float: left;
+          max-width: 100%;
+          width: 100%;
+        }
+
+        @media screen and (max-width: $extra-small) {
+          float: left;
+          max-width: 100%;
+          width: 100%;
+        }
 
         a {
           color: black;
@@ -249,10 +291,12 @@ body {
 
     @media screen and (max-width: $small) {
       top: -80px;
+      margin-bottom: 10px;
     }
 
     @media screen and (max-width: $extra-small) {
       top: -350px;
+      margin-bottom: 10px;
     }
   }
 
@@ -266,10 +310,12 @@ body {
 
       @media screen and (max-width: $small) {
         top: -70px;
+        float: left;
       }
 
       @media screen and (max-width: $extra-small) {
         top: -320px;
+        float: left;
       }
     }
   }
