@@ -1,5 +1,4 @@
 /*font*/
-/*size*/
 /*colors*/
 /*mixins*/
 body {
@@ -9,6 +8,12 @@ body {
     background-color: #3D3D3D;
     height: 450px;
     color: white; }
+    @media screen and (max-width: 767px) {
+      body .jumbotron {
+        height: 470px; } }
+    @media screen and (max-width: 480px) {
+      body .jumbotron {
+        height: 470px; } }
     body .jumbotron .container {
       margin-top: 50px; }
       body .jumbotron .container .course-title {
@@ -18,6 +23,12 @@ body {
         margin-top: 10px; }
         body .jumbotron .container .dept-info h1 {
           font-weight: 300; }
+          @media screen and (max-width: 767px) {
+            body .jumbotron .container .dept-info h1 {
+              font-size: 2em; } }
+          @media screen and (max-width: 480px) {
+            body .jumbotron .container .dept-info h1 {
+              font-size: 2em; } }
         body .jumbotron .container .dept-info a {
           color: white; }
         body .jumbotron .container .dept-info a:hover {
@@ -28,11 +39,25 @@ body {
     float: right;
     position: relative;
     top: -220px; }
+    @media screen and (max-width: 767px) {
+      body #sortby form {
+        float: left;
+        top: -160px; } }
+    @media screen and (max-width: 480px) {
+      body #sortby form {
+        float: left;
+        top: -160px; } }
   body .cardcol {
     position: relative;
     top: -200px;
     overflow: auto;
     clear: both; }
+    @media screen and (max-width: 767px) {
+      body .cardcol {
+        top: -150px; } }
+    @media screen and (max-width: 480px) {
+      body .cardcol {
+        top: -150px; } }
     body .cardcol .border-good {
       border-top: 8px solid #e67300; }
     body .cardcol .border-neutral {

@@ -71,15 +71,15 @@ body {
         @media screen and (max-width: 767px) {
           body .jumbotron .container .faculty-pic img {
             float: none;
-            width: 180px;
+            width: 150px;
             margin: 0 auto;
-            height: 180px; } }
+            height: 150px; } }
         @media screen and (max-width: 480px) {
           body .jumbotron .container .faculty-pic img {
             float: none;
-            width: 180px;
+            width: 150px;
             margin: 0 auto;
-            height: 180px; } }
+            height: 150px; } }
       body .jumbotron .container .faculty-info {
         float: left;
         margin: 10px 0 0 60px; }
@@ -88,15 +88,31 @@ body {
             float: none;
             margin: 0 auto;
             text-align: center;
-            margin-top: 20px; } }
+            margin-top: 30px; } }
         @media screen and (max-width: 480px) {
           body .jumbotron .container .faculty-info {
             float: none;
             margin: 0 auto;
             text-align: center;
-            margin-top: 20px; } }
+            margin-top: 30px; } }
+        @media screen and (max-width: 767px) {
+          body .jumbotron .container .faculty-info h1 {
+            margin-top: 50px;
+            margin-bottom: 20px;
+            font-size: 2.5em; } }
+        @media screen and (max-width: 480px) {
+          body .jumbotron .container .faculty-info h1 {
+            margin-top: 50px;
+            margin-bottom: 20px;
+            font-size: 2.5em; } }
         body .jumbotron .container .faculty-info p {
           margin-left: 5px; }
+          @media screen and (max-width: 767px) {
+            body .jumbotron .container .faculty-info p {
+              font-size: 1em; } }
+          @media screen and (max-width: 480px) {
+            body .jumbotron .container .faculty-info p {
+              font-size: 1em; } }
   body .statistics {
     position: relative;
     top: -180px;

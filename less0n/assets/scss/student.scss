@@ -19,9 +19,29 @@ body {
         overflow: auto;
         float: left;
 
+        h3 {
+          @media screen and (max-width: $small) {
+            margin-top: 30px;
+            font-size: 2.5em;
+          }
+
+          @media screen and (max-width: $extra-small) {
+            margin-top: 30px;
+            font-size: 2.5em;
+          }
+        }
+
         .display-5 {
           font-weight: 300;
           margin-top: 20px;
+
+          @media screen and (max-width: $small) {
+            font-size: 1.5em;
+          }
+
+          @media screen and (max-width: $extra-small) {
+            font-size: 1.5em;
+          }
         }
       }
     }
