@@ -146,6 +146,11 @@ def logout():
     return redirect(redirect_url)
 
 
+@login_manager.unauthorized_handler
+def unauthorized_callback():
+    return redirect(url_for('login') + '?redirect=' + request.path)
+
+
 @app.route('/department', methods=["GET", "POST"])
 def department():
     """
@@ -782,7 +787,6 @@ def admin_approve_prof_request():
     :return: json-str.
         "OK" if add successfully. "Fail" + error info if subject / department / professor not exists.
     """
-    redirect_url = request.args.get('redirect') or url_for('index')
     role_admin = Role.query.filter_by(name='admin').first()
     if current_user.is_authenticated and has_membership(current_user.id, role_admin):
         # Get parameters
