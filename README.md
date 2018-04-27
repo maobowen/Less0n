@@ -10,7 +10,9 @@ This is a class project for COMS W4156 Advanced Software Engineering, Spring 201
 
 ## Authors
 
-- Yiming Guo	yg2529@columbia.edu
-- Yilan He	yh2961@columbia.edu
-- Zhijian Jiang	zj2226@columbia.edu
-- Bowen Mao	bm2734@columbia.edu
+- Yiming Guo ([@Nicole-gym](https://github.com/Nicole-gym))	yg2529@columbia.edu
+- Yilan He ([@elenahoho](https://github.com/elenahoho))	yh2961@columbia.edu
+- Zhijian Jiang ([@ZhijianJiang](https://github.com/ZhijianJiang))	zj2226@columbia.edu
+- Bowen Mao ([@maobowen](https://github.com/maobowen))	bm2734@columbia.edu
+
+For general inquires, please send us an email at less0n.cu@gmail.com.
