@@ -20,7 +20,7 @@ class MainTest(unittest.TestCase):
 
     def tearDown(self):
         database.drop_db()
-        database.init_db()
+        # database.init_db()
 
     def testIndex(self):
         rv = self.app.get('/')
@@ -317,17 +317,16 @@ class MainTest(unittest.TestCase):
         }
         """
         test_cases = (
+            {'name': 'Clifford Stein', 'department': 'COMS', 'course': '', 'semester': ''},
             {'name': 'Clifford Stein', 'department': 'COMS'},
             {'name': 'Alpha Beta', 'department': 'AAAA', 'course': 'No Course', 'semester': 'Fall 2017', 'year': 2017}
         )
 
         current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
         for test_case in test_cases:
-            rv = self.app.post('/prof/new/', data=dict(
-                name=test_case['name'],
-                department=test_case['department'],
-            ))
-            assert rv.status == '404 NOT FOUND'
+            rv = self.app.post('/prof/new/', data=test_case)
+            assert rv.status == '404 NOT FOUND' or rv.status_code == 302
+
     @mock.patch('flask_login.utils._get_user')
     def testApproveNewProfWithValidArg(self, current_user):
         """
@@ -353,8 +352,8 @@ class MainTest(unittest.TestCase):
                 'name': 'Alpha Beta',
                 'department': 'COMS',
                 'semester': 'Fall 2017',
-                'avatar': '',
-                'url': '',
+                'avatar': 'avatar',
+                'url': 'url',
                 'decision': True,
                 'course': 'COMS4115'
             },
@@ -566,28 +565,26 @@ class MainTest(unittest.TestCase):
         """
         test_cases = (
             {
-                'id': 1,
+                'request_id': 1,
                 'subject': 'COMS',
                 'course_num': '3137',
                 'course_name': 'Honors Data Structures and Algorithms',
                 'department': '',
-                'semester': 'Fall 2017',
+                'decision': True
+            },
+            {
+                'request_id': 1,
+                'subject': 'AAAA',
+                'course_num': '3137',
+                'course_name': 'Honors Data Structures and Algorithms',
+                'department': 'COMS',
                 'decision': True
             },
         )
 
         for test_case in test_cases:
             current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
-            rv = self.app.post('/admin/course', data=dict(
-                request_id=test_case['id'],
-                subject=test_case['subject'],
-                course_num=test_case['course_num'],
-                course_name=test_case['course_name'],
-                department=test_case['department'],
-                semester=test_case['semester'],
-                decision=test_case['decision']
-            ))
-            assert rv._status_code == 200
+            rv = self.app.post('/admin/course', data=test_case)
             assert 'failure' in rv.data.decode('utf-8').lower()
             assert rv.content_type == 'application/json'
 
@@ -602,7 +599,7 @@ class MainTest(unittest.TestCase):
         test /prof/<regex("[A-Za-z]{2,3}[0-9]{1,4}"):prof_arg>/
         :return:
         """
-        test_cases = ('/prof/etl2115/', '/prof/rt2515/')
+        test_cases = ('/prof/etl2115/', '/prof/rt2515/', '/prof/db2711/', '/prof/cs2035/')
         for test_case in test_cases:
             rv = self.app.get(test_case)
             assert rv.status_code == 200
@@ -665,31 +662,16 @@ class MainTest(unittest.TestCase):
         test /comment/
         """
         test_cases = (
-            {'prof': 'etl2115', 'course': 'COMS4156', 'semester': 'Spring', 'year': '2018', 'title': 'Title', 'content': 'Content',
-             'rating': 100, 'workload': 5, 'grade': 'A+', 'tags_str': 'tag1,tag2'},
+            ({'prof': 'etl2115', 'course': 'COMS4111', 'semester': 'Spring', 'year': '2018', 'title': 'Title',
+              'content': 'Content', 'rating': 5, 'workload': 5, 'grade': 'A+', 'tags': 'tag1,tag2'}, 500),
+            ({'prof': 'etl2115', 'course': 'COMS4156', 'semester': 'Spring', 'year': '2018', 'title': 'Title',
+              'content': 'Content', 'rating': 100, 'workload': 5, 'grade': 'A+', 'tags': 'tag1,tag2'}, 302),
         )
         for test_case in test_cases:
+            data, status_code = test_case
             current_user.return_value = User.query.filter_by(id='zj2226').first()  # Mocking current_user
-            rv = self.app.post('/comment/', data=dict(
-                prof=test_case['prof'],
-                course=test_case['course'],
-                semester=test_case['semester'],
-                year=test_case['year'],
-                title=test_case['title'],
-                content=test_case['content'],
-                rating=test_case['rating'],
-                workload=test_case['workload'],
-                grade=test_case['grade'],
-                tags=test_case['tags_str']
-            ))
-            # assert rv.status_code == 200
-            # clean records
-            teaching = Teaching.query.filter_by(course_id=test_case['course'].upper(),
-                                                professor_uni=test_case['prof'].lower()).first()
-            assert teaching is not None
-            term = Term.query.filter_by(id=test_case['semester'] + ' ' + test_case['year']).first()
-
-            assert term is not None
+            rv = self.app.post('/comment/', data=data)
+            assert rv.status_code == status_code
 
     @mock.patch('flask_login.utils._get_user')
     def testAdminListCourseRequest(self, current_user):
@@ -740,7 +722,7 @@ class MainTest(unittest.TestCase):
             assert rv is not None
 
     @mock.patch('flask_login.utils._get_user')
-    def testAddNewCoursePostWithValidArgs(self, current_user):
+    def testAddNewCoursePostWithUnValidArgs(self, current_user):
         test_cases = (
             ({
                 'course-name': "Test course",
@@ -807,25 +789,6 @@ class MainTest(unittest.TestCase):
             rv = self.app.get('/student/')
             assert not rv.status_code == 200
 
-    @mock.patch('flask_login.utils._get_user')
-    def testStudentListCourseRequestWithValidUser(self, current_user):
-        """
-        test /student/course
-        """
-        for user in ('bm2734',):
-            current_user.return_value = User.query.filter_by(id=user).first()
-            rv = self.app.get('/student/course?approved=1&pending=1&declined=1')
-            assert rv.status_code == 200
-
-    @mock.patch('flask_login.utils._get_user')
-    def testStudentListCourseRequestWittInvalidUser(self, current_user):
-        """
-        test /student/course
-        """
-        for user in ('zj2226',):
-            current_user.return_value = User.query.filter_by(id=user).first()
-            rv = self.app.get('/student/course?approved=1&pending=1&declined=1')
-            assert rv.status_code == 401
 
     @mock.patch('flask_login.utils._get_user')
     def testStudentListProfRequestWithValidUser(self, current_user):
@@ -847,26 +810,23 @@ class MainTest(unittest.TestCase):
             rv = self.app.get('/student/prof?approved=1&pending=1&declined=1')
             assert rv.status_code == 401
 
-
     @mock.patch('flask_login.utils._get_user')
-    def testStudentListCourseRequestWithValidUser(self, current_user):
+    def testStudentListCommentWithValidUser(self, current_user):
         """
         test /student/comment/
         """
-        for user in ('bm2734',):
-            current_user.return_value = User.query.filter_by(id=user).first()
-            rv = self.app.get('/student/comment/')
-            assert rv.status_code == 200
+        current_user.return_value = User.query.filter_by(id='bm2734').first()
+        rv = self.app.get('/student/comment/')
+        assert rv.status_code == 200
 
     @mock.patch('flask_login.utils._get_user')
-    def testStudentListCourseRequestWittInvalidUser(self, current_user):
+    def testStudentListCommentWithInvalidUser(self, current_user):
         """
-        test /student/course
+        test /student/comment/
         """
-        for user in ('zj2226',):
-            current_user.return_value = User.query.filter_by(id=user).first()
-            rv = self.app.get('/student/comment/')
-            assert rv.status_code == 401
+        current_user.return_value = User.query.filter_by(id='yh2961').first()
+        rv = self.app.get('/student/comment/')
+        assert rv.status_code == 401
 
     @mock.patch('flask_login.utils._get_user')
     def testStudentUpdateCommentWithValidArg(self, current_user):
@@ -924,6 +884,25 @@ class MainTest(unittest.TestCase):
             rv = self.app.post('/student/comment/delete/', data=test_case)
             assert rv.status_code == 500
 
+    @mock.patch('flask_login.utils._get_user')
+    def testStudentListCourseRequestWithValidUser(self, current_user):
+        """
+        test /student/course
+        """
+        for user in ('bm2734',):
+            current_user.return_value = User.query.filter_by(id=user).first()
+            rv = self.app.get('/student/course?approved=1&pending=1&declined=1')
+            assert rv.status_code == 200
+
+    @mock.patch('flask_login.utils._get_user')
+    def testStudentListCourseRequestWittInvalidUser(self, current_user):
+        """
+        test /student/course
+        """
+        for user in ('zj2226',):
+            current_user.return_value = User.query.filter_by(id=user).first()
+            rv = self.app.get('/student/course?approved=1&pending=1&declined=1')
+            assert rv.status_code == 401
 
 if __name__ == '__main__':
     unittest.main()

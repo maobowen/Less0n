@@ -98,6 +98,8 @@ def init_db():
                            name='Computer Science Theory'),
         'COMS4115': Course(id='COMS4115', subject=subjs['COMS'], number='4115', department=depts['COMS'],
                            name='Programming Languages and Translators'),
+        'COMS4111': Course(id='COMS4111', subject=subjs['COMS'], number='4111', department=depts['COMS'],
+                           name='Intro to Database'),
         'COMS4156': Course(id='COMS4156', subject=subjs['COMS'], number='4156', department=depts['COMS'],
                            name='Advanced Software Engineering'),
         'COMS4701': Course(id='COMS4701', subject=subjs['COMS'], number='4701', department=depts['COMS'],
@@ -144,6 +146,8 @@ def init_db():
 
     # Professors
     profs = {
+        'cs2035': Professor(uni='cs2035', name='Clifford Stein', department=depts['COMS'],
+                           url='http://www.columbia.edu/~cs2035/'),
         'dar27': Professor(uni='dar27', name='David Aaron Rios', department=depts['STAT'],
                            url='http://stat.columbia.edu/department-directory/name/david-rios/'),
         'db2711': Professor(uni='db2711', name='Daniel Bauer', department=depts['COMS'],
@@ -171,7 +175,7 @@ def init_db():
                             avatar='https://static.wixstatic.com/media/53f993_cc1ad3e6319d46ed929831fd9ffb98c0.jpg/v1/fill/w_414,h_496,al_c,q_80,usm_0.66_1.00_0.01/53f993_cc1ad3e6319d46ed929831fd9ffb98c0.jpg'),
         'tm2118': Professor(uni='tm2118', name='Tal G. Malkin', department=depts['COMS'],
                             url='http://www.cs.columbia.edu/~tal/',
-                            avatar='https://industry.datascience.columbia.edu/sites/default/files/profiles/photos/Malkin_web.png'),
+                            avatar='https://industry.datascience.columbia.edu/sites/default/files/profiles/photos/Malkin_web.png')
     }
     for _, prof in profs.items():
         db.session.add(prof)
@@ -190,6 +194,7 @@ def init_db():
         Teaching(course=courses['COMS4156'], professor=profs['etl2115']),
         Teaching(course=courses['HIST1302'], professor=profs['lt95']),
         Teaching(course=courses['COMS4156'], professor=profs['db2711']),
+        Teaching(course=courses['COMS4111'], professor=profs['db2711']),
     ]
     for teaching in teachings:
         db.session.add(teaching)
