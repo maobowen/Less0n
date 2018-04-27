@@ -12,7 +12,11 @@
         <div class="jumbotron jumbotron-fluid">
             <div class="container">
                 <div class="faculty-pic">
-                    <img src="{{ prof.avatar }}" alt="{{ prof.name }}">
+                    {% if prof.avatar %}
+                        <img src="{{ prof.avatar }}" alt="{{ prof.name }}">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='img/icon_square.png') }}" alt="{{ prof.name }}">
+                    {% endif %}
                 </div>
                 <div class="faculty-info">
                     <h1 class="display-4">{{ prof.name }}</h1>

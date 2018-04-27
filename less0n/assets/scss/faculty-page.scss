@@ -78,15 +78,15 @@ body {
         }
         @media screen and (max-width: $small) {
           float: none;
-          width: 180px;
+          width: 150px;
           margin: 0 auto;
-          height: 180px;
+          height: 150px;
         }
         @media screen and (max-width: $extra-small) {
           float: none;
-          width: 180px;
+          width: 150px;
           margin: 0 auto;
-          height: 180px;
+          height: 150px;
         }
       }
 
@@ -94,21 +94,43 @@ body {
         float: left;
         margin: 10px 0 0 60px;
 
-
         @media screen and (max-width: $small) {
           float: none;
           margin: 0 auto;
           text-align: center;
-          margin-top: 20px;
+          margin-top: 30px;
         }
         @media screen and (max-width: $extra-small) {
           float: none;
           margin: 0 auto;
           text-align: center;
-          margin-top: 20px;
+          margin-top: 30px;
         }
+
+        h1 {
+          @media screen and (max-width: $small) {
+            margin-top: 50px;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+          }
+
+          @media screen and (max-width: $extra-small) {
+            margin-top: 50px;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+          }
+        }
+
         p {
           margin-left: 5px;
+
+          @media screen and (max-width: $small) {
+            font-size: 1em;
+          }
+
+          @media screen and (max-width: $extra-small) {
+            font-size: 1em;
+          }
         }
       }
     }

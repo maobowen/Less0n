@@ -45,13 +45,45 @@ body {
         max-width: 70%;
         overflow: auto;
         float: left; }
+        @media screen and (max-width: 767px) {
+          body .jumbotron .container .course-title {
+            max-width: 100%;
+            width: 100%; } }
+        @media screen and (max-width: 480px) {
+          body .jumbotron .container .course-title {
+            max-width: 100%;
+            width: 100%; } }
         body .jumbotron .container .course-title h1 {
           font-weight: 300; }
+          @media screen and (max-width: 767px) {
+            body .jumbotron .container .course-title h1 {
+              font-size: 2em; } }
+          @media screen and (max-width: 480px) {
+            body .jumbotron .container .course-title h1 {
+              font-size: 2em; } }
+        body .jumbotron .container .course-title h3 {
+          font-weight: 300; }
+          @media screen and (max-width: 767px) {
+            body .jumbotron .container .course-title h3 {
+              font-size: 3em; } }
+          @media screen and (max-width: 480px) {
+            body .jumbotron .container .course-title h3 {
+              font-size: 3em; } }
       body .jumbotron .container .course-info {
         float: right;
         margin-top: 20px;
         max-width: 25%;
         overflow: auto; }
+        @media screen and (max-width: 767px) {
+          body .jumbotron .container .course-info {
+            float: left;
+            max-width: 100%;
+            width: 100%; } }
+        @media screen and (max-width: 480px) {
+          body .jumbotron .container .course-info {
+            float: left;
+            max-width: 100%;
+            width: 100%; } }
         body .jumbotron .container .course-info a {
           color: black; }
         body .jumbotron .container .course-info a:hover {
@@ -197,10 +229,12 @@ body {
     margin-right: 10px; }
     @media screen and (max-width: 767px) {
       body #add-comment, body #add-prof {
-        top: -80px; } }
+        top: -80px;
+        margin-bottom: 10px; } }
     @media screen and (max-width: 480px) {
       body #add-comment, body #add-prof {
-        top: -350px; } }
+        top: -350px;
+        margin-bottom: 10px; } }
   body #sortby form {
     width: 230px;
     position: relative;
@@ -209,10 +243,12 @@ body {
     float: right; }
     @media screen and (max-width: 767px) {
       body #sortby form {
-        top: -70px; } }
+        top: -70px;
+        float: left; } }
     @media screen and (max-width: 480px) {
       body #sortby form {
-        top: -320px; } }
+        top: -320px;
+        float: left; } }
   body .modal-content {
     -webkit-border-radius: 11px;
     -moz-border-radius: 11px;

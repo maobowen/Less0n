@@ -153,3 +153,67 @@
 
 }
 
+@media only screen and (max-width: 400px) {
+        h1{
+            font-size: 180%;
+        }
+        h2{
+            font-size: 50%;
+        }
+        .search-back{
+            width: 351px;
+        }
+        .search{
+            width: 220px;
+            font-size: 70%;
+            height: 40px;
+        }
+        .custom-select {
+            width: 90px;
+            height: 40px;
+            font-size: 70%;
+            padding: 0px;
+        }
+        .select-selected {
+            height: 40px;
+            width: 100px;
+            margin-top: -1px;
+            margin-left: -1px;
+            /*padding: 0px;*/
+        }
+        /*style the arrow inside the select element:*/
+        .select-selected:after {
+            margin-top: 12px;
+        }
+        /*style items (options):*/
+        .select-items {
+            width: 130px;
+            margin-left: -1px;
+        }
+        .search-icon button{
+            display: inline-block;
+            height: 41px;
+            width: 41px;
+        }
+
+        .search-icon button i{
+            position: relative;
+            top: -10px;
+            font-size: 25px;
+            color: white;
+        }
+        .videoWrapper{
+            display: none;
+        }
+        header {
+            /*background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.7)), to(rgba(0, 0, 0, 0.7))), url(../img/background-img.jpg);*/
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(../img/background-img.jpg);
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            background-attachment: fixed;
+            background-color: transparent;
+        }
+
+}
+

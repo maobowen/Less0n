@@ -10,8 +10,10 @@
 
 {% block body_main %}
         <header id="main-page">
-            <p id="n-find">Oops, we couldn't find that page!</p>
-            <p id="not-found">404</p>
+            <h4 id="n-find">Sorry, we couldn't find that page!</h4>
+            <p id="not-found">
+                <img src="{{ url_for('static', filename='img/oops.png') }}" alt="" height="500" width="528">
+            </p>
             <div id="back-btn">
                 <a class="btn btn-full" href="javascript:window.history.back();">Go Back</a>
             </div>
