@@ -575,7 +575,7 @@ def add_new_prof():
         return redirect(redirect_url)
     except SQLAlchemyError:
         flash('An error occurred when submitting an adding instructor request.', 'danger')
-        return redirect(redirect_url, code=500)
+        return redirect(redirect_url)
 
 
 @app.route('/comment/', methods=["POST"])
@@ -624,7 +624,7 @@ def comment():
             return redirect(redirect_url)
         except SQLAlchemyError:
             flash('An error occurred when publishing the evaluation.', 'danger')
-            return redirect(redirect_url, code=500)
+            return redirect(redirect_url)
 
 
 @app.route('/admin/', methods=['GET'])
@@ -636,7 +636,7 @@ def admin():
         return render_template('admin.html')
     else:
         flash('You do not have the permission to view this page.', 'danger')
-        return redirect(url_for('index'), code=401)
+        return redirect(url_for('index'))
 
 
 @app.route('/admin/course', methods=['GET'])
@@ -863,7 +863,7 @@ def student():
         return render_template('student.html')
     else:
         flash('You do not have the permission to view this page.', 'danger')
-        return redirect(url_for('index'), code=401)
+        return redirect(url_for('index'))
 
 
 @app.route('/student/course', methods=['GET'])
@@ -988,7 +988,7 @@ def student_update_comment():
     comment = Comment.query.filter_by(id=id).first()
     if comment is None:
         flash('An error occurred when updating the evaluation.', 'danger')
-        return redirect(redirect_url, code=500)
+        return redirect(redirect_url)
 
     term_id = request.form.get('semester', type=str) + ' ' + request.form.get('year', type=str)
     title = request.form.get('title', type=str)
@@ -1026,7 +1026,7 @@ def student_update_comment():
         return redirect(redirect_url)
     except SQLAlchemyError:
         flash('An error occurred when updating the evaluation.', 'danger')
-        return redirect(redirect_url, code=500)
+        return redirect(redirect_url)
 
 
 @app.route('/student/comment/delete/', methods=['POST'])
@@ -1038,7 +1038,7 @@ def student_delete_comment():
     comment = Comment.query.filter_by(id=id).first()
     if comment is None:
         flash('An error occurred when deleting the evaluation.', 'danger')
-        return redirect(redirect_url, code=500)
+        return redirect(redirect_url)
 
     # Delete
     try:
@@ -1048,7 +1048,7 @@ def student_delete_comment():
         return redirect(redirect_url)
     except SQLAlchemyError:
         flash('An error occurred when deleting the evaluation.', 'danger')
-        return redirect(redirect_url, code=500)
+        return redirect(redirect_url)
 
 
 @app.errorhandler(500)

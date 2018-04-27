@@ -882,7 +882,7 @@ class MainTest(unittest.TestCase):
         for test_case in test_cases:
             current_user.return_value = User.query.filter_by(id='bm2734').first()
             rv = self.app.post('/student/comment/delete/', data=test_case)
-            assert rv.status_code == 500
+            assert rv.status_code == 302
 
     @mock.patch('flask_login.utils._get_user')
     def testStudentListCourseRequestWithValidUser(self, current_user):
