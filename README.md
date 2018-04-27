@@ -4,9 +4,9 @@
 
 ![Less0n](less0n/assets/img/icon_logo_readme.png)
 
-Less0n is the next generation of course and professor ratings system for Columbia community.
+Less0n is the next generation of course and professor ratings system for Columbia community. It is now available at https://less0n.bmao.tech/ or https://less0n.herokuapp.com/.
 
-This is a class project for COMS W4156 Advanced Software Engineering, Spring 2018 at Columbia University.
+This is a class project for COMS W4156 Advanced Software Engineering, Spring 2018 at Columbia University. We have just won the First Prize on the Demo Day at J.P. Morgan.
 
 ## Authors
 

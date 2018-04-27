@@ -415,48 +415,52 @@ def search():
     course = request.args.get('course')
 
     if dept is not None:
+        dept = dept.strip()
         depts = re.split(',\s*|\s+', dept)  # split keywords by , |\s
         results = []
         for dept in depts:
             for result in Department.query.filter(
-                    (Department.id.like("%%" + dept.upper() + "%")) |
-                    (Department.name.like("%%" + dept + "%"))
+                    (Department.id.ilike("%%" + dept.upper() + "%")) |
+                    (Department.name.ilike("%%" + dept + "%"))
             ).order_by(Department.id).all():
                 results.append(result)
         context['depts'] = results
         context['count'] += len(results)
 
     if subj is not None:
+        subj = subj.strip()
         subjs = re.split(',\s*|\s+', subj)
         results = []
         for subj in subjs:
             for result in Subject.query.filter(
-                    (Subject.id.like("%%" + subj.upper() + "%")) |
-                    (Subject.name.like("%%" + subj + "%"))
+                    (Subject.id.ilike("%%" + subj.upper() + "%")) |
+                    (Subject.name.ilike("%%" + subj + "%"))
             ).order_by(Subject.id).all():
                 results.append(result)
         context['subjs'] = results
         context['count'] += len(results)
 
     if prof is not None:
+        prof = prof.strip()
         profs = re.split(',\s*|\s+', prof)
         results = []
         for prof in profs:
             for result in Professor.query.filter(
-                    (Professor.uni.like("%%" + prof + "%")) |
-                    (Professor.name.like("%%" + prof + "%"))
+                    (Professor.uni.ilike("%%" + prof + "%")) |
+                    (Professor.name.ilike("%%" + prof + "%"))
             ).order_by(Professor.name).all():
                 results.append(result)
         context['profs'] = results
         context['count'] += len(results)
 
     if course is not None:
+        course = course.strip()
         courses = re.split(',\s*|\s+', course)
         results = []
         for course in courses:
             for result in Course.query.filter(
-                    (Course.id.like("%%" + course.upper() + "%")) |
-                    (Course.name.like("%%" + course + "%"))
+                    (Course.id.ilike("%%" + course.upper() + "%")) |
+                    (Course.name.ilike("%%" + course + "%"))
             ).order_by(Course.id).all():
                 results.append(result)
         context['courses'] = results
