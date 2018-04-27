@@ -1051,16 +1051,41 @@ def student_delete_comment():
         return redirect(redirect_url)
 
 
-@app.errorhandler(500)
-def server_error(e):
-    logging.exception('An error occurred during a request.')
-    return """
-    An internal error occurred: <pre>{}</pre>
-    See logs for full stacktrace.
-    """.format(e), 500
+@app.errorhandler(400)
+def bad_request_error(e):
+    context = {
+        'title': 'Bad Request',
+        'content': 'the server could not understand the request.',
+    }
+    logging.exception(format(e))
+    return render_template('404.html', **context), 400
+
+
+@app.errorhandler(401)
+def not_authorized_error(e):
+    context = {
+        'title': 'Authorization Required',
+        'content': 'you are not authorized to access this page.',
+    }
+    logging.exception(format(e))
+    return render_template('404.html', **context), 401
 
 
 @app.errorhandler(404)
 def page_not_found_error(e):
-    logging.exception('Page not found.')
-    return render_template('404.html'), 404
+    context = {
+        'title': 'Page Not Found',
+        'content': 'the content was not found.',
+    }
+    logging.exception(format(e))
+    return render_template('404.html', **context), 404
+
+
+@app.errorhandler(500)
+def server_error(e):
+    context = {
+        'title': 'Internal Server Error',
+        'content': 'the server encountered an internal error.',
+    }
+    logging.exception(format(e))
+    return render_template('404.html', **context), 500
