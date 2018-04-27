@@ -18,7 +18,11 @@ function changeProf(index, all_profs) {
         current_prof['comments'].sort(compareWorkload);
     }
 
-    $('#prof-pic').attr('src', current_prof['avatar']);
+    if (current_prof['avatar'] == "") {
+        $('#prof-pic').attr('src', '/static/img/icon_square.png');
+    } else {
+        $('#prof-pic').attr('src', current_prof['avatar']);
+    }
     $('#faculty_choice h4 a').text(current_prof['name']);
     if (current_prof['uni']) {
         $('#prof-pic').parent().attr('href', '/prof/' + current_prof['uni']);
