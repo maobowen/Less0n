@@ -16,7 +16,7 @@ def init_db():
         'yg2529': User(id='yg2529', avatar='', email='yg2529@columbia.edu', name='Yiming Guo', tokens=''),
         'yh2961': User(id='yh2961', avatar='', email='yh2961@columbia.edu', name='Yilan He', tokens=''),
         'zj2226': User(id='zj2226', avatar='', email='zj2226@columbia.edu', name='Zhijian Jiang', tokens=''),
-        'ky2371': User(id='ky2371', avatar='', email='ky2371@columbia.edu', name='Kaimao Yang', tokens='')
+        'ky2371': User(id='ky2371', avatar='', email='ky2371@columbia.edu', name='Kaimao Yang', tokens=''),
     }
     for _, user in users.items():
         db.session.add(user)
@@ -38,7 +38,7 @@ def init_db():
         Membership(user=users['yh2961'], role=role_admin),
         Membership(user=users['zj2226'], role=role_admin),
         Membership(user=users['ky2371'], role=role_student),
-        Membership(user=users['bm2734'], role=role_student)
+        Membership(user=users['bm2734'], role=role_student),
     ]
     for membership in memberships:
         db.session.add(membership)
@@ -48,15 +48,20 @@ def init_db():
     depts = {
         'AHAR': Department(id='AHAR', name='Art History and Archaeology',
                            url='http://www.columbia.edu/cu/arthistory/'),
+        'COCI': Department(id='COCI', name='Contemporary Civilization and Literature Humanities'),
         'COMS': Department(id='COMS', name='Computer Science',
                            url='https://www.cs.columbia.edu/'),
         'EALC': Department(id='EALC', name='East Asian Languages and Cultures',
                            url='http://ealac.columbia.edu/'),
         'ECON': Department(id='ECON', name='Economics',
                            url='http://econ.columbia.edu/'),
+        'ENCL': Department(id='ENCL', name='English and Comparative Literature',
+                           url='http://english.columbia.edu/'),
         'HSTB': Department(id='HSTB', name='History @Barnard',
                            url='https://history.barnard.edu/'),
         'HUMC': Department(id='HUMC', name='Humanities (College)'),
+        'IEOR': Department(id='IEOR', name='Industrial Engineering and Operations Research',
+                           url='http://ieor.columbia.edu/'),
         'MATH': Department(id='MATH', name='Mathematics',
                            url='https://www.math.columbia.edu/'),
         'MUSI': Department(id='MUSI', name='Music',
@@ -70,10 +75,15 @@ def init_db():
 
     # Subjects
     subjs = {
+        'AHUM': Subject(id='AHUM', name='Asian Humanities'),
         'ASCE': Subject(id='ASCE', name='Asian Civilization: East Asian'),
+        'COCI': Subject(id='COCI', name='Contemporary Civilization'),
         'COMS': Subject(id='COMS', name='Computer Science'),
+        'CPLT': Subject(id='CPLT', name='Comparative Literature'),
         'CSEE': Subject(id='CSEE', name='Computer Science and Electrical Engineering'),
+        'CSOR': Subject(id='CSOR', name='Computer Science and Operations Research'),
         'ECON': Subject(id='ECON', name='Economics'),
+        'ENGL': Subject(id='ENGL', name='English'),
         'HIST': Subject(id='HIST', name='History'),
         'HUMA': Subject(id='HUMA', name='Humanities'),
         'MATH': Subject(id='MATH', name='Mathematics'),
@@ -85,6 +95,9 @@ def init_db():
 
     # Courses
     courses = {
+        'AHUM2604': Course(id='AHUM2604', subject=subjs['AHUM'], number='2604', department=depts['AHAR'],
+                           name='Art In China, Japan, and Korea'),
+
         'ASCE1359': Course(id='ASCE1359', subject=subjs['ASCE'], number='1359', department=depts['EALC'],
                            name='Introduction to East Asian Civilizations: China'),
         'ASCE1361': Course(id='ASCE1361', subject=subjs['ASCE'], number='1361', department=depts['EALC'],
@@ -92,14 +105,31 @@ def init_db():
         'ASCE1363': Course(id='ASCE1363', subject=subjs['ASCE'], number='1363', department=depts['EALC'],
                            name='Introduction to East Asian Civilizations: Korea'),
 
+        'COCI1101': Course(id='COCI1101', subject=subjs['COCI'], number='1101', department=depts['COCI'],
+                           name='Contemporary Western Civilization I'),
+        'COCI1102': Course(id='COCI1102', subject=subjs['COCI'], number='1102', department=depts['COCI'],
+                           name='Contemporary Western Civilization II'),
+
+        'COMS1004': Course(id='COMS1004', subject=subjs['COMS'], number='1004', department=depts['COMS'],
+                           name='Introduction to Computer Science and Programming in Java'),
+        'COMS1007': Course(id='COMS1007', subject=subjs['COMS'], number='1007', department=depts['COMS'],
+                           name='Honors Introduction to Computer Science'),
+        'COMS3134': Course(id='COMS3134', subject=subjs['COMS'], number='3134', department=depts['COMS'],
+                           name='Data Structures in Java'),
         'COMS3157': Course(id='COMS3157', subject=subjs['COMS'], number='3157', department=depts['COMS'],
                            name='Advanced Programming'),
+        'COMS3203': Course(id='COMS3203', subject=subjs['COMS'], number='3203', department=depts['COMS'],
+                           name='Discrete Mathematics: Introduction to Combinatorics and Graph Theory'),
         'COMS3261': Course(id='COMS3261', subject=subjs['COMS'], number='3261', department=depts['COMS'],
                            name='Computer Science Theory'),
+        'COMS3998': Course(id='COMS3998', subject=subjs['COMS'], number='3998', department=depts['COMS'],
+                           name='Undergraduate Projects in Computer Science'),
+        'COMS4111': Course(id='COMS4111', subject=subjs['COMS'], number='4111', department=depts['COMS'],
+                           name='Introduction to Databases'),
         'COMS4115': Course(id='COMS4115', subject=subjs['COMS'], number='4115', department=depts['COMS'],
                            name='Programming Languages and Translators'),
-        'COMS4111': Course(id='COMS4111', subject=subjs['COMS'], number='4111', department=depts['COMS'],
-                           name='Intro to Database'),
+        'COMS4118': Course(id='COMS4118', subject=subjs['COMS'], number='4118', department=depts['COMS'],
+                           name='Operating Systems I'),
         'COMS4156': Course(id='COMS4156', subject=subjs['COMS'], number='4156', department=depts['COMS'],
                            name='Advanced Software Engineering'),
         'COMS4701': Course(id='COMS4701', subject=subjs['COMS'], number='4701', department=depts['COMS'],
@@ -108,12 +138,32 @@ def init_db():
                            name='Natural Language Processing'),
         'COMS4771': Course(id='COMS4771', subject=subjs['COMS'], number='4771', department=depts['COMS'],
                            name='Machine Learning'),
+        'COMS6111': Course(id='COMS6111', subject=subjs['COMS'], number='6111', department=depts['COMS'],
+                           name='Advanced Database Systems'),
+        'COMS6232': Course(id='COMS6232', subject=subjs['COMS'], number='6232', department=depts['COMS'],
+                           name='Analysis of Algorithms II'),
+        'COMS6901': Course(id='COMS6901', subject=subjs['COMS'], number='6901', department=depts['COMS'],
+                           name='Projects in Computer Science'),
         'CSEE3827': Course(id='CSEE3827', subject=subjs['CSEE'], number='3827', department=depts['COMS'],
                            name='Fundamentals of Computer Systems'),
+        'CSOR4231': Course(id='CSOR4231', subject=subjs['CSOR'], number='4231', department=depts['COMS'],
+                           name='Analysis of Algorithms I'),
+
+        'CPLT3541': Course(id='CPLT3541', subject=subjs['CPLT'], number='3541', department=depts['ENCL'],
+                           name='Contemporary Short Story'),
 
         'ECON1105': Course(id='ECON1105', subject=subjs['ECON'], number='1105', department=depts['ECON'],
                            name='Principles of Economics'),
 
+        'ENGL1010': Course(id='ENGL1010', subject=subjs['ENGL'], number='1010', department=depts['ENCL'],
+                           name='University Writing'),
+        'ENGL3335': Course(id='ENGL3335', subject=subjs['ENGL'], number='3335', department=depts['ENCL'],
+                           name='Shakespeare I'),
+        'ENGL3336': Course(id='ENGL3336', subject=subjs['ENGL'], number='3336', department=depts['ENCL'],
+                           name='Shakespeare II'),
+
+        'HIST1101': Course(id='HIST1101', subject=subjs['HIST'], number='1101', department=depts['HSTB'],
+                           name='European History 1500-1789'),
         'HIST1302': Course(id='HIST1302', subject=subjs['HIST'], number='1302', department=depts['HSTB'],
                            name='European History Since 1789'),
 
@@ -137,6 +187,12 @@ def init_db():
         'MATH2010': Course(id='MATH2010', subject=subjs['MATH'], number='2010', department=depts['MATH'],
                            name='Linear Algebra'),
 
+        'STAT1001': Course(id='STAT1001', subject=subjs['STAT'], number='1001', department=depts['STAT'],
+                           name='Introduction to Statistical Reasoning'),
+        'STAT1101': Course(id='STAT1101', subject=subjs['STAT'], number='1101', department=depts['STAT'],
+                           name='Introduction to Statistical Reasoning'),
+        'STAT1201': Course(id='STAT1201', subject=subjs['STAT'], number='1201', department=depts['STAT'],
+                           name='Calculus-Based Introduction to Statistics'),
         'STAT4001': Course(id='STAT4001', subject=subjs['STAT'], number='4001', department=depts['STAT'],
                            name='Introduction to Probability and Statistics'),
     }
@@ -146,7 +202,7 @@ def init_db():
 
     # Professors
     profs = {
-        'cs2035': Professor(uni='cs2035', name='Clifford Stein', department=depts['COMS'],
+        'cs2035': Professor(uni='cs2035', name='Clifford Seth Stein', department=depts['IEOR'],
                            url='http://www.columbia.edu/~cs2035/'),
         'dar27': Professor(uni='dar27', name='David Aaron Rios', department=depts['STAT'],
                            url='http://stat.columbia.edu/department-directory/name/david-rios/'),
@@ -175,7 +231,7 @@ def init_db():
                             avatar='https://static.wixstatic.com/media/53f993_cc1ad3e6319d46ed929831fd9ffb98c0.jpg/v1/fill/w_414,h_496,al_c,q_80,usm_0.66_1.00_0.01/53f993_cc1ad3e6319d46ed929831fd9ffb98c0.jpg'),
         'tm2118': Professor(uni='tm2118', name='Tal G. Malkin', department=depts['COMS'],
                             url='http://www.cs.columbia.edu/~tal/',
-                            avatar='https://industry.datascience.columbia.edu/sites/default/files/profiles/photos/Malkin_web.png')
+                            avatar='https://industry.datascience.columbia.edu/sites/default/files/profiles/photos/Malkin_web.png'),
     }
     for _, prof in profs.items():
         db.session.add(prof)
@@ -329,6 +385,10 @@ def init_db():
                          course_name='Number Theory and Cryptography',
                          department=depts['MATH'], subject=subjs['MATH'],
                          term=terms['Spring 2018'], approved=ApprovalType.PENDING),
+        AddCourseRequest(user=users['bm2734'], course_id='COMS4444', course_number='4444',
+                         course_name='Programming and Problem Solving',
+                         department=depts['COMS'], subject=subjs['COMS'],
+                         term=terms['Fall 2017'], approved=ApprovalType.PENDING),
     ]
     for add_course_request in add_course_requests:
         db.session.add(add_course_request)

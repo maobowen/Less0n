@@ -15,12 +15,12 @@ class MainTest(unittest.TestCase):
 
     def setUp(self):
         self.app = app.test_client()
-        database.drop_db() # drop previous db
+        database.drop_db()  # drop previous db
         database.init_db()
 
     def tearDown(self):
         database.drop_db()
-        # database.init_db()
+        database.init_db()
 
     def testIndex(self):
         rv = self.app.get('/')
